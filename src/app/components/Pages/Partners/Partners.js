@@ -5,7 +5,7 @@ const Partners =({images})=>{
   return(
     <div
       id="Partners"
-      className="flex flex-col">
+      className="flex flex-col text-[#111111CC]">
       <div>
         <h2 className="text-[30px] font-[500] mb-[28px]">НАШИ ПАРТНЕРЫ</h2>
       </div>

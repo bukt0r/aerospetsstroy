@@ -2,7 +2,7 @@ const News = () =>{
   return(
     <div
       id="News"
-      className="flex flex-col pl-[15px] pr-[19px] pt-[60px] pb-[60px] bg-[#D3DFEA]">
+      className="flex flex-col pl-[15px] pr-[19px] pt-[60px] pb-[60px] bg-[#D3DFEA] text-[#111111CC]">
       <div >
         <h2 className="text-[30px] font-[500] mb-[20px]">НОВОСТИ</h2>
         <div className="px-[16px] pt-[16px] pb-[50px] bg-[#F7FAFF] h-[300px] overflow-y-auto"

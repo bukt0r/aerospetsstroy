@@ -11,16 +11,16 @@ const MainPage = () => {
       </footer>
 
       <div className="mt-[120px]">
-        <h1 className="text-left text-[30px] font-[500]">
+        <h1 className="text-left text-[#111111CC] text-[30px] font-[500]">
           МЫ СОЗДАЕМ БУДУЩЕЕ
         </h1>
-        <p className="text-left text-[20px] font-[200]">
+        <p className="text-left text-[#111111CC] text-[20px] font-[200]">
           полный спектр услуг по проектированию и строительству
         </p>
       </div>
       <div className="flex flex-col mt-auto text-right">
-        <span className="mb-[8px]">info@aeross.ru</span>
-        <span>+7(931)319-25-05</span>
+        <span className="text-[#1D1D1DCC] mb-[8px]">info@aeross.ru</span>
+        <span className="text-[#1D1D1DCC]">+7(931)319-25-05</span>
       </div>
 
     </div>

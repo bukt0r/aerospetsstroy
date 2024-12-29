@@ -4,7 +4,7 @@ const Objects = ({project, description, address, image}) => {
 
   return(
     <div
-      className="flex flex-col">
+      className="flex flex-col text-[#111111CC]">
       <div>
         <h2 className="text-[30px] font-[500]">НАШИ ОБЪЕКТЫ</h2>
       </div>

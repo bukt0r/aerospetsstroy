@@ -14,7 +14,7 @@ const Footer =()=>{
         className="flex flex-col pl-[15px] pr-[19px] pt-[44px] pb-[60px] bg-gradient-to-b from-[#9FBBD9] to-[#467CB6]">
         <div className="flex items-center gap-[9px]">
           <img src="/footerLogo.svg" alt="logo"/>
-          <p className="text-[20px] font-[500]">АэроСпецСтрой</p>
+          <p className="text-[#464849] text-[20px] font-[500]">АэроСпецСтрой</p>
         </div>
         <div className="flex gap-[69px] mt-[29px] mb-[52px] font-[400] text-[#111111B2]">
           <div className="flex flex-col gap-[8px]">
@@ -27,7 +27,7 @@ const Footer =()=>{
           <div className="flex flex-col gap-[8px]">
             <div class="transition-transform duration-300 hover:scale-110"><a href="#AboutСompany">о компании</a></div>
             <div class="transition-transform duration-300 hover:scale-110"><a href="#PartnersContainer">партнеры</a></div>
-            <div class="transition-transform duration-300 hover:scale-110"><a href="#Certificates">сертификаты</a></div>
+            <div class="transition-transform duration-300 hover:scale-110"><a href="#CertificatesContainer">сертификаты</a></div>
             <div class="transition-transform duration-300 hover:scale-110"><a href="#Vacancies">вакансии</a></div>
           </div>
         </div>

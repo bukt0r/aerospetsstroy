@@ -3,7 +3,7 @@
 const Team = ({ title, text, images, names=[] }) => {
   return (
     <div
-      className="flex flex-col"
+      className="flex flex-col text-[#111111CC]"
     >
       <div>
         <h2 className="text-[30px] font-[500] mb-[28px]">КОМАНДА</h2>

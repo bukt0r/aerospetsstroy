@@ -4,6 +4,7 @@ import React from "react";
 import Team from "./Team";
 import ImageCarusel from "@/app/components/ImageCarusel/ImageCarusel";
 
+
 const TeamContainer = () => {
   const teamData = [
     {
@@ -36,16 +37,20 @@ const TeamContainer = () => {
     },
   ];
 
-  // Генерируем массив JSX-компонентов Team
+  const allImages = teamData.flatMap((data) => data.images);
+  const allNames = teamData.flatMap((data) => data.names);
+
   const teamBlocks = teamData.map((data, index) => (
     <Team key={index} title={data.title} text={data.text} images={data.images} names={data.names} />
   ));
 
   return (
     <div
-      className="pl-[15px] pr-[19px] pt-[60px] pb-[60px]"
+      className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:py-[100px]"
       id="TeamContainer">
-      <ImageCarusel blocks={teamBlocks}/>
+      <div>
+        <ImageCarusel blocks={teamBlocks}/>
+      </div>
     </div>
   );
 };

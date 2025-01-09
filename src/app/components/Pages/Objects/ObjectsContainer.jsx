@@ -68,13 +68,14 @@ const ObjectsContainer = () => {
     },
   ];
 
+
   // Генерируем массив JSX-компонентов Team
   const projectBlocks = projectData.map((data, index) => (
     <Objects key={index} project={data.project} description={data.description} address={data.address} image={data.image} />
   ));
 
   return (
-    <div className="pl-[15px] pr-[19px] pt-[60px] pb-[60px]"
+    <div className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:pt-[100px]"
       id="ObjectsContainer">
       <ImageCarusel blocks={projectBlocks}/>
     </div>

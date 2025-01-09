@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ImageCarusel = ({ blocks = [] }) => {
+const ImageCarusel = ({ blocks = []}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {
@@ -37,7 +37,7 @@ const ImageCarusel = ({ blocks = [] }) => {
               currentIndex === 0 ? "opacity-30" : "opacity-100"
             }`}
           >
-            <img src="/arrowLeft.svg" alt="<-" />
+            <img src="/arrowLeft.svg" alt="<-"/>
           </button>
           <button
             onClick={handleNext}
@@ -46,7 +46,7 @@ const ImageCarusel = ({ blocks = [] }) => {
               currentIndex === blocks.length - 1 ? "opacity-30" : "opacity-100"
             }`}
           >
-            <img src="/arrowRight.svg" alt="->" />
+            <img src="/arrowRight.svg" alt="->"/>
           </button>
         </div>
       </div>

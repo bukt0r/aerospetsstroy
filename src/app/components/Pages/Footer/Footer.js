@@ -20,22 +20,22 @@ const Footer =()=>{
         <div className="mt-[29px] xl:mt-[41px] lg:flex xl:text-[20px]">
           <div className="flex gap-[69px] mb-[52px] font-[400] text-[#111111B2] lg:w-[33%]">
             <div className="flex flex-col gap-[8px]">
-              <div className="transition-transform duration-300 hover:scale-110 "><a
+              <div className="hover:underline"><a
                 href="#Specialization">специализация</a></div>
-              <div className="transition-transform duration-300 hover:scale-110 "><a href="#Services">услуги</a></div>
-              <div className="transition-transform duration-300 hover:scale-110 "><a href="#ObjectsContainer">проекты</a>
+              <div className="hover:underline"><a href="#Services">услуги</a></div>
+              <div className="hover:underline"><a href="#ObjectsContainer">проекты</a>
               </div>
-              <div className="transition-transform duration-300 hover:scale-110 "><a href="#News">новости</a></div>
-              <div className="transition-transform duration-300 hover:scale-110 "><a href="#TeamContainer">команда</a></div>
+              <div className="hover:underline"><a href="#News">новости</a></div>
+              <div className="hover:underline"><a href="#TeamContainer">команда</a></div>
             </div>
             <div className="flex flex-col gap-[8px]">
-              <div className="transition-transform duration-300 hover:scale-110"><a href="#AboutСompany">о компании</a>
+              <div className="hover:underline"><a href="#AboutСompany">о компании</a>
               </div>
-              <div className="transition-transform duration-300 hover:scale-110"><a href="#PartnersContainer">партнеры</a>
+              <div className="hover:underline"><a href="#PartnersContainer">партнеры</a>
               </div>
-              <div className="transition-transform duration-300 hover:scale-110"><a
-                href="#CertificatesContainer">сертификаты</a></div>
-              <div className="transition-transform duration-300 hover:scale-110"><a href="#Vacancies">вакансии</a></div>
+              <div className="hover:underline">
+                <a href="#CertificatesContainer">сертификаты</a></div>
+              <div className="hover:underline"><a href="#Vacancies">вакансии</a></div>
             </div>
           </div>
           <div className="flex flex-col gap-[8px] mb-[58px] font-[400] text-[#111111B2] lg:w-[33%]">
@@ -56,7 +56,7 @@ const Footer =()=>{
         </div>
       </div>
 
-      <footer className="pl-[15px] py-[12px]">
+      <footer className="pl-[15px] py-[12px] xl:px-[60px]">
         <p className="text-[#46484980] xl:text-[20px]">ООО “АэроСпецСтрой”</p>
       </footer>
     </div>

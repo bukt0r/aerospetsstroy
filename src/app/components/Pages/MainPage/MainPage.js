@@ -1,7 +1,7 @@
 const MainPage = () => {
   return(
     <div
-      className="flex flex-col pl-[15px] pr-[19px] pb-[36px] bg-[url('/main/mainBackground.svg')] bg-cover bg-center h-[100vh] w-full lg:bg-[url('/main/mainBackgroundFullScreen.svg')] lg:px-[60px] lg:pb-[55px] ">
+      className="flex flex-col pl-[15px] pr-[19px] pb-[36px] bg-[url('/main/mainBackground.svg')] bg-cover bg-center h-[100vh] w-full lg:bg-[url('/main/mainBackgroundFullScreen.svg')] lg:px-[60px] xl:px-[100px] lg:pb-[55px] ">
       <header className="flex justify-between items-center pt-[50px] lg:hidden">
         <div>
           <img src="/main/logo.svg" alt="logo"/>

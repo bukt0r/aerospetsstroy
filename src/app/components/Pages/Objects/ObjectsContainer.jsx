@@ -80,7 +80,7 @@ const ObjectsContainer = () => {
   ));
 
   return (
-    <div className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:pt-[100px]"
+    <div className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:pt-[100px] xl:px-[100px]"
          id="ObjectsContainer"
     >
       <div>

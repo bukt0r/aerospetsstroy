@@ -46,7 +46,7 @@ const ParntersContainer =()=>{
 
   return (
     <div
-      className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] bg-[#F2F5F9] xl:px-[100px] xl:py-[100px]"
+      className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] bg-[#F2F5F9] lg:px-[60px] xl:px-[100px] xl:py-[100px]"
       id="PartnersContainer">
       <ImageCarusel blocks={partnersBlocks}/>
     </div>

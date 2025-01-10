@@ -71,7 +71,7 @@ const TeamContainer = () => {
 
   return (
     <div
-      className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:py-[100px]"
+      className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:py-[100px] xl:px-[100px]"
       id="TeamContainer">
       <div>
         <ImageCarusel blocks={teamBlocks}/>

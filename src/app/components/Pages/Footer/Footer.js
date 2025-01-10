@@ -35,7 +35,7 @@ const Footer =()=>{
               </div>
               <div className="hover:underline">
                 <a href="#CertificatesContainer">сертификаты</a></div>
-              <div className="hover:underline"><a href="#Vacancies">вакансии</a></div>
+              <div className="hover:underline"><a href="#VacanciesContainer">вакансии</a></div>
             </div>
           </div>
           <div className="flex flex-col gap-[8px] mb-[58px] font-[400] text-[#111111B2] lg:w-[33%]">

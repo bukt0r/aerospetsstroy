@@ -7,8 +7,9 @@ import TeamContainer from "@/app/components/Pages/Team/TeamContainer";
 import AboutСompany from "@/app/components/Pages/AboutСompany/AboutСompany";
 import PartnersContainer from "@/app/components/Pages/Partners/PartnersContainer";
 import CertificatesContainer from "@/app/components/Pages/Certificates/CertificatesContainer";
-import Vacancies from "@/app/components/Pages/Vacancies/Vacancies";
+import VacanciesContainer from "@/app/components/Pages/Vacancies/VacanciesContainer";
 import Footer from "@/app/components/Pages/Footer/Footer";
+
 
 
 export default function Home() {
@@ -23,7 +24,7 @@ export default function Home() {
       <AboutСompany/>
       <PartnersContainer/>
       <CertificatesContainer/>
-      <Vacancies/>
+      <VacanciesContainer/>
       <Footer/>
     </main>
   );

@@ -2,7 +2,7 @@ const Specialization = () => {
   return(
     <div
       id="Specialization"
-      className="flex flex-col pl-[15px] pr-[19px] pt-[60px] pb-[60px] text-[#FFFFFFCC] bg-[url('/specializationBackground.svg')] bg-cover bg-center h-[100vh] w-full lg:bg-[url('/specializationBackgroundFullScreen.svg')] lg:flex-row lg:pt-[100px] lg:px-[60px] xl:px-[100px] lg:justify-between">
+      className="flex flex-col pl-[15px] pr-[19px] pt-[60px] pb-[60px] text-[#FFFFFFCC] bg-[url('/specializationBackground.svg')] bg-cover bg-center h-[100vh] w-full lg:bg-[url('/specializationBackgroundFullScreen.svg')] lg:flex-row lg:pt-[100px] lg:pl-[60px] 2xl:px-[100px] lg:justify-between">
       <div className="">
         <h2 className="text-[30px] font-[600] mb-[40px] xl:text-[64px] xl:leading-none">СПЕЦИАЛИЗАЦИЯ</h2>
       </div>

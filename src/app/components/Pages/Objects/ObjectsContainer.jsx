@@ -74,16 +74,15 @@ const ObjectsContainer = () => {
 
   const projects = chunkArray(projectData, count);
 
-  // Генерируем массив JSX-компонентов Team
   const projectBlocks = projects.map((project, index) => (
-    <Objects key={index} project = {project}/>
+    <Objects key={index} projects = {project}/>
   ));
 
   return (
     <div className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:pt-[100px] xl:px-[100px]"
          id="ObjectsContainer"
     >
-      <div>
+      <div className='xl:mb-[65px]'>
         <h2 className="text-[30px] font-[500] xl:text-[64px]">НАШИ ОБЪЕКТЫ</h2>
       </div>
       <ImageCarusel blocks={projectBlocks}/>

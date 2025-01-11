@@ -8,7 +8,6 @@ import AboutСompany from "@/app/components/Pages/AboutСompany/AboutСompany";
 import PartnersContainer from "@/app/components/Pages/Partners/PartnersContainer";
 import CertificatesContainer from "@/app/components/Pages/Certificates/CertificatesContainer";
 import VacanciesContainer from "@/app/components/Pages/Vacancies/VacanciesContainer";
-import Footer from "@/app/components/Pages/Footer/Footer";
 
 
 
@@ -25,7 +24,6 @@ export default function Home() {
       <PartnersContainer/>
       <CertificatesContainer/>
       <VacanciesContainer/>
-      <Footer/>
     </main>
   );
 };

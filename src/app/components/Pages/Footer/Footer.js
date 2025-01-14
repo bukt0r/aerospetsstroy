@@ -9,11 +9,13 @@ import Vacancies from "@/app/components/Pages/Vacancies/Vacancies";
 
 const Footer =()=>{
   return(
-    <div className="">
+    <div id="Footer">
       <div
         className="flex flex-col pl-[15px] pr-[19px] pt-[44px] pb-[60px] bg-gradient-to-b from-[#9FBBD9] to-[#467CB6] lg:px-[60px]">
         <div className="flex items-center gap-[9px] lg:justify-between lg:gap-[0px]">
-          <div className="lg:w-[33%]"><img className="xl:w-[100px] xl:h-[100px]" src="/footerLogo.svg" alt="logo"/></div>
+          <div className="lg:w-[33%]">
+            <img className="xl:w-[100px] xl:h-[100px] cursor-pointer" onClick={() => (window.location.href = '#MainPage')} src="/footerLogo.svg" alt="logo"/>
+          </div>
           <div className="hidden lg:block lg:w-[30%]"></div>
           <div className="lg:w-[34%]"><p className="text-[#464849] text-[20px] xl:text-[32px] font-[500]">АэроСпецСтрой</p></div>
         </div>

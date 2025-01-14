@@ -31,7 +31,10 @@ const Objects = ({projects}) => {
                 <img src="/geolocation.svg" alt="pic"/>
                 <p className="text-[#3E3F4080] text-[14px]">{obj.address}</p>
               </div>
-              <p className="text-[#3E3F4080] underline">показать на карте</p>
+              <p className="text-[#3E3F4080] underline cursor-pointer"
+                 onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(obj.address)}`, '_blank')}
+              >
+                показать на карте</p>
             </div>
             <div className="mb-[48px]">
               <img src={obj.image} alt="pic"/>
@@ -58,7 +61,10 @@ const Objects = ({projects}) => {
                     <img src="/geolocation.svg" alt="pic"/>
                     <p className="text-[#3E3F4080] text-[14px]">{projects[0].address}</p>
                   </div>
-                  <a className="text-[#3E3F4080] underline" href="/">показать на карте</a>
+                  <a className="text-[#3E3F4080] underline cursor-pointer"
+                     onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[0].address)}`, '_blank')}
+                  >
+                    показать на карте</a>
                 </div>
                 <div>
                   <button
@@ -83,7 +89,10 @@ const Objects = ({projects}) => {
                     <img src="/geolocation.svg" alt="pic"/>
                     <p className="text-[#3E3F4080] text-[14px]">{projects[2].address}</p>
                   </div>
-                  <a className="text-[#3E3F4080] underline" href="/">показать на карте</a>
+                  <a className="text-[#3E3F4080] underline cursor-pointer"
+                     onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[2].address)}`, '_blank')}
+                  >
+                    показать на карте</a>
                 </div>
                 <div>
                   <button
@@ -111,7 +120,10 @@ const Objects = ({projects}) => {
                     <img src="/geolocation.svg" alt="pic"/>
                     <p className="text-[#3E3F4080] text-[14px]">{projects[1].address}</p>
                   </div>
-                  <a className="text-[#3E3F4080] underline" href="/">показать на карте</a>
+                  <a className="text-[#3E3F4080] underline cursor-pointer"
+                     onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[1].address)}`, '_blank')}
+                  >
+                    показать на карте</a>
                 </div>
                 <div>
                   <button
@@ -137,7 +149,10 @@ const Objects = ({projects}) => {
                       <img src="/geolocation.svg" alt="pic"/>
                       <p className="text-[#3E3F4080] text-[14px]">{projects[3].address}</p>
                     </div>
-                    <a className="text-[#3E3F4080] underline" href="/">показать на карте</a>
+                    <a className="text-[#3E3F4080] underline cursor-pointer"
+                       onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[3].address)}`, '_blank')}
+                    >
+                      показать на карте</a>
                   </div>
                   <div>
                     <button
@@ -180,7 +195,10 @@ const Objects = ({projects}) => {
                     <img src="/geolocation.svg" alt="pic"/>
                     <p className="text-[#3E3F4080] text-[14px]">{projects[activeElement].address}</p>
                   </div>
-                  <a className="text-[#3E3F4080] underline" href="/">показать на карте</a>
+                  <a className="text-[#3E3F4080] underline cursor-pointer"
+                     onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[activeElement].address)}`, '_blank')}
+                  >
+                    показать на карте</a>
                 </div>
               </div>
             </div>

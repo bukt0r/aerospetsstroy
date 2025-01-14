@@ -7,6 +7,20 @@ import chunkArray from "@/app/components/Helper/chunkArray";
 import {useMediaQuery} from "@mantine/hooks";
 import {vacanciesData} from "@/data/vacanciesData";
 
+function getVacancyWord(count) {
+  if (count % 10 === 1 && count % 100 !== 11) {
+    return "вакансия";
+  } else if (
+    [2, 3, 4].includes(count % 10) &&
+    ![12, 13, 14].includes(count % 100)
+  ) {
+    return "вакансии";
+  } else {
+    return "вакансий";
+  }
+}
+
+
 const VacanciesContainer =()=>{
 
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
@@ -27,9 +41,12 @@ const VacanciesContainer =()=>{
         <h2 className="text-[30px] font-[500] mb-[8px] xl:text-[64px] xl:leading-none">ВАКАНСИИ</h2>
       </div>
       <div className="mb-[24px] xl:mb-[57px]">
-        {vacancies.length < 1 ? (
+        {vacanciesData.length < 1 ? (
             <p className="text-[#4A4A4ACC] xl:text-[32px]">Открытых вакансий нет</p>
-        ) : (<p className="text-[#4A4A4ACC] xl:text-[32px]">{vacancies.length} вакансии </p>)}
+        ) : (<p className="text-[#4A4A4ACC] xl:text-[32px]">
+              {vacanciesData.length} {getVacancyWord(vacanciesData.length)}
+            </p>
+        )}
       </div>
       <div>
         {vacancies.length < 1 ? (

@@ -20,8 +20,8 @@ const Objects = ({projects}) => {
   const sliderImages = chunkArray(projects[activeElement].images ,sliderCount);
   const slider = sliderImages.map((obj, sliderIndex) => (
     <div
-      className="flex gap-[20px] mb-[60px]">
       key={sliderIndex}
+      className="flex gap-[20px] mb-[60px]">
       {obj.map((image:string, index:number)=> (
         <div key={index}>
           <img className="" key={index} src={image} alt="img"/>

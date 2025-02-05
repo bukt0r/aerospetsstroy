@@ -1,6 +1,8 @@
 'use client'
 
 import React, {useState} from "react";
+import ImageCarusel from "@/app/components/ImageCarusel/ImageCarusel";
+import chunkArray from "@/app/components/Helper/chunkArray";
 
 const Objects = ({projects}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +16,19 @@ const Objects = ({projects}) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const sliderCount = 4;
+  const sliderImages = chunkArray(projects[activeElement].images ,sliderCount);
+  const slider = sliderImages.map((obj,) => (
+    <div
+      className="flex gap-[20px] mb-[60px]">
+      {obj.map((image:string, index:number)=> (
+        <div key={index}>
+          <img className="" key={index} src={image} alt="img"/>
+        </div>
+      ))}
+    </div>
+  ))
+
   return (
 
     <div className="relative xl:mb-[100px]">
@@ -169,7 +184,7 @@ const Objects = ({projects}) => {
         </div>
       </div>
       {isModalOpen && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#FFFFFF] z-50">
+        <div className="max-xl:hidden absolute inset-0 flex items-center justify-center bg-[#FFFFFF] z-50">
           <div className=" flex flex-col h-[100%] w-[100%] bg-[#FFFFFF] py-[60px] pl-[60px] pr-[28px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
             <div className="flex mb-[60px] gap-[60px]">
               <div className="w-full">
@@ -202,12 +217,8 @@ const Objects = ({projects}) => {
                 </div>
               </div>
             </div>
-            <div className="flex gap-[20px]">
-              {projects.map((obj, index) => (
-                <div key={index}>
-                  <div><img src={obj.images[0]} alt=""/></div>
-                </div>
-              ))}
+            <div>
+              <ImageCarusel blocks={slider}/>
             </div>
           </div>
         </div>

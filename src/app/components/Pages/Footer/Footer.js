@@ -1,11 +1,3 @@
-import AboutСompany from "@/app/components/Pages/AboutСompany/AboutСompany";
-import Certificates from "@/app/components/Pages/Certificates/Certificates";
-import News from "@/app/components/Pages/News/News";
-import Partners from "@/app/components/Pages/Partners/Partners";
-import Services from "@/app/components/Pages/Services/Services";
-import Specialization from "@/app/components/Pages/Specialization/Specialization";
-import Team from "@/app/components/Pages/Team/Team";
-import Vacancies from "@/app/components/Pages/Vacancies/Vacancies";
 
 const Footer =()=>{
   return(

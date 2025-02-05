@@ -27,8 +27,9 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
     setIsModalOpen(false);
   };
   const sliderCount = 4;
-  const sliderImages = chunkArray(projects[activeElement].images ,sliderCount);
-  const slider = sliderImages.map((obj, sliderIndex) => (
+  const sliderImages:string[][] = chunkArray(projects[activeElement].images ,sliderCount);
+  console.log('!!!!!!', sliderImages)
+  const slider:JSX.Element[] = sliderImages.map((obj, sliderIndex) => (
     <div
       key={sliderIndex}
       className="flex gap-[20px] mb-[60px]">
@@ -41,7 +42,6 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
   ))
 
   return (
-
     <div className="relative xl:mb-[100px]">
       {projects.map((obj, index) => (
         <div key={index}>

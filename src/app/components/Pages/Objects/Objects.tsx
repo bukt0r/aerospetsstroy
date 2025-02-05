@@ -6,9 +6,11 @@ import chunkArray from "@/app/components/Helper/chunkArray";
 
 interface Project {
   id: number;
-  name: string;
+  title: string;
   description: string;
-  imageUrl: string;
+  address: string;
+  adressUrl: string;
+  image: string;
   images: string[];
 }
 

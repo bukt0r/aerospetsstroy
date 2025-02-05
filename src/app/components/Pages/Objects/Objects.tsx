@@ -9,6 +9,7 @@ interface Project {
   name: string;
   description: string;
   imageUrl: string;
+  images: string[];
 }
 
 const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {

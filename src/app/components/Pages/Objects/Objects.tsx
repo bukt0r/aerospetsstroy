@@ -4,7 +4,14 @@ import React, {useState} from "react";
 import ImageCarusel from "@/app/components/ImageCarusel/ImageCarusel";
 import chunkArray from "@/app/components/Helper/chunkArray";
 
-const Objects: React.FC<{ projects: any[] }> = ({ projects }) => {
+interface Project {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+}
+
+const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [activeElement, setActiveElement] = useState<number>(0);

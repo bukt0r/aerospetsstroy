@@ -229,7 +229,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
               </div>
             </div>
             <div>
-              {/* @ts-expect-error */}
+              {//@typescript-eslint/ban-ts-comment}
               <ImageCarusel blocks={slider}/>
             </div>
           </div>

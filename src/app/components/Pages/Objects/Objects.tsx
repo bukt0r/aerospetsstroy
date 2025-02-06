@@ -28,7 +28,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
   };
   const sliderCount = 4;
   const sliderImages:string[][] = chunkArray(projects[activeElement].images ,sliderCount);
-  const slider: React.ReactNode[] = sliderImages.map((obj, sliderIndex) => (
+  const slider = sliderImages.map((obj, sliderIndex) => (
     <div
       key={sliderIndex}
       className="flex gap-[20px] mb-[60px]">
@@ -39,6 +39,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
       ))}
     </div>
   ))
+  console.log('!!!!!', slider)
 
   return (
     <div className="relative xl:mb-[100px]">

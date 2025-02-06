@@ -229,6 +229,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
               </div>
             </div>
             <div>
+              {/* @ts-ignore */}
               <ImageCarusel blocks={slider}/>
             </div>
           </div>

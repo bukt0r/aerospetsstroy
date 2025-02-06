@@ -229,7 +229,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
               </div>
             </div>
             <div>
-              {//@typescript-eslint/ban-ts-comment}
+              {/*@typescript-eslint/ban-ts-comment*/}
               <ImageCarusel blocks={slider}/>
             </div>
           </div>

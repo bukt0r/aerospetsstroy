@@ -4,7 +4,7 @@ const AboutСompany = () => {
       id="AboutСompany"
       className="flex flex-col lg:flex-row pl-[15px] pr-[19px] pt-[60px] pb-[60px] text-[#FFFFFFCC] bg-[url('/aboutCompanyBackground.svg')] bg-cover bg-center h-[100vh] w-full lg:bg-[url('/aboutCompanyFullScreen.svg')] lg:px-[60px] xl:px-[100px] lg:py-[100px] lg:justify-between">
       <div>
-        <h2 className="text-[30px] font-[600] mb-[40px] xl:text-[64px] xl:leading-none">О КОМПАНИИ</h2>
+        <h2 className="text-[30px] font-semibold mb-[40px] xl:text-[64px] xl:leading-none">О КОМПАНИИ</h2>
       </div>
       <div className="xl:text-[20px] lg:w-[560px]">
         <div className="mb-[36px] ">

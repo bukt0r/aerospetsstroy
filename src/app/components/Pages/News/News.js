@@ -4,7 +4,7 @@ const News = () =>{
       id="News"
       className="flex flex-col pl-[15px] pr-[19px] pt-[60px] pb-[60px] bg-[#D3DFEA] text-[#111111CC] lg:bg-[#F2F5F9] lg:px-[60px] lg:py-[100px] xl:px-[100px]">
       <div >
-        <h2 className="text-[30px] font-[500] mb-[20px] xl:text-[64px] lg:mb-[37px]">НОВОСТИ</h2>
+        <h2 className="text-[30px] font-semibold mb-[20px] xl:text-[64px] lg:mb-[37px]">НОВОСТИ</h2>
         <div
           className="relative h-[300px] lg:h-[690px] bg-[#F7FAFF] lg:bg-gradient-to-b from-[#E9F3FE] to-[#F7F9FF] lg:shadow-[8px_8px_200px_0px_#3C72AE33]">
           {/* Содержимое с прокруткой */}

@@ -14,8 +14,36 @@
   }
 }
 
+@font-face {
+  font-family: 'Involve';
+  src: url('/fonts/Involve-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Involve';
+  src: url('/fonts/Involve-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Involve';
+  src: url('/fonts/Involve-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeue-Thin.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Involve', 'Helvetica', sans-serif;
 }

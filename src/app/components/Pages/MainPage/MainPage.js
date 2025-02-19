@@ -55,10 +55,10 @@ const MainPage = () => {
 
       <div className="mt-[120px]">
         <h1
-          className="text-left text-[#111111CC] text-[30px] font-[500] xl:text-[64px] lg:text-[#1D1D1DCC] lg:mb-[20px]">
+          className="text-left text-[#111111CC] text-[30px] font-semibold xl:text-[64px] lg:text-[#1D1D1DCC] lg:mb-[20px]">
           МЫ СОЗДАЕМ БУДУЩЕЕ
         </h1>
-        <p className="text-left text-[#111111CC] text-[20px] font-[200] xl:text-[32px] lg:text-[#000000B2]">
+        <p className="text-left text-[#111111CC] text-[20px] font-helvetica font-[200] xl:text-[32px] lg:text-[#000000B2]">
           полный спектр услуг по проектированию и строительству
         </p>
       </div>

@@ -58,7 +58,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                 <p className="text-[#3E3F4080] text-[14px]">{obj.address}</p>
               </div>
               <p className="text-[#3E3F4080] underline cursor-pointer"
-                 onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(obj.address)}`, '_blank')}
+                 onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(obj.address)}`, '_blank')}
               >
                 показать на карте</p>
             </div>
@@ -88,7 +88,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     <p className="text-[#3E3F4080] text-[14px]">{projects[0].address}</p>
                   </div>
                   <a className="text-[#3E3F4080] underline cursor-pointer"
-                     onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[0].address)}`, '_blank')}
+                     onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[0].address)}`, '_blank')}
                   >
                     показать на карте</a>
                 </div>
@@ -116,7 +116,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     <p className="text-[#3E3F4080] text-[14px]">{projects[2].address}</p>
                   </div>
                   <a className="text-[#3E3F4080] underline cursor-pointer"
-                     onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[2].address)}`, '_blank')}
+                     onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[2].address)}`, '_blank')}
                   >
                     показать на карте</a>
                 </div>
@@ -147,7 +147,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     <p className="text-[#3E3F4080] text-[14px]">{projects[1].address}</p>
                   </div>
                   <a className="text-[#3E3F4080] underline cursor-pointer"
-                     onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[1].address)}`, '_blank')}
+                     onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[1].address)}`, '_blank')}
                   >
                     показать на карте</a>
                 </div>
@@ -176,7 +176,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                       <p className="text-[#3E3F4080] text-[14px]">{projects[3].address}</p>
                     </div>
                     <a className="text-[#3E3F4080] underline cursor-pointer"
-                       onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[3].address)}`, '_blank')}
+                       onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[3].address)}`, '_blank')}
                     >
                       показать на карте</a>
                   </div>
@@ -222,7 +222,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     <p className="text-[#3E3F4080] text-[14px]">{projects[activeElement].address}</p>
                   </div>
                   <a className="text-[#3E3F4080] underline cursor-pointer"
-                     onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(projects[activeElement].address)}`, '_blank')}
+                     onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[activeElement].address)}`, '_blank')}
                   >
                     показать на карте</a>
                 </div>

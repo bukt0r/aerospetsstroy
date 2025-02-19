@@ -103,7 +103,7 @@ const ObjectsContainer = () => {
          id="ObjectsContainer"
     >
       <div className='xl:mb-[65px]'>
-        <h2 className="text-[30px] font-[500] xl:text-[64px]">НАШИ ОБЪЕКТЫ</h2>
+        <h2 className="text-[30px] font-semibold xl:text-[64px]">НАШИ ОБЪЕКТЫ</h2>
       </div>
       <ImageCarusel blocks={projectBlocks}/>
     </div>

@@ -10,7 +10,7 @@ const Team = ({ team }) => {
       <div className="flex flex-col lg:flex-row lg:justify-between">
         <div>
           <div>
-            <h2 className="text-[30px] font-[500] mb-[28px] xl:mb-[19px] xl:text-[64px] xl:leading-none">КОМАНДА</h2>
+            <h2 className="text-[30px] font-semibold mb-[28px] xl:mb-[19px] xl:text-[64px] xl:leading-none">КОМАНДА</h2>
           </div>
           <div className="mb-[12px] xl:mb-[40px]">
             <p className="font-[550] xl:text-[24px]">{title}</p>

@@ -38,7 +38,7 @@ const VacanciesContainer =()=>{
       id="VacanciesContainer"
     >
       <div>
-        <h2 className="text-[30px] font-[500] mb-[8px] xl:text-[64px] xl:leading-none">ВАКАНСИИ</h2>
+        <h2 className="text-[30px] font-semibold mb-[8px] xl:text-[64px] xl:leading-none">ВАКАНСИИ</h2>
       </div>
       <div className="mb-[24px] xl:mb-[57px]">
         {vacanciesData.length < 1 ? (

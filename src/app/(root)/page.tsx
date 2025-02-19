@@ -18,8 +18,8 @@ export default function Home() {
       <Specialization/>
       <Services/>
       <ObjectsContainer/>
-      <News/>
-      <TeamContainer/>
+      {/*<News/>*/}
+      {/*<TeamContainer/>*/}
       <AboutСompany/>
       <PartnersContainer/>
       <CertificatesContainer/>

@@ -2,7 +2,7 @@ const AboutСompany = () => {
   return(
     <div
       id="AboutСompany"
-      className="flex flex-col lg:flex-row pl-[15px] pr-[19px] pt-[60px] pb-[60px] text-[#FFFFFFCC] bg-[url('/aboutCompanyBackground.svg')] bg-cover bg-center h-[100vh] w-full lg:bg-[url('/aboutCompanyFullScreen.svg')] lg:px-[60px] xl:px-[100px] lg:py-[100px] lg:justify-between">
+      className="flex flex-col lg:flex-row pl-[15px] pr-[19px] pt-[60px] pb-[60px] text-[#FFFFFFCC] bg-[url('/aboutCompanyBackground.svg')] bg-cover bg-center w-full lg:bg-[url('/aboutCompanyFullScreen.svg')] lg:px-[60px] xl:px-[100px] lg:py-[100px] lg:justify-between">
       <div>
         <h2 className="text-[30px] font-semibold mb-[40px] xl:text-[64px] xl:leading-none">О КОМПАНИИ</h2>
       </div>

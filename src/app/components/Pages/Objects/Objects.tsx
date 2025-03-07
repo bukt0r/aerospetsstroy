@@ -39,7 +39,6 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
       ))}
     </div>
   ))
-  console.log('!!!!!', slider)
 
   return (
     <div className="relative xl:mb-[100px]">
@@ -72,7 +71,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
 
 
       <div className="max-xl:hidden">
-        <div className="flex max-xl:hidden gap-[20px]">
+        <div className="flex gap-[20px]">
           <div className="flex flex-col justify-between">
             <div className="flex flex-col w-full">
               <div className="mb-[20px]">
@@ -195,8 +194,8 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
         </div>
       </div>
       {isModalOpen && (
-        <div className="max-xl:hidden absolute inset-0 flex items-center justify-center bg-[#FFFFFF] z-50">
-          <div className=" flex flex-col h-[100%] w-[100%] bg-[#FFFFFF] py-[60px] pl-[60px] pr-[28px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
+        <div className="max-xl:hidden absolute inset-0 flex items-start justify-center bg-[#FFFFFFB3] z-50">
+          <div className=" flex flex-col w-[100%] bg-[#FFFFFF] py-[60px] pl-[60px] pr-[28px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
             <div className="flex mb-[60px] gap-[60px]">
               <div className="w-full">
                 <img src={projects[activeElement].image} alt="pic"/>

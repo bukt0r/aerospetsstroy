@@ -13,7 +13,7 @@ const MainPage = () => {
   return(
     <div
       id="MainPage"
-      className="flex flex-col pl-[15px] pr-[19px] pb-[36px] bg-[url('/main/mainBackground.svg')] bg-cover bg-center h-[100vh] w-full lg:bg-[url('/main/mainBackgroundFullScreen.svg')] lg:px-[60px] xl:px-[100px] lg:pb-[55px] ">
+      className="flex flex-col pl-[15px] pr-[19px] pb-[36px] bg-[url('/main/mainBackground.svg')] bg-cover bg-center min-h-screen w-full lg:bg-[url('/main/mainBackgroundFullScreen.svg')] lg:px-[60px] xl:px-[100px] lg:pb-[55px] ">
       <header className="flex justify-between items-center pt-[50px] lg:hidden">
         <div>
           <img onClick={() => window.location.reload()} className="cursor-pointer" src="/main/logo.svg" alt="logo"/>

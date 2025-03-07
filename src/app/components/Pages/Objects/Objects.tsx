@@ -26,6 +26,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const sliderCount = 4;
   const sliderImages:string[][] = chunkArray(projects[activeElement].images ,sliderCount);
   const slider = sliderImages.map((obj, sliderIndex) => (

@@ -41,11 +41,26 @@ const Footer =()=>{
             <div>банк : ДО ББР Банка (АО), г.Санкт-Петербург</div>
           </div>
           <div className="flex flex-col gap-[8px] font-[500] lg:w-[33%]">
-            <div>офис в Санкт-Петербурге : +7(931)319-25-05</div>
-            <div>отдел снабжения : +7(928)435-56-00</div>
-            <div>email : info@aeross.ru</div>
-            <div>Фактический адрес :196084, г. Санкт-Петербург, ул. Смоленская, д. 7 лит. Б, оф. 205, 206, 207</div>
-            <div>Юридический адрес : 353460, Краснодарский край, г. Геленджик, ул. Тельмана, д. 137, ком. 36</div>
+            <div>
+              <span className="text-black">Юридический адрес :</span>{' '}
+              <span className="text-gray-700">353460, Краснодарский край, г. Геленджик, ул. Тельмана, д. 137, ком. 36</span>
+            </div>
+            <div>
+              <span className="text-black">email :</span>{' '}
+              <a href="mailto:info@aeross.ru" className=" text-gray-700 no-underline">info@aeross.ru</a>
+            </div>
+            <div>
+              <span className="text-black">офис в Санкт-Петербурге :</span>{' '}
+              <a href="tel:+79313192505" className=" text-gray-700 no-underline">+7(931)319-25-05</a>
+            </div>
+            <div>
+              <span className="text-black">отдел снабжения :</span>{' '}
+              <a href="tel:+79284355600" className="text-gray-700 no-underline">+7(928)435-56-00</a>
+            </div>
+            <div>
+              <span className="text-black">Адрес для корреспонденции :</span>{' '}
+              <span className="text-gray-700">196084, г. Санкт-Петербург, ул. Смоленская, д. 7 лит. Б, оф. 205, 206, 207</span>
+            </div>
           </div>
         </div>
       </div>

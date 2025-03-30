@@ -35,15 +35,14 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
       className="flex gap-[20px] mb-[60px]">
       {obj.map((image:string, index:number)=> (
         <div key={index}>
-          <img className="" key={index} src={image} alt="img"/>
+          <img className="max-w-[100px]" key={index} src={image} alt="img"/>
         </div>
       ))}
     </div>
   ))
-  console.log('!!!!!', slider)
 
   return (
-    <div className="relative xl:mb-[100px]">
+    <div className="relative xl:mb-[20px]">
       {projects.map((obj, index) => (
         <div key={index}>
           <div className="xl:hidden">
@@ -63,7 +62,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
               >
                 показать на карте</p>
             </div>
-            <div className="mb-[48px]">
+            <div className="mb-[48px] max-w-[300px]">
               <img src={obj.image} alt="pic"/>
             </div>
           </div>
@@ -77,12 +76,12 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
           <div className="flex flex-col justify-between">
             <div className="flex flex-col w-full">
               <div className="mb-[20px]">
-                <img src={projects[0].image} alt="pic"/>
+                <img src={projects[0].image} alt="pic" className="max-w-[250px]"/>
               </div>
               <div className="mb-[10px]">
                 <p className="font-[600] text-[#111111CC]">{projects[0].title}</p>
               </div>
-              <div className="flex items-end justify-between">
+              <div className="flex items-end">
                 <div>
                   <div className="flex">
                     <img src="/geolocation.svg" alt="pic"/>
@@ -105,12 +104,12 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
             </div>
             {projects[2] && (<div className="flex flex-col w-full">
               <div className="mb-[20px]">
-                <img src={projects[2].image} alt="pic"/>
+                <img src={projects[2].image} alt="pic" className="max-w-[250px]"/>
               </div>
               <div className="mb-[10px]">
                 <p className="font-[600] text-[#111111CC]">{projects[2].title}</p>
               </div>
-              <div className="flex items-end justify-between">
+              <div className="flex items-end">
                 <div>
                   <div className="flex">
                     <img src="/geolocation.svg" alt="pic"/>
@@ -136,12 +135,12 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
           <div>
             {projects[1] && (<div className="flex flex-col w-full mb-[85px]">
               <div className="mb-[20px]">
-                <img src={projects[1].image} alt="pic"/>
+                <img src={projects[1].image} alt="pic" className="max-w-[250px]"/>
               </div>
               <div className="mb-[10px]">
                 <p className="font-[600] text-[#111111CC]">{projects[1].title}</p>
               </div>
-              <div className="flex items-end justify-between">
+              <div className="flex items-end">
                 <div>
                   <div className="flex">
                     <img src="/geolocation.svg" alt="pic"/>
@@ -162,15 +161,15 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                 </div>
               </div>
             </div>)}
-            {projects[3] && (<div className="flex justify-end">
+            {projects[3] && (<div className="flex justify-start">
               <div className="flex flex-col">
                 <div className="mb-[20px]">
-                  <img src={projects[3].image} alt="pic"/>
+                  <img src={projects[3].image} alt="pic" className="max-w-[250px]"/>
                 </div>
                 <div className="mb-[10px]">
                   <p className="font-[600] text-[#111111CC]">{projects[3].title}</p>
                 </div>
-                <div className="flex items-end justify-between">
+                <div className="flex items-end">
                   <div>
                     <div className="flex">
                       <img src="/geolocation.svg" alt="pic"/>
@@ -196,11 +195,11 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
         </div>
       </div>
       {isModalOpen && (
-        <div className="max-xl:hidden absolute inset-0 flex items-center justify-center bg-[#FFFFFF] z-50">
-          <div className=" flex flex-col h-[100%] w-[100%] bg-[#FFFFFF] py-[60px] pl-[60px] pr-[28px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
-            <div className="flex mb-[60px] gap-[60px]">
-              <div className="w-full">
-                <img src={projects[activeElement].image} alt="pic"/>
+        <div className="max-xl:hidden absolute inset-0 h-[80vh] flex items-center justify-center bg-[#FFFFFF] z-50">
+          <div className=" flex flex-col h-[100%] w-[100%] bg-[#FFFFFF] py-[30px] pl-[60px] pr-[28px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
+            <div className="flex mb-[30px] gap-[30px]">
+              <div className="flex items-center w-[25%]">
+                <img src={projects[activeElement].image} alt="pic" className="max-w-[250px]"/>
               </div>
               <div className="flex flex-col w-[70%]">
                 <div className="ml-auto mb-[44px]">
@@ -214,7 +213,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                 <div className="mb-[18px]">
                   <p>{projects[activeElement].title}</p>
                 </div>
-                <div className="mb-[80px]" >
+                <div className="mb-[30px]" >
                   <p>{projects[activeElement].description}</p>
                 </div>
                 <div>

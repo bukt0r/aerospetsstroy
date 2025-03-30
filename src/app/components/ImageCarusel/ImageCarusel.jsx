@@ -16,12 +16,12 @@ const ImageCarusel = ({ blocks = []}) => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col flex-grow">
       {/* Отображаем текущий блок */}
       <div>{blocks[currentIndex]}</div>
 
       {/* Навигация */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mt-auto">
         {/* Пагинация */}
         <div className="text-[24px] font-[400] mb-2">
           <span className="text-[#6095AB]">{currentIndex + 1} / </span>

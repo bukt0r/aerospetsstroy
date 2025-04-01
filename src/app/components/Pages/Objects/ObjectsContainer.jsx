@@ -94,15 +94,19 @@ const ObjectsContainer = () => {
 
   const projects = chunkArray(projectData, count);
 
+  const addresses = projectData.map(project => project.address);
+
+  const titles = projectData.map(project => project.title);
+
   const projectBlocks = projects.map((project, index) => (
-    <Objects key={index} projects = {project}/>
+    <Objects key={index} projects = {project} addresses = {addresses} titles = {titles}/>
   ));
 
   return (
-    <div className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:pt-[100px] xl:px-[100px]"
+    <div className="flex flex-col min-h-screen pl-[15px] pr-[19px] pt-[40px] pb-[40px] lg:px-[60px] lg:pt-[40px] xl:px-[100px]"
          id="ObjectsContainer"
     >
-      <div className='xl:mb-[40px]'>
+      <div className='xl:mb-[20px]'>
         <h2 className="text-[30px] font-semibold xl:text-[64px]">НАШИ ОБЪЕКТЫ</h2>
       </div>
       <ImageCarusel blocks={projectBlocks}/>

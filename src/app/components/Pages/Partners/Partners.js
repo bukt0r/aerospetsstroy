@@ -11,7 +11,7 @@ const Partners =({images})=>{
       </div>
       <div className="grid grid-cols-3 xl:grid-cols-4 mb-[44px] gap-[11px] xl:gap-[20px] xl:mb-[80px]">
         {images.map((image, index) => (
-          <div key={index} className="flex flex-col items-center">
+          <div key={index} className="flex flex-col items-center max-w-[200px]">
             <img src={image} alt={`${index + 1}`} className="w-full"/>
           </div>
         ))}

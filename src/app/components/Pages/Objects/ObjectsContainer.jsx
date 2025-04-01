@@ -94,8 +94,12 @@ const ObjectsContainer = () => {
 
   const projects = chunkArray(projectData, count);
 
+  const addresses = projectData.map(project => project.address);
+
+  const titles = projectData.map(project => project.title);
+
   const projectBlocks = projects.map((project, index) => (
-    <Objects key={index} projects = {project}/>
+    <Objects key={index} projects = {project} addresses = {addresses} titles = {titles}/>
   ));
 
   return (

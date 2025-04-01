@@ -3,6 +3,7 @@
 import React, {useState} from "react";
 import ImageCarusel from "@/app/components/ImageCarusel/ImageCarusel";
 import chunkArray from "@/app/components/Helper/chunkArray";
+import MapComponent from "@/app/components/Map/MapComponent";
 
 interface Project {
   id: number;
@@ -14,7 +15,7 @@ interface Project {
   images: string[];
 }
 
-const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
+const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: string[] }> = ({ projects, addresses, titles }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [activeElement, setActiveElement] = useState<number>(0);
@@ -25,6 +26,14 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
   };
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+  const [isModalMapOpen, setIsModalMapOpen] = useState(false);
+
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const openModalMap = (project: Project) => {
+    setSelectedProject(project);
+    setIsModalMapOpen(true);
   };
 
   const sliderCount = 4;
@@ -58,7 +67,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                 <p className="text-[#3E3F4080] text-[14px]">{obj.address}</p>
               </div>
               <p className="text-[#3E3F4080] underline cursor-pointer"
-                 onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(obj.address)}`, '_blank')}
+                 onClick={() => openModalMap(obj)}
               >
                 показать на карте</p>
             </div>
@@ -88,7 +97,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     <p className="text-[#3E3F4080] text-[14px]">{projects[0].address}</p>
                   </div>
                   <a className="text-[#3E3F4080] underline cursor-pointer"
-                     onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[0].address)}`, '_blank')}
+                     onClick={() => openModalMap(projects[0])}
                   >
                     показать на карте</a>
                 </div>
@@ -116,7 +125,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     <p className="text-[#3E3F4080] text-[14px]">{projects[2].address}</p>
                   </div>
                   <a className="text-[#3E3F4080] underline cursor-pointer"
-                     onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[2].address)}`, '_blank')}
+                     onClick={() => openModalMap(projects[2])}
                   >
                     показать на карте</a>
                 </div>
@@ -147,7 +156,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     <p className="text-[#3E3F4080] text-[14px]">{projects[1].address}</p>
                   </div>
                   <a className="text-[#3E3F4080] underline cursor-pointer"
-                     onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[1].address)}`, '_blank')}
+                     onClick={() => openModalMap(projects[1])}
                   >
                     показать на карте</a>
                 </div>
@@ -176,7 +185,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                       <p className="text-[#3E3F4080] text-[14px]">{projects[3].address}</p>
                     </div>
                     <a className="text-[#3E3F4080] underline cursor-pointer"
-                       onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[3].address)}`, '_blank')}
+                       onClick={() => openModalMap(projects[3])}
                     >
                       показать на карте</a>
                   </div>
@@ -222,7 +231,7 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
                     <p className="text-[#3E3F4080] text-[14px]">{projects[activeElement].address}</p>
                   </div>
                   <a className="text-[#3E3F4080] underline cursor-pointer"
-                     onClick={() => window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(projects[activeElement].address)}`, '_blank')}
+                     onClick={() => openModalMap(projects[activeElement])}
                   >
                     показать на карте</a>
                 </div>
@@ -234,6 +243,21 @@ const Objects: React.FC<{ projects: Project[] }> = ({ projects }) => {
             </div>
           </div>
         </div>
+      )}
+      {isModalMapOpen && (
+          <div className="max-xl:hidden absolute inset-0 h-[80vh] flex items-center justify-center bg-[#FFFFFF] z-50">
+            <div className=" flex flex-col items-center justify-center h-[100%] w-[100%] bg-[#FFFFFF] py-[30px] px-[30px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
+              <button
+                  onClick={() => setIsModalMapOpen(false)}
+                  className="text-[#6095AB] px-[21px] border-[#6095AB] border-[1px] rounded-2xl self-end absolute top-[40px] right-[30px]"
+              >
+                закрыть
+              </button>
+              <div className="[filter:grayscale(0.5)]">
+                <MapComponent addresses={addresses} titles={titles} centerAddress={selectedProject?.address} />
+              </div>
+            </div>
+          </div>
       )}
     </div>);
 };

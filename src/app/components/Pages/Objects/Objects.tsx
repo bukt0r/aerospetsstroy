@@ -245,7 +245,7 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
         </div>
       )}
       {isModalMapOpen && (
-          <div className="max-xl:hidden absolute inset-0 h-[80vh] flex items-center justify-center bg-[#FFFFFF] z-50">
+          <div className="absolute inset-0 h-[80vh] flex items-center justify-center bg-[#FFFFFF] z-50">
             <div className=" flex flex-col items-center justify-center h-[100%] w-[100%] bg-[#FFFFFF] py-[30px] px-[30px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
               <button
                   onClick={() => setIsModalMapOpen(false)}
@@ -253,7 +253,7 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
               >
                 закрыть
               </button>
-              <div className="[filter:grayscale(0.5)]">
+              <div className="[filter:grayscale(0.5)] border-[1px] border-black w-[90%] h-[60%]">
                 <MapComponent addresses={addresses} titles={titles} centerAddress={selectedProject?.address} />
               </div>
             </div>

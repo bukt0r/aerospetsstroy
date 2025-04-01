@@ -4,6 +4,8 @@ import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 const MapComponent = ({ addresses, titles, centerAddress }) => {
     const [coordinates, setCoordinates] = useState([]);
     const [center, setCenter] = useState([55.751244, 37.618423]); // Москва по умолчанию
+    const [mapInstance, setMapInstance] = useState(null);
+    const apiKey = "158182c0-83bc-4116-994d-7433c95bb7a3";
 
     useEffect(() => {
         const fetchCoordinates = async () => {
@@ -11,7 +13,7 @@ const MapComponent = ({ addresses, titles, centerAddress }) => {
                 addresses.map(async (address) => {
                     try {
                         const response = await fetch(
-                            `https://geocode-maps.yandex.ru/1.x/?apikey=158182c0-83bc-4116-994d-7433c95bb7a3&format=json&geocode=${encodeURIComponent(address)}`
+                            `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&format=json&geocode=${encodeURIComponent(address)}`
                         );
                         const data = await response.json();
 
@@ -47,18 +49,32 @@ const MapComponent = ({ addresses, titles, centerAddress }) => {
 
     return (
         <YMaps>
-            <Map state={{ center, zoom: 10 }} width="600px" height="400px">
+            <Map
+                state={{ center, zoom: 10 }}
+                width="100%"
+                height="100%"
+                instanceRef={(ref) => setMapInstance(ref)}
+            >
                 {coordinates.map((coord, index) => (
                     <Placemark
                         key={index}
                         geometry={coord}
                         properties={{
-                            balloonContentHeader: `<strong>${titles[index]}</strong>`,
-                            balloonContentBody: `Адрес: ${addresses[index]}`
+                            hintContent: titles[index], // Всплывающая подсказка при наведении
+                            balloonContentHeader: `<b>${titles[index]}</b>`, // Заголовок балуна
+                            balloonContentBody: `<p>${addresses[index]}</p>` // Тело балуна
                         }}
                         options={{
-                            balloonMaxWidth: 200,
-                            preset: "islands#redIcon" // Меняем стиль точки, если нужно
+                            preset: "islands#blueDotIcon" // Синий маркер (стандартный стиль)
+                        }}
+                        onClick={(e) => {
+                            const placemark = e.get("target");
+                            if (mapInstance) {
+                                mapInstance.balloon.open(placemark.geometry.getCoordinates(), {
+                                    contentHeader: `<b>${titles[index]}</b>`,
+                                    contentBody: `<p>${addresses[index]}</p>`,
+                                });
+                            }
                         }}
                     />
                 ))}
@@ -68,6 +84,8 @@ const MapComponent = ({ addresses, titles, centerAddress }) => {
 };
 
 export default MapComponent;
+
+
 
 
 

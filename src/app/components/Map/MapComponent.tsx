@@ -5,7 +5,7 @@ const MapComponent = ({ addresses, titles, centerAddress }) => {
     const [coordinates, setCoordinates] = useState([]);
     const [center, setCenter] = useState([55.751244, 37.618423]); // Москва по умолчанию
     const [mapInstance, setMapInstance] = useState(null);
-    const apiKey = "158182c0-83bc-4116-994d-7433c95bb7a3";
+    const apiKey = "0202c11e-dc17-4344-8864-88e3386584d2";
 
     useEffect(() => {
         const fetchCoordinates = async () => {
@@ -34,13 +34,17 @@ const MapComponent = ({ addresses, titles, centerAddress }) => {
             const filteredCoords = geocodedCoords.filter(Boolean);
             setCoordinates(filteredCoords);
 
-            if (centerAddress) {
-                const selectedIndex = addresses.indexOf(centerAddress);
-                if (selectedIndex !== -1 && filteredCoords[selectedIndex]) {
-                    setCenter(filteredCoords[selectedIndex]);
+            if (filteredCoords.length > 0) {
+                if (centerAddress) {
+                    const selectedIndex = addresses.indexOf(centerAddress);
+                    if (selectedIndex !== -1 && filteredCoords[selectedIndex]) {
+                        setCenter(filteredCoords[selectedIndex]); // Фокус на выбранный объект
+                    } else {
+                        setCenter(filteredCoords[0]); // Фокус на первый объект, если не найден
+                    }
+                } else {
+                    setCenter(filteredCoords[0]); // Устанавливаем первый объект как центр
                 }
-            } else if (filteredCoords.length) {
-                setCenter(filteredCoords[0]);
             }
         };
 

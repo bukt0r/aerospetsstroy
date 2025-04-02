@@ -43,7 +43,7 @@ const MainPage = () => {
               x
             </div>
           </div>
-          <div className="flex flex-col items-end w-full gap-[20px] pr-[40px]">
+          <div className="flex flex-col items-end w-full gap-[20px]">
             <div><a href="#ObjectsContainer" onClick={toggleMenu}>наши объекты</a></div>
             <div><a href="#Services" onClick={toggleMenu}>услуги</a></div>
             <div><a href="#AboutСompany" onClick={toggleMenu}>о компании</a></div>

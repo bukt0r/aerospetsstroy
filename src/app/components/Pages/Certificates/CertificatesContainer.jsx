@@ -47,7 +47,7 @@ const CertificatesContainer = () => {
 
   return (
     <div
-      className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] xl:px-[100px] xl:py-[100px]"
+      className="pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] xl:px-[100px] xl:py-[100px] bg-[#FFFFFF]"
       id="CertificatesContainer"
     >
       <h2 className="text-[30px] font-semibold mb-[24px] xl:text-[64px] xl:mb-[40px]">СЕРТИФИКАТЫ</h2>

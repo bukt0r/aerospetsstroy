@@ -20,6 +20,8 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
 
   const [activeElement, setActiveElement] = useState<number>(0);
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const openModal = (index: number ) => {
     setIsModalOpen(true);
     setActiveElement(index);
@@ -36,6 +38,14 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
     setIsModalMapOpen(true);
   };
 
+  const openImageModal = (image: string) => {
+    setSelectedImage(image);
+  };
+
+  const closeImageModal = () => {
+    setSelectedImage(null);
+  };
+
   const sliderCount = 4;
   const sliderImages:string[][] = chunkArray(projects[activeElement].images ,sliderCount);
   const slider = sliderImages.map((obj, sliderIndex) => (
@@ -43,20 +53,20 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
       key={sliderIndex}
       className="flex gap-[20px] mb-[60px]">
       {obj.map((image:string, index:number)=> (
-        <div key={index}>
-          <img className="max-w-[100px]" key={index} src={image} alt="img"/>
+        <div key={index} className="cursor-pointer" onClick={() => openImageModal(image)}>
+          <img key={index} src={image} alt="img"/>
         </div>
       ))}
     </div>
-  ))
-  console.log('!!!!!', slider)
+  ));
 
   return (
+      /*MOBILE*/
     <div className="relative xl:mb-[20px]">
       {projects.map((obj, index) => (
         <div key={index}>
-          <div className="xl:hidden">
-            <div className="mt-[32px] mb-[12px]">
+          <div className="xl:hidden flex flex-col">
+            <div className="mt-[12px] mb-[12px]">
               <p className="font-[600] text-[#111111CC]">{obj.title}</p>
             </div>
             <div>
@@ -72,26 +82,26 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
               >
                 показать на карте</p>
             </div>
-            <div className="mb-[48px] max-w-[300px]">
-              <img src={obj.image} alt="pic"/>
+            <div className="mb-[48px] self-center">
+              <img src={obj.image} alt="pic" className="max-h-[380px]"/>
             </div>
           </div>
         </div>
       ))
       }
 
-
+      {/*DESKTOP*/}
       <div className="max-xl:hidden">
         <div className="flex max-xl:hidden gap-[20px]">
           <div className="flex flex-col justify-between">
             <div className="flex flex-col w-full">
               <div className="mb-[20px]">
-                <img src={projects[0].image} alt="pic" className="max-w-[250px]"/>
+                <img src={projects[0].image} alt="pic" className="max-h-[500px]"/>
               </div>
               <div className="mb-[10px]">
                 <p className="font-[600] text-[#111111CC]">{projects[0].title}</p>
               </div>
-              <div className="flex items-end">
+              <div className="flex items-end justify-between">
                 <div>
                   <div className="flex">
                     <img src="/geolocation.svg" alt="pic"/>
@@ -114,12 +124,12 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
             </div>
             {projects[2] && (<div className="flex flex-col w-full">
               <div className="mb-[20px]">
-                <img src={projects[2].image} alt="pic" className="max-w-[250px]"/>
+                <img src={projects[2].image} alt="pic" className="max-h-[500px]"/>
               </div>
               <div className="mb-[10px]">
                 <p className="font-[600] text-[#111111CC]">{projects[2].title}</p>
               </div>
-              <div className="flex items-end">
+              <div className="flex items-end justify-between">
                 <div>
                   <div className="flex">
                     <img src="/geolocation.svg" alt="pic"/>
@@ -145,12 +155,12 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
           <div>
             {projects[1] && (<div className="flex flex-col w-full mb-[85px]">
               <div className="mb-[20px]">
-                <img src={projects[1].image} alt="pic" className="max-w-[250px]"/>
+                <img src={projects[1].image} alt="pic" className="max-h-[500px]"/>
               </div>
               <div className="mb-[10px]">
                 <p className="font-[600] text-[#111111CC]">{projects[1].title}</p>
               </div>
-              <div className="flex items-end">
+              <div className="flex items-end justify-between">
                 <div>
                   <div className="flex">
                     <img src="/geolocation.svg" alt="pic"/>
@@ -174,12 +184,12 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
             {projects[3] && (<div className="flex justify-start">
               <div className="flex flex-col">
                 <div className="mb-[20px]">
-                  <img src={projects[3].image} alt="pic" className="max-w-[250px]"/>
+                  <img src={projects[3].image} alt="pic" className="max-h-[500px]"/>
                 </div>
                 <div className="mb-[10px]">
                   <p className="font-[600] text-[#111111CC]">{projects[3].title}</p>
                 </div>
-                <div className="flex items-end">
+                <div className="flex items-end justify-between">
                   <div>
                     <div className="flex">
                       <img src="/geolocation.svg" alt="pic"/>
@@ -206,20 +216,20 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
       </div>
       {isModalOpen && (
         <div className="max-xl:hidden absolute inset-0 h-[80vh] flex items-center justify-center bg-[#FFFFFF] z-50">
-          <div className=" flex flex-col h-[100%] w-[100%] bg-[#FFFFFF] py-[30px] pl-[60px] pr-[28px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
+          <div className=" flex flex-col justify-between h-[100%] w-[100%] bg-[#FFFFFF] py-[30px] pl-[60px] pr-[28px] shadow-xl drop-shadow-[10px_4px_6px_#3C72AE40]">
             <div className="flex mb-[30px] gap-[30px]">
-              <div className="flex items-center w-[25%]">
-                <img src={projects[activeElement].image} alt="pic" className="max-w-[250px]"/>
-              </div>
-              <div className="flex flex-col w-[70%]">
-                <div className="ml-auto mb-[44px]">
-                  <button
+              {/*<div className="flex items-center w-[25%]">*/}
+              {/*  <img src={projects[activeElement].image} alt="pic" className="max-w-[250px]"/>*/}
+              {/*</div>*/}
+              <div className="absolute top-4 right-4">
+                <button
                     onClick={closeModal}
                     className="text-[#6095AB] px-[21px] border-[#6095AB] border-[1px] rounded-2xl xl:text-[20px] hover:bg-[#6095AB99] hover:text-[#FFFFFF] hover:border-none"
-                  >
-                    закрыть
-                  </button>
-                </div>
+                >
+                  закрыть
+                </button>
+              </div>
+              <div className="flex flex-col w-[70%]">
                 <div className="mb-[18px]">
                   <p>{projects[activeElement].title}</p>
                 </div>
@@ -243,6 +253,19 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
               <ImageCarusel blocks={slider}/>
             </div>
           </div>
+          {selectedImage && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50">
+                <div className="relative">
+                  <button
+                      onClick={closeImageModal}
+                      className="absolute top-2 right-2 bg-white text-black px-3 py-1 rounded-full"
+                  >
+                    ✕
+                  </button>
+                  <img src={selectedImage} alt="Full Size" className="w-[700px] rounded-lg"/>
+                </div>
+              </div>
+          )}
         </div>
       )}
       {isModalMapOpen && (

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const ImageCarusel = ({ blocks = []}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleNext = () => {
     if (currentIndex < blocks.length - 1) {

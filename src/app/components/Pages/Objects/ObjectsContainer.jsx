@@ -8,7 +8,7 @@ import chunkArray from "@/app/components/Helper/chunkArray";
 
 const ObjectsContainer = () => {
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
-  const count = isLargeScreen ? 4 : 1;
+  const count = isLargeScreen ? 2 : 1;
   const projectData = [
     {
       title: "Пункт технического осмотра станции Анапа Северо-Кавказской железной дороги",

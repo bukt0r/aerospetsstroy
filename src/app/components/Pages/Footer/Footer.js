@@ -50,7 +50,7 @@ const Footer =()=>{
               <a href="mailto:info@aeross.ru" className=" text-gray-700 no-underline">info@aeross.ru</a>
             </div>
             <div>
-              <span className="text-black">офис в Санкт-Петербурге :</span>{' '}
+              <span className="text-black">Телефон : :</span>{' '}
               <a href="tel:+79313192505" className=" text-gray-700 no-underline">+7(931)319-25-05</a>
             </div>
             <div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const MainPage = () => {
+const MainPage = ({ title, subtitle, email, phone }) => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -56,15 +56,15 @@ const MainPage = () => {
       <div className="mt-[120px]">
         <h1
           className="text-left text-[#111111CC] text-[30px] font-semibold xl:text-[64px] lg:text-[#1D1D1DCC] lg:mb-[20px]">
-          МЫ СОЗДАЕМ БУДУЩЕЕ
+            {title}
         </h1>
         <p className="text-left text-[#111111CC] text-[20px] font-helvetica font-[200] xl:text-[32px] lg:text-[#000000B2]">
-          полный спектр услуг по проектированию и строительству
+            {subtitle}
         </p>
       </div>
       <div className="flex flex-col mt-auto text-right lg:text-left xl:text-[20px]">
-        <span className="text-[#1D1D1DCC] mb-[8px]">info@aeross.ru</span>
-        <span className="text-[#1D1D1DCC]">+7(931)319-25-05</span>
+        <span className="text-[#1D1D1DCC] mb-[8px]">{email}</span>
+        <span className="text-[#1D1D1DCC]">{phone}</span>
       </div>
 
     </div>

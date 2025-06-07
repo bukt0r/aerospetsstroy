@@ -1,8 +1,7 @@
 'use client'
 
-const Team = ({ team }) => {
-  const title = 'Lorem ipsum dolor sit amet consectetur';
-  const description = 'Lorem ipsum dolor sit amet consectetur. Neque ut auctor ultrices pellentesque elementum quis. Imperdiet augue nulla orci massa ipsum. Odio enim elit vestibulum purus ullamcorper turpis at ornare dolor. Nibh mi varius nullam pellentesque venenatis tortor cum.';
+const Team = ({ team, title, subtitle, description }) => {
+
   return (
     <div
       className="flex flex-col text-[#111111CC]"
@@ -10,10 +9,10 @@ const Team = ({ team }) => {
       <div className="flex flex-col lg:flex-row lg:justify-between">
         <div>
           <div>
-            <h2 className="text-[30px] font-semibold mb-[28px] xl:mb-[19px] xl:text-[64px] xl:leading-none">КОМАНДА</h2>
+            <h2 className="text-[30px] font-semibold mb-[28px] xl:mb-[19px] xl:text-[64px] xl:leading-none">{title}</h2>
           </div>
           <div className="mb-[12px] xl:mb-[40px]">
-            <p className="font-[550] xl:text-[24px]">{title}</p>
+            <p className="font-[550] xl:text-[24px]">{subtitle}</p>
           </div>
         </div>
 

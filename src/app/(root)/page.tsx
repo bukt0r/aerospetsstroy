@@ -18,7 +18,7 @@ export default function Home() {
     const main = getPageData("main") || {};
     const specialization = getPageData("specialization") || {};
     const services = getPageData("services") || {};
-    const object = getPageData("object") || {};
+    const objects = getPageData("objects") || {};
     const news = getPageData("news") || {};
     const team = getPageData("team") || {};
     const aboutCompany = getPageData("aboutCompany") || {};
@@ -54,11 +54,10 @@ export default function Home() {
             />
         )}
 
-        {object?.visible && (
+        {objects?.visible && (
             <ObjectsContainer
-                title={object.title}
-                subtitle={object.subtitle}
-                description={object.description}
+                title={objects.title}
+                objectsData={objects.objectsData}
             />
         )}
 
@@ -103,8 +102,7 @@ export default function Home() {
         {certificates?.visible && (
             <CertificatesContainer
                 title={certificates.title}
-                subtitle={certificates.subtitle}
-                description={certificates.description}
+                documents={certificates.documents}
             />
         )}
 

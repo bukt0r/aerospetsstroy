@@ -34,3 +34,31 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Доступ в панель управления, SSH, SFTP
+Логин:
+u2157411
+Пароль:
+mogKEMg349pkx2B9
+Панель управления:
+Ispmanager
+Адрес панели управления хостингом:
+https://server10.hosting.reg.ru:1500/
+
+Доступ к FTP
+Логин:
+u2157411
+Пароль:
+9Cz3TmM4hH4yKvU7
+IP-адрес сервера:
+31.31.198.112
+
+Доступ к MySQL
+Логин:
+u2157411_default
+Пароль:
+r6OR4s8tB8mDYkTU
+Имя базы:
+u2157411_default
+Host:
+localhost

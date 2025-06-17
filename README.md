@@ -62,3 +62,7 @@ r6OR4s8tB8mDYkTU
 u2157411_default
 Host:
 localhost
+
+wordpress
+admin
+9Yf5B3LAH@

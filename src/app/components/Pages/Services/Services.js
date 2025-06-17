@@ -1,4 +1,4 @@
-const Services = ({title, subtitle1, description1, subtitle2, description2,}) => {
+const Services = ({title, subtitle1, description1, description2,}) => {
   return(
     <div
       id="Services"
@@ -13,6 +13,9 @@ const Services = ({title, subtitle1, description1, subtitle2, description2,}) =>
                     <span className="text-[20px] font-[600] xl:text-[24px]">{subtitle1}</span>
                     <p className="mt-[12px] xl:text-[20px]">
                         {description1}
+                      <br />
+                      <br />
+                        {description2}
                     </p>
                 </div>
             </div>
@@ -22,17 +25,17 @@ const Services = ({title, subtitle1, description1, subtitle2, description2,}) =>
             <img className="shadow-[0px_30px_20px_#DFE7F2,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2]" src="/services/servicesImg2.png" alt="pic"/>
         </div>
 
-      <div className="lg:flex lg:items-center lg:bg-[url('/services/servicesFullScreenImg1.png')] bg-cover bg-center lg:shadow-[0px_40px_20px_#D6E1ED,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2] lg:min-h-[300px] xl:min-h-[470px] lg:mb-[40px]">
-        <div className="flex lg:w-[50%]"></div>
-        <div className="lg:w-[50%]">
-          <div className="lg:w-[80%] lg:pl-[30px] mt-[40px]">
-            <span className="text-[20px] font-[600] xl:text-[24px]">{subtitle2}</span>
-            <p className="mt-[12px] xl:text-[20px]">
-                {description2}
-            </p>
-          </div>
-        </div>
-      </div>
+      {/*<div className="lg:flex lg:items-center lg:bg-[url('/services/servicesFullScreenImg1.png')] bg-cover bg-center lg:shadow-[0px_40px_20px_#D6E1ED,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2] lg:min-h-[300px] xl:min-h-[470px] lg:mb-[40px]">*/}
+      {/*  <div className="flex lg:w-[50%]"></div>*/}
+      {/*  <div className="lg:w-[50%]">*/}
+      {/*    <div className="lg:w-[80%] lg:pl-[30px] mt-[40px]">*/}
+      {/*      <span className="text-[20px] font-[600] xl:text-[24px]">{subtitle2}</span>*/}
+      {/*      <p className="mt-[12px] xl:text-[20px]">*/}
+      {/*          {description2}*/}
+      {/*      </p>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       <div className="lg:hidden mt-[40px] mb-[60px]">
         <img className="shadow-[0px_30px_20px_#DFE7F2,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2]" src="/services/servicesImg1.png" alt="pic"/>

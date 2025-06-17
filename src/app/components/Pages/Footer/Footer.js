@@ -46,19 +46,19 @@ const Footer =()=>{
               <span className="text-gray-700">353460, Краснодарский край, г. Геленджик, ул. Тельмана, д. 137, ком. 36</span>
             </div>
             <div>
-              <span className="text-black">email :</span>{' '}
+              <span className="text-black">Email :</span>{' '}
               <a href="mailto:info@aeross.ru" className=" text-gray-700 no-underline">info@aeross.ru</a>
             </div>
             <div>
-              <span className="text-black">Телефон : :</span>{' '}
+              <span className="text-black">Телефон :</span>{' '}
               <a href="tel:+79313192505" className=" text-gray-700 no-underline">+7(931)319-25-05</a>
             </div>
             <div>
-              <span className="text-black">отдел снабжения :</span>{' '}
+              <span className="text-black">Телефон отдела снабжения :</span>{' '}
               <a href="tel:+79284355600" className="text-gray-700 no-underline">+7(928)435-56-00</a>
             </div>
             <div>
-              <span className="text-black">Адрес для корреспонденции :</span>{' '}
+              <span className="text-black">Адрес для направления почтовой корреспонденции :</span>{' '}
               <span className="text-gray-700">196084, г. Санкт-Петербург, ул. Смоленская, д. 7 лит. Б, оф. 205, 206, 207</span>
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const MainPage = ({ title, subtitle, email, phone }) => {
+const MainPage = ({ title, email, phone }) => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -59,7 +59,7 @@ const MainPage = ({ title, subtitle, email, phone }) => {
             {title}
         </h1>
         <p className="text-left text-[#111111CC] text-[20px] font-helvetica font-[200] xl:text-[32px] lg:text-[#000000B2]">
-            {subtitle}
+          полный спектр услуг по строительству
         </p>
       </div>
       <div className="flex flex-col mt-auto text-right lg:text-left xl:text-[20px]">

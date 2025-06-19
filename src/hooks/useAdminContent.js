@@ -1,10 +1,10 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const LOCAL_STORAGE_KEY = "adminContent";
-const LOCAL_STORAGE_VERSION_KEY = "adminContentVersion";
-
-const defaultVersion = "1.0.1";
+// const LOCAL_STORAGE_KEY = "adminContent";
+// const LOCAL_STORAGE_VERSION_KEY = "adminContentVersion";
+//
+// const defaultVersion = "1.0.1";
 const defaultContent = [
     {
         page: "main",
@@ -130,14 +130,14 @@ const defaultContent = [
     },
     {
         page: "news",
-        visible: true,
+        visible: false,
         title: "НОВОСТИ",
         subtitle: "",
         description: "",
     },
     {
         page: "team",
-        visible: true,
+        visible: false,
         title: "КОМАНДА",
         subtitle: "Наша команда профессионалов",
         description: "Мы гордимся нашей командой экспертов",
@@ -249,14 +249,8 @@ const defaultContent = [
             ordering: [
                 {
                     description:
-                        'Выписка из реестра членов саморегулируемой организации в составе единого реестра сведений о членах саморегулируемых организаций в области строительства, реконструкции, капитального ремонта, сноса объектов капитального строительства и их обязательствах от 06.03.2025',
-                    images: ['/certificates/ordering_1-1.png', '/certificates/ordering_1-2.png'],
-                    pdf: '/certificates/ordering.pdf',
-                },
-                {
-                    description:
-                        'Выписка из реестра членов саморегулируемой организации в составе единого реестра сведений о членах саморегулируемых организаций в области строительства, реконструкции, капитального ремонта, сноса объектов капитального строительства и их обязательствах от 06.03.2025',
-                    images: ['/certificates/ordering_1-3.png', '/certificates/ordering_1-4.png'],
+                        'Выписка из реестра членов саморегулируемой организации в составе единого реестра сведений о членах саморегулируемых организаций в области строительства, реконструкции, капитального ремонта, сноса объектов капитального строительства и их обязательствах от 30.05.2025',
+                    images: ['/certificates/ordering-1.png', '/certificates/ordering-2.png', '/certificates/ordering-3.png', '/certificates/ordering-4.png'],
                     pdf: '/certificates/ordering.pdf',
                 },
             ],
@@ -272,15 +266,9 @@ const defaultContent = [
                 {
                     description:
                         'Сертификат соответсвия',
-                    images: ['/certificates/certificate_1-1.png', '/certificates/certificate_1-2.png'],
+                    images: ['/certificates/certificate_1-1.png', '/certificates/certificate_1-2.png', '/certificates/certificate_1-3.png'],
                     pdf: '/certificates/certificate.pdf',
-                },
-                {
-                    description:
-                        'Сертификат соответсвия',
-                    images: ['/certificates/certificate_1-3.png'],
-                    pdf: '/certificates/certificate.pdf',
-                },
+                }
             ],
             opd: [
                 {
@@ -294,7 +282,7 @@ const defaultContent = [
     },
     {
         page: "vacancies",
-        visible: true,
+        visible: false,
         title: "ВАКАНСИИ",
         vacancyData:[
             {
@@ -330,21 +318,21 @@ const defaultContent = [
 export function useAdminContent() {
     const [content, setContent] = useState(defaultContent);
 
-    useEffect(() => {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-        const savedVersion = localStorage.getItem(LOCAL_STORAGE_VERSION_KEY);
-
-        if (saved && savedVersion === defaultVersion) {
-            try {
-                setContent(JSON.parse(saved));
-            } catch (e) {
-                console.error("Ошибка чтения localStorage", e);
-                resetToDefault();
-            }
-        } else {
-            resetToDefault();
-        }
-    }, []);
+    // useEffect(() => {
+    //     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    //     const savedVersion = localStorage.getItem(LOCAL_STORAGE_VERSION_KEY);
+    //
+    //     if (saved && savedVersion === defaultVersion) {
+    //         try {
+    //             setContent(JSON.parse(saved));
+    //         } catch (e) {
+    //             console.error("Ошибка чтения localStorage", e);
+    //             resetToDefault();
+    //         }
+    //     } else {
+    //         resetToDefault();
+    //     }
+    // }, []);
 
     const togglePageVisibility = (page) => {
         setContent((prev) =>
@@ -354,15 +342,15 @@ export function useAdminContent() {
         );
     };
 
-    const resetToDefault = () => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(defaultContent));
-        localStorage.setItem(LOCAL_STORAGE_VERSION_KEY, defaultVersion);
-        setContent(defaultContent);
-    };
+    // const resetToDefault = () => {
+    //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(defaultContent));
+    //     localStorage.setItem(LOCAL_STORAGE_VERSION_KEY, defaultVersion);
+    //     setContent(defaultContent);
+    // };
 
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(content));
-    }, [content]);
+    // useEffect(() => {
+    //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(content));
+    // }, [content]);
 
     const getPageData = (page) => content.find((item) => item.page === page);
     const updatePageData = (page, key, value) => {

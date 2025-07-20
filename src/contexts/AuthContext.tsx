@@ -15,24 +15,27 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const auth = getAuth(app);
 
   useEffect(() => {
+    // Only initialize auth if Firebase is available
+    if (!app) {
+      setLoading(false);
+      return;
+    }
+
+    const auth = getAuth(app);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });
 
-    // If auth is not available, set loading to false
-    if (!auth) {
-      setLoading(false);
-    }
-
     return () => unsubscribe();
-  }, [auth]);
+  }, []);
 
   const logout = async () => {
     try {
+      if (!app) return;
+      const auth = getAuth(app);
       await signOut(auth);
     } catch (error) {
       console.error('Error signing out:', error);

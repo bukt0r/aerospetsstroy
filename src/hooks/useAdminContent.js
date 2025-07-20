@@ -1,10 +1,6 @@
 'use client';
 import { useState } from "react";
 
-// const LOCAL_STORAGE_KEY = "adminContent";
-// const LOCAL_STORAGE_VERSION_KEY = "adminContentVersion";
-//
-// const defaultVersion = "1.0.1";
 const defaultContent = [
     {
         page: "main",
@@ -332,22 +328,6 @@ const defaultContent = [
 export function useAdminContent() {
     const [content, setContent] = useState(defaultContent);
 
-    // useEffect(() => {
-    //     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-    //     const savedVersion = localStorage.getItem(LOCAL_STORAGE_VERSION_KEY);
-    //
-    //     if (saved && savedVersion === defaultVersion) {
-    //         try {
-    //             setContent(JSON.parse(saved));
-    //         } catch (e) {
-    //             console.error("Ошибка чтения localStorage", e);
-    //             resetToDefault();
-    //         }
-    //     } else {
-    //         resetToDefault();
-    //     }
-    // }, []);
-
     const togglePageVisibility = (page) => {
         setContent((prev) =>
             prev.map((item) =>
@@ -355,16 +335,6 @@ export function useAdminContent() {
             )
         );
     };
-
-    // const resetToDefault = () => {
-    //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(defaultContent));
-    //     localStorage.setItem(LOCAL_STORAGE_VERSION_KEY, defaultVersion);
-    //     setContent(defaultContent);
-    // };
-
-    // useEffect(() => {
-    //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(content));
-    // }, [content]);
 
     const getPageData = (page) => content.find((item) => item.page === page);
     const updatePageData = (page, key, value) => {

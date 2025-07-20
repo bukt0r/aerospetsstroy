@@ -11,13 +11,14 @@ import PartnersContainer from "@/app/components/Pages/Partners/PartnersContainer
 import CertificatesContainer from "@/app/components/Pages/Certificates/CertificatesContainer";
 import VacanciesContainer from "@/app/components/Pages/Vacancies/VacanciesContainer";
 import { useAdminContent } from "@/hooks/useAdminContent"
+import { useFirestoreContent } from "@/hooks/useFirestoreContent";
 import AdminNav from "@/components/AdminNav";
+import FirestoreStatus from "@/components/FirestoreStatus";
 
 
 export default function Home() {
     const { getPageData } = useAdminContent();
-    const main = getPageData("main");
-    const specialization = getPageData("specialization");
+    const { mainPageData, specializationData, loading: mainLoading } = useFirestoreContent();
     const services = getPageData("services");
     const objects = getPageData("objects");
     const news = getPageData("news");
@@ -28,8 +29,8 @@ export default function Home() {
     const vacancies = getPageData("vacancies");
   return (
     <main>
-        {main && <MainPage title={main.title} email={main.email} phone={main.phone} />}
-        {specialization && <Specialization title={specialization.title} description={specialization.description} subtitle1={specialization.subtitle1} description1={specialization.description1} subtitle2={specialization.subtitle2} description2={specialization.description2} />}
+        {!mainLoading && <MainPage title={mainPageData.title} email={mainPageData.email} phone={mainPageData.phone} />}
+        {specializationData?.visible && <Specialization title={specializationData.title} description={specializationData.description} subtitle1={specializationData.subtitle1} description1={specializationData.description1} subtitle2={specializationData.subtitle2} description2={specializationData.description2} />}
 
         {services?.visible && services && (
             <Services
@@ -99,6 +100,7 @@ export default function Home() {
             />
         )}
         <AdminNav />
+        <FirestoreStatus />
     </main>
   );
 };

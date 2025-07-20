@@ -16,7 +16,7 @@ const MainPage = ({ title, email, phone }) => {
       className="flex flex-col pl-[15px] pr-[19px] pb-[36px] bg-[url('/main/mainBackground.svg')] bg-cover bg-center min-h-screen w-full lg:bg-[url('/main/mainBackgroundFullScreen.svg')] lg:px-[60px] xl:px-[100px] lg:pb-[55px] ">
       <header className="flex justify-between items-center pt-[50px] lg:hidden">
         <div>
-          <img onClick={() => window.location.reload()} className="cursor-pointer" src="/main/logo.svg" alt="logo"/>
+          <img onClick={() => { if (typeof window !== 'undefined') window.location.reload(); }} className="cursor-pointer" src="/main/logo.svg" alt="logo"/>
         </div>
         <div>
           <img className="h-[28px] w-[32px]" src="/main/menu.svg" alt="menu" onClick={toggleMenu}/>
@@ -25,7 +25,7 @@ const MainPage = ({ title, email, phone }) => {
 
       <header className="flex justify-between items-center max-lg:hidden">
         <div>
-          <img onClick={() => window.location.reload()} className="cursor-pointer"  src="/main/logoFullScreen.svg" alt="logo"/>
+          <img onClick={() => { if (typeof window !== 'undefined') window.location.reload(); }} className="cursor-pointer"  src="/main/logoFullScreen.svg" alt="logo"/>
         </div>
         <div className="flex gap-[20px] text-[20px] text-[#1D1D1DCC]">
           <div><a href="#ObjectsContainer">наши объекты</a></div>

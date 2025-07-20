@@ -66,3 +66,4 @@ localhost
 wordpress
 admin
 9Yf5B3LAH@
+$8#zaqJZW4

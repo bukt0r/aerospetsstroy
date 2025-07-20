@@ -57,7 +57,17 @@ const Footer =()=>{
       </div>
 
       <footer className="pl-[15px] py-[12px] xl:px-[60px]">
-        <p className="text-[#46484980] xl:text-[20px]">ООО "АэроСпецСтрой"</p>
+        <div className="flex flex-col gap-[8px] xl:flex-row xl:justify-between xl:items-center">
+          <p className="text-[#46484980] xl:text-[20px]">ООО "АэроСпецСтрой"</p>
+          <a 
+            href="/certificates/policy.pdf" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#46484980] xl:text-[20px] hover:underline cursor-pointer"
+          >
+            политика обработки персональных данных
+          </a>
+        </div>
       </footer>
     </div>
   );

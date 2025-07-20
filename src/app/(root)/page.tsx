@@ -11,45 +11,31 @@ import PartnersContainer from "@/app/components/Pages/Partners/PartnersContainer
 import CertificatesContainer from "@/app/components/Pages/Certificates/CertificatesContainer";
 import VacanciesContainer from "@/app/components/Pages/Vacancies/VacanciesContainer";
 import { useAdminContent } from "@/hooks/useAdminContent"
+import AdminNav from "@/components/AdminNav";
 
 
 export default function Home() {
     const { getPageData } = useAdminContent();
-    const main = getPageData("main") || {};
-    const specialization = getPageData("specialization") || {};
-    const services = getPageData("services") || {};
-    const objects = getPageData("objects") || {};
-    const news = getPageData("news") || {};
-    const team = getPageData("team") || {};
-    const aboutCompany = getPageData("aboutCompany") || {};
-    const partners = getPageData("partners") || {};
-    const certificates = getPageData("certificates") || {};
-    const vacancies = getPageData("vacancies") || {};
+    const main = getPageData("main");
+    const specialization = getPageData("specialization");
+    const services = getPageData("services");
+    const objects = getPageData("objects");
+    const news = getPageData("news");
+    const team = getPageData("team");
+    const aboutCompany = getPageData("aboutCompany");
+    const partners = getPageData("partners");
+    const certificates = getPageData("certificates");
+    const vacancies = getPageData("vacancies");
   return (
     <main>
-      <MainPage
-          title={main.title}
-          subtitle={main.subtitle}
-          email={main.email}
-          phone={main.phone}
-      />
-        {specialization?.visible && (
-            <Specialization
-                title={specialization.title}
-                description={specialization.description}
-                subtitle1={specialization.subtitle1}
-                description1={specialization.description1}
-                subtitle2={specialization.subtitle2}
-                description2={specialization.description2}
-            />
-        )}
+        {main && <MainPage title={main.title} email={main.email} phone={main.phone} />}
+        {specialization && <Specialization title={specialization.title} description={specialization.description} subtitle1={specialization.subtitle1} description1={specialization.description1} subtitle2={specialization.subtitle2} description2={specialization.description2} />}
 
-        {services?.visible && (
+        {services?.visible && services && (
             <Services
                 title={services.title}
                 subtitle1={services.subtitle1}
                 description1={services.description1}
-                subtitle2={services.subtitle2}
                 description2={services.description2}
             />
         )}
@@ -112,6 +98,7 @@ export default function Home() {
                 vacancyData={vacancies.vacancyData}
             />
         )}
+        <AdminNav />
     </main>
   );
 };

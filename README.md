@@ -67,3 +67,7 @@ wordpress
 admin
 9Yf5B3LAH@
 $8#zaqJZW4
+
+firebase:
+email: admin@aeross.ru
+password: 123qwe123

@@ -31,9 +31,20 @@ const defaultSpecializationData = {
     "            Такой подход позволяет минимизировать риски и гарантировать надежную эксплуатацию построенных объектов.",
 };
 
+// Initial state for services page
+const defaultServicesData = {
+  visible: true,
+  title: "УСЛУГИ",
+  subtitle1: "Строительство",
+  description1: "Строим высокотехнологичные производственные комплексы в разных отраслях. ",
+  subtitle2: "Проектирование",
+  description2: "Нами реализовано большое количество посадочных площадок всех типов и сложности на территории РФ и СНГ. Наша компания выполняет работы с соблюдением всех норм, применяя самые современные технологии, материалы и оборудование.",
+};
+
 export function useFirestoreContent() {
   const [mainPageData, setMainPageData] = useState(defaultMainPageData);
   const [specializationData, setSpecializationData] = useState(defaultSpecializationData);
+  const [servicesData, setServicesData] = useState(defaultServicesData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -96,16 +107,51 @@ export function useFirestoreContent() {
           setDoc(doc(db, 'pages', 'specialization'), defaultSpecializationData);
           setSpecializationData(defaultSpecializationData);
         }
-        setLoading(false);
       },
       (error) => {
         console.error('Error loading specialization data:', error);
+        setError(error.message);
+      }
+    );
+
+    return () => unsubscribeSpecialization();
+  }, [db]);
+
+  // Load services data from Firestore
+  useEffect(() => {
+    if (!db) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribeServices = onSnapshot(
+      doc(db, 'pages', 'services'),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setServicesData({
+            visible: data.visible !== false,
+            title: data.title || defaultServicesData.title,
+            subtitle1: data.subtitle1 || defaultServicesData.subtitle1,
+            description1: data.description1 || defaultServicesData.description1,
+            subtitle2: data.subtitle2 || defaultServicesData.subtitle2,
+            description2: data.description2 || defaultServicesData.description2,
+          });
+        } else {
+          // If document doesn't exist, create it with default data
+          setDoc(doc(db, 'pages', 'services'), defaultServicesData);
+          setServicesData(defaultServicesData);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error loading services data:', error);
         setError(error.message);
         setLoading(false);
       }
     );
 
-    return () => unsubscribeSpecialization();
+    return () => unsubscribeServices();
   }, [db]);
 
   // Update main page data
@@ -150,11 +196,34 @@ export function useFirestoreContent() {
     }
   };
 
+  // Update services data
+  const updateServicesData = async (field: string, value: any) => {
+    if (!db) return;
+    
+    try {
+      const docRef = doc(db, 'pages', 'services');
+      if (field === 'batch') {
+        // Handle batch update
+        await setDoc(docRef, value, { merge: true });
+        setServicesData(value);
+      } else {
+        // Handle single field update
+        await setDoc(docRef, { ...servicesData, [field]: value }, { merge: true });
+        setServicesData(prev => ({ ...prev, [field]: value }));
+      }
+    } catch (error) {
+      console.error('Error updating services data:', error);
+      setError('Failed to update data');
+    }
+  };
+
   return {
     mainPageData,
     specializationData,
+    servicesData,
     updateMainPageData,
     updateSpecializationData,
+    updateServicesData,
     loading,
     error
   };

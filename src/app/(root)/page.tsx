@@ -30,17 +30,8 @@ export default function Home() {
   return (
     <main>
         <MainPage />
-        
-        {specializationData?.visible && <Specialization title={specializationData.title} description={specializationData.description} subtitle1={specializationData.subtitle1} description1={specializationData.description1} subtitle2={specializationData.subtitle2} description2={specializationData.description2} />}
-
-        {services?.visible && services && (
-            <Services
-                title={services.title}
-                subtitle1={services.subtitle1}
-                description1={services.description1}
-                description2={services.description2}
-            />
-        )}
+        <Specialization />
+        <Services />
 
         {objects?.visible && (
             <ObjectsContainer

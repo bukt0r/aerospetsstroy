@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const { getPageData, updatePageData, togglePageVisibility } = useAdminContent();
-  const { mainPageData, specializationData, updateMainPageData, updateSpecializationData } = useFirestoreContent();
+  const { mainPageData, specializationData, servicesData, updateMainPageData, updateSpecializationData, updateServicesData } = useFirestoreContent();
   const [activeSection, setActiveSection] = useState('main');
 
   const sections = [
@@ -62,15 +62,17 @@ export default function AdminDashboard() {
             {/* Sidebar */}
             <div className="lg:col-span-1">
               <nav className="space-y-2">
-                                {sections.map((section) => {
-                  const pageData = section.id === 'main' ? mainPageData :
-                                 section.id === 'specialization' ? specializationData :
+                                                {sections.map((section) => {
+                  const pageData = section.id === 'main' ? mainPageData : 
+                                 section.id === 'specialization' ? specializationData : 
+                                 section.id === 'services' ? servicesData : 
                                  getPageData(section.id);
-                  const isVisible = section.id === 'main' ? true :
-                                  section.id === 'specialization' ? specializationData?.visible :
+                  const isVisible = section.id === 'main' ? true : 
+                                  section.id === 'specialization' ? specializationData?.visible : 
+                                  section.id === 'services' ? servicesData?.visible : 
                                   (pageData as any)?.visible !== false;
                   const showVisibilityToggle = section.id !== 'main'; // Don't show toggle for main page
-
+                  
                   return (
                     <button
                       key={section.id}
@@ -95,6 +97,8 @@ export default function AdminDashboard() {
                                   e.stopPropagation();
                                   if (section.id === 'specialization') {
                                     updateSpecializationData('visible', !isVisible);
+                                  } else if (section.id === 'services') {
+                                    updateServicesData('visible', !isVisible);
                                   } else {
                                     togglePageVisibility(section.id);
                                   }
@@ -121,18 +125,22 @@ export default function AdminDashboard() {
                   {sections.find(s => s.id === activeSection)?.title}
                 </h2>
 
-                                {activeSection === 'main' && !mainPageData ? (
+                                                {activeSection === 'main' && !mainPageData ? (
                   <div>Загрузка данных главной страницы...</div>
                 ) : activeSection === 'specialization' && !specializationData ? (
                   <div>Загрузка данных специализации...</div>
+                ) : activeSection === 'services' && !servicesData ? (
+                  <div>Загрузка данных услуг...</div>
                 ) : (
-                  <ContentEditor
-                    section={activeSection}
-                    pageData={activeSection === 'main' ? mainPageData :
-                             activeSection === 'specialization' ? specializationData :
+                  <ContentEditor 
+                    section={activeSection} 
+                    pageData={activeSection === 'main' ? mainPageData : 
+                             activeSection === 'specialization' ? specializationData : 
+                             activeSection === 'services' ? servicesData : 
                              getPageData(activeSection)}
-                    updatePageData={activeSection === 'main' ? updateMainPageData :
-                                  activeSection === 'specialization' ? updateSpecializationData :
+                    updatePageData={activeSection === 'main' ? updateMainPageData : 
+                                  activeSection === 'specialization' ? updateSpecializationData : 
+                                  activeSection === 'services' ? updateServicesData : 
                                   updatePageData}
                   />
                 )}
@@ -176,6 +184,8 @@ function ContentEditor({ section, pageData, updatePageData }: ContentEditorProps
       if (section === 'main') {
         await (updatePageData as (field: string, value: string) => Promise<void>)('batch', formData);
       } else if (section === 'specialization') {
+        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+      } else if (section === 'services') {
         await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
       } else {
         // For other sections, update each field individually

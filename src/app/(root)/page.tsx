@@ -18,7 +18,7 @@ import FirestoreStatus from "@/components/FirestoreStatus";
 
 export default function Home() {
     const { getPageData } = useAdminContent();
-    const { mainPageData, specializationData, loading: mainLoading } = useFirestoreContent();
+    const { specializationData } = useFirestoreContent();
     const services = getPageData("services");
     const objects = getPageData("objects");
     const news = getPageData("news");
@@ -29,7 +29,8 @@ export default function Home() {
     const vacancies = getPageData("vacancies");
   return (
     <main>
-        {!mainLoading && <MainPage title={mainPageData.title} email={mainPageData.email} phone={mainPageData.phone} />}
+        <MainPage />
+        
         {specializationData?.visible && <Specialization title={specializationData.title} description={specializationData.description} subtitle1={specializationData.subtitle1} description1={specializationData.description1} subtitle2={specializationData.subtitle2} description2={specializationData.description2} />}
 
         {services?.visible && services && (

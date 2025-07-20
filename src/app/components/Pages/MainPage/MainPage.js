@@ -1,14 +1,26 @@
 'use client'
 
 import React, { useState } from 'react';
+import { useFirestoreContent } from '@/hooks/useFirestoreContent';
 
-const MainPage = ({ title, email, phone }) => {
-
+const MainPage = () => {
+  const { mainPageData, loading } = useFirestoreContent();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
+
+  // Default values for loading state
+  const defaultData = {
+    title: "МЫ СОЗДАЕМ БУДУЩЕЕ",
+    subtitle: "полный спектр услуг по строительству",
+    email: "info@aeross.ru",
+    phone: "+7(931)319-25-05"
+  };
+
+  // Use data from Firestore or defaults
+  const data = loading ? defaultData : mainPageData;
 
   return(
     <div
@@ -56,15 +68,43 @@ const MainPage = ({ title, email, phone }) => {
       <div className="mt-[120px]">
         <h1
           className="text-left text-[#111111CC] text-[30px] font-semibold xl:text-[64px] lg:text-[#1D1D1DCC] lg:mb-[20px]">
-            {title}
+          {loading ? (
+            <div className="animate-pulse">
+              <div className="h-[30px] lg:h-[64px] bg-gray-300 rounded w-3/4 mb-2"></div>
+            </div>
+          ) : (
+            data.title
+          )}
         </h1>
         <p className="text-left text-[#111111CC] text-[20px] font-helvetica font-[200] xl:text-[32px] lg:text-[#000000B2]">
-          полный спектр услуг по строительству
+          {loading ? (
+            <div className="animate-pulse">
+              <div className="h-[20px] lg:h-[32px] bg-gray-300 rounded w-1/2"></div>
+            </div>
+          ) : (
+            data.subtitle
+          )}
         </p>
       </div>
       <div className="flex flex-col mt-auto text-right lg:text-left xl:text-[20px]">
-        <span className="text-[#1D1D1DCC] mb-[8px]">{email}</span>
-        <span className="text-[#1D1D1DCC]">{phone}</span>
+        <span className="text-[#1D1D1DCC] mb-[8px]">
+          {loading ? (
+            <div className="animate-pulse">
+              <div className="h-[20px] bg-gray-300 rounded w-32 ml-auto lg:ml-0"></div>
+            </div>
+          ) : (
+            data.email
+          )}
+        </span>
+        <span className="text-[#1D1D1DCC]">
+          {loading ? (
+            <div className="animate-pulse">
+              <div className="h-[20px] bg-gray-300 rounded w-40 ml-auto lg:ml-0"></div>
+            </div>
+          ) : (
+            data.phone
+          )}
+        </span>
       </div>
 
     </div>

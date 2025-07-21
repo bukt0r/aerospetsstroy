@@ -5,11 +5,15 @@ import { useMediaQuery } from "@mantine/hooks";
 import Objects from "./Objects";
 import ImageCarusel from "@/app/components/ImageCarusel/ImageCarusel";
 import chunkArray from "@/app/components/Helper/chunkArray";
+import { useAdminContent } from "@/hooks/useAdminContent";
 
-const ObjectsContainer = ({title, objectsData}) => {
+const ObjectsContainer = () => {
+  const { getPageData } = useAdminContent();
+  const objects = getPageData("objects");
+  
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
   const count = isLargeScreen ? 2 : 1;
-  const projectData = objectsData
+  const projectData = objects?.objectsData || [];
 
   const projects = chunkArray(projectData, count);
 
@@ -26,7 +30,7 @@ const ObjectsContainer = ({title, objectsData}) => {
          id="ObjectsContainer"
     >
       <div className='xl:mb-[20px]'>
-        <h2 className="text-[30px] font-semibold xl:text-[64px]">{title}</h2>
+        <h2 className="text-[30px] font-semibold xl:text-[64px]">{objects?.title}</h2>
       </div>
       <ImageCarusel blocks={projectBlocks}/>
     </div>

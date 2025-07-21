@@ -18,9 +18,6 @@ import FirestoreStatus from "@/components/FirestoreStatus";
 
 export default function Home() {
     const { getPageData } = useAdminContent();
-    const { specializationData } = useFirestoreContent();
-    const services = getPageData("services");
-    const objects = getPageData("objects");
     const news = getPageData("news");
     const team = getPageData("team");
     const aboutCompany = getPageData("aboutCompany");
@@ -32,13 +29,7 @@ export default function Home() {
         <MainPage />
         <Specialization />
         <Services />
-
-        {objects?.visible && (
-            <ObjectsContainer
-                title={objects.title}
-                objectsData={objects.objectsData}
-            />
-        )}
+        <ObjectsContainer />
 
         {news?.visible && (
             <News
@@ -57,18 +48,7 @@ export default function Home() {
             />
         )}
 
-        {aboutCompany?.visible && (
-            <AboutCompany
-                title={aboutCompany.title}
-                paragraph1={aboutCompany.paragraph1}
-                subtitle={aboutCompany.subtitle}
-                row1={aboutCompany.row1}
-                row2={aboutCompany.row2}
-                row3={aboutCompany.row3}
-                row4={aboutCompany.row4}
-                paragraph2={aboutCompany.paragraph2}
-            />
-        )}
+        <AboutCompany/>
 
 
         {partners?.visible && (

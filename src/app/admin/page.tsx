@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const { getPageData, updatePageData, togglePageVisibility } = useAdminContent();
-  const { mainPageData, specializationData, servicesData, updateMainPageData, updateSpecializationData, updateServicesData } = useFirestoreContent();
+  const { mainPageData, specializationData, servicesData, objectsData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData } = useFirestoreContent();
   const [activeSection, setActiveSection] = useState('main');
 
   const sections = [
@@ -66,10 +66,12 @@ export default function AdminDashboard() {
                   const pageData = section.id === 'main' ? mainPageData : 
                                  section.id === 'specialization' ? specializationData : 
                                  section.id === 'services' ? servicesData : 
+                                 section.id === 'objects' ? objectsData :
                                  getPageData(section.id);
                   const isVisible = section.id === 'main' ? true : 
                                   section.id === 'specialization' ? specializationData?.visible : 
                                   section.id === 'services' ? servicesData?.visible : 
+                                  section.id === 'objects' ? objectsData?.visible :
                                   (pageData as any)?.visible !== false;
                   const showVisibilityToggle = section.id !== 'main'; // Don't show toggle for main page
                   
@@ -99,6 +101,8 @@ export default function AdminDashboard() {
                                     updateSpecializationData('visible', !isVisible);
                                   } else if (section.id === 'services') {
                                     updateServicesData('visible', !isVisible);
+                                  } else if (section.id === 'objects') {
+                                    updateObjectsData('visible', !isVisible);
                                   } else {
                                     togglePageVisibility(section.id);
                                   }
@@ -131,6 +135,13 @@ export default function AdminDashboard() {
                   <div>Загрузка данных специализации...</div>
                 ) : activeSection === 'services' && !servicesData ? (
                   <div>Загрузка данных услуг...</div>
+                ) : activeSection === 'objects' && !objectsData ? (
+                  <div>Загрузка данных объектов...</div>
+                ) : activeSection === 'objects' ? (
+                  <ObjectsEditor 
+                    pageData={objectsData}
+                    updatePageData={updateObjectsData}
+                  />
                 ) : (
                   <ContentEditor 
                     section={activeSection} 
@@ -149,6 +160,236 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+  );
+}
+
+interface ObjectsEditorProps {
+  pageData: any;
+  updatePageData: (field: string, value: any) => Promise<void>;
+}
+
+function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
+  const [formData, setFormData] = useState(pageData);
+  const [isDirty, setIsDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  // Update form data when pageData changes
+  useEffect(() => {
+    setFormData(pageData);
+    setIsDirty(false);
+  }, [pageData]);
+
+  if (!pageData) {
+    return <div>Загрузка...</div>;
+  }
+
+  const handleInputChange = (key: string, value: any) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+    setIsDirty(true);
+  };
+
+  const handleObjectChange = (index: number, field: string, value: any) => {
+    const newObjectsData = [...(formData.objectsData || [])];
+    newObjectsData[index] = { ...newObjectsData[index], [field]: value };
+    setFormData(prev => ({ ...prev, objectsData: newObjectsData }));
+    setIsDirty(true);
+  };
+
+  const addObject = () => {
+    const newObject = {
+      title: "Новый объект",
+      description: "Описание объекта",
+      address: "Адрес объекта",
+      adressUrl: "",
+      image: "/objects/objects1-full.svg",
+      images: []
+    };
+    const newObjectsData = [...(formData.objectsData || []), newObject];
+    setFormData(prev => ({ ...prev, objectsData: newObjectsData }));
+    setIsDirty(true);
+  };
+
+  const removeObject = (index: number) => {
+    const newObjectsData = [...(formData.objectsData || [])];
+    newObjectsData.splice(index, 1);
+    setFormData(prev => ({ ...prev, objectsData: newObjectsData }));
+    setIsDirty(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Update the entire objects data as a batch
+      await updatePageData('batch', formData);
+      setIsDirty(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Title */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Заголовок раздела
+        </label>
+        <input
+          type="text"
+          value={formData.title || ''}
+          onChange={(e) => handleInputChange('title', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* Objects List */}
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Список объектов
+          </label>
+          <button
+            onClick={addObject}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Добавить объект
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {(formData.objectsData || []).map((object: any, index: number) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="font-medium">Объект {index + 1}</h4>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setEditingIndex(editingIndex === index ? null : index)}
+                    className="text-blue-600 hover:text-blue-800 text-sm"
+                  >
+                    {editingIndex === index ? 'Свернуть' : 'Редактировать'}
+                  </button>
+                  <button
+                    onClick={() => removeObject(index)}
+                    className="text-red-600 hover:text-red-800 text-sm"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+
+              {editingIndex === index && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Название
+                    </label>
+                    <input
+                      type="text"
+                      value={object.title || ''}
+                      onChange={(e) => handleObjectChange(index, 'title', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Описание
+                    </label>
+                    <textarea
+                      value={object.description || ''}
+                      onChange={(e) => handleObjectChange(index, 'description', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Адрес
+                    </label>
+                    <input
+                      type="text"
+                      value={object.address || ''}
+                      onChange={(e) => handleObjectChange(index, 'address', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      URL адреса (опционально)
+                    </label>
+                    <input
+                      type="text"
+                      value={object.adressUrl || ''}
+                      onChange={(e) => handleObjectChange(index, 'adressUrl', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Главное изображение
+                    </label>
+                    <input
+                      type="text"
+                      value={object.image || ''}
+                      onChange={(e) => handleObjectChange(index, 'image', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="/objects/objects1-full.svg"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Дополнительные изображения (через запятую)
+                    </label>
+                    <input
+                      type="text"
+                      value={Array.isArray(object.images) ? object.images.join(', ') : ''}
+                      onChange={(e) => handleObjectChange(index, 'images', e.target.value.split(', ').filter(img => img.trim()))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="/objects/images/1-1.svg, /objects/images/1-2.svg"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingIndex !== index && (
+                <div className="text-sm text-gray-600">
+                  <p><strong>Название:</strong> {object.title}</p>
+                  <p><strong>Адрес:</strong> {object.address}</p>
+                  <p><strong>Описание:</strong> {object.description?.substring(0, 100)}...</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="pt-6 border-t border-gray-200">
+        <button
+          onClick={handleSave}
+          disabled={!isDirty || saving}
+          className={`px-6 py-2 rounded-md font-medium ${
+            isDirty && !saving
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {saving ? 'Сохранение...' : 'Сохранить'}
+        </button>
+        {isDirty && (
+          <span className="ml-3 text-sm text-gray-500">
+            Есть несохраненные изменения
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
 

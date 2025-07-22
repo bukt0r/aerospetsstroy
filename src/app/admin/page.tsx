@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const { getPageData, updatePageData, togglePageVisibility } = useAdminContent();
-  const { mainPageData, specializationData, servicesData, objectsData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData } = useFirestoreContent();
+  const { mainPageData, specializationData, servicesData, objectsData, aboutCompanyData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData, updateAboutCompanyData } = useFirestoreContent();
   const [activeSection, setActiveSection] = useState('main');
 
   const sections = [
@@ -67,11 +67,13 @@ export default function AdminDashboard() {
                                  section.id === 'specialization' ? specializationData : 
                                  section.id === 'services' ? servicesData : 
                                  section.id === 'objects' ? objectsData :
+                                 section.id === 'aboutCompany' ? aboutCompanyData :
                                  getPageData(section.id);
                   const isVisible = section.id === 'main' ? true : 
                                   section.id === 'specialization' ? specializationData?.visible : 
                                   section.id === 'services' ? servicesData?.visible : 
                                   section.id === 'objects' ? objectsData?.visible :
+                                  section.id === 'aboutCompany' ? aboutCompanyData?.visible :
                                   (pageData as any)?.visible !== false;
                   const showVisibilityToggle = section.id !== 'main'; // Don't show toggle for main page
                   
@@ -103,6 +105,8 @@ export default function AdminDashboard() {
                                     updateServicesData('visible', !isVisible);
                                   } else if (section.id === 'objects') {
                                     updateObjectsData('visible', !isVisible);
+                                  } else if (section.id === 'aboutCompany') {
+                                    updateAboutCompanyData('visible', !isVisible);
                                   } else {
                                     togglePageVisibility(section.id);
                                   }
@@ -137,6 +141,8 @@ export default function AdminDashboard() {
                   <div>Загрузка данных услуг...</div>
                 ) : activeSection === 'objects' && !objectsData ? (
                   <div>Загрузка данных объектов...</div>
+                ) : activeSection === 'aboutCompany' && !aboutCompanyData ? (
+                  <div>Загрузка данных о компании...</div>
                 ) : activeSection === 'objects' ? (
                   <ObjectsEditor 
                     pageData={objectsData}
@@ -148,10 +154,12 @@ export default function AdminDashboard() {
                     pageData={activeSection === 'main' ? mainPageData : 
                              activeSection === 'specialization' ? specializationData : 
                              activeSection === 'services' ? servicesData : 
+                             activeSection === 'aboutCompany' ? aboutCompanyData :
                              getPageData(activeSection)}
                     updatePageData={activeSection === 'main' ? updateMainPageData : 
                                   activeSection === 'specialization' ? updateSpecializationData : 
                                   activeSection === 'services' ? updateServicesData : 
+                                  activeSection === 'aboutCompany' ? updateAboutCompanyData :
                                   updatePageData}
                   />
                 )}
@@ -427,6 +435,8 @@ function ContentEditor({ section, pageData, updatePageData }: ContentEditorProps
       } else if (section === 'specialization') {
         await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
       } else if (section === 'services') {
+        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+      } else if (section === 'aboutCompany') {
         await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
       } else {
         // For other sections, update each field individually

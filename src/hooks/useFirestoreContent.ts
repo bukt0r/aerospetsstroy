@@ -129,11 +129,31 @@ const defaultObjectsData = {
   ],
 };
 
+// Initial state for aboutCompany page
+const defaultAboutCompanyData = {
+  visible: true,
+  title: "О КОМПАНИИ",
+  paragraph1: "ООО «АэроСпецСтрой» — надежный подрядчик в сфере промышленного строительства.\n" +
+    "            За годы работы компания зарекомендовала себя как эксперт в выполнении строительно-монтажных\n" +
+    "            работ (СМР) любого уровня сложности.",
+  subtitle: "Ключевые преимущества",
+  row1: "Членство в СРО с третьим уровнем ответственности для реализации сложных и уникальных проектов.",
+  row2: "Лицензия МЧС России на монтаж, обслуживание и ремонт систем пожарной безопасности.",
+  row3: "Высококвалифицированный инженерно-технический персонал с подтвержденной аттестацией.",
+  row4: "Собственная материально-техническая база для выполнения проектов любого масштаба.",
+  paragraph2: "На сегодняшний день компания успешно реализует контракты на сумму\n" +
+    "            свыше 1,718 млрд рублей, а также активно участвует в тендерах на\n" +
+    "            крупнейших электронных площадках. География деятельности расширяется:\n" +
+    "            помимо Центрального и Южного федеральных округов, работы планируются\n" +
+    "            в Приволжском и Северо-Западном ФО.",
+};
+
 export function useFirestoreContent() {
   const [mainPageData, setMainPageData] = useState(defaultMainPageData);
   const [specializationData, setSpecializationData] = useState(defaultSpecializationData);
   const [servicesData, setServicesData] = useState(defaultServicesData);
   const [objectsData, setObjectsData] = useState(defaultObjectsData);
+  const [aboutCompanyData, setAboutCompanyData] = useState(defaultAboutCompanyData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -277,6 +297,46 @@ export function useFirestoreContent() {
     return () => unsubscribeObjects();
   }, [db]);
 
+  // Load aboutCompany data from Firestore
+  useEffect(() => {
+    if (!db) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribeAboutCompany = onSnapshot(
+      doc(db, 'pages', 'aboutCompany'),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setAboutCompanyData({
+            visible: data.visible !== false,
+            title: data.title || defaultAboutCompanyData.title,
+            paragraph1: data.paragraph1 || defaultAboutCompanyData.paragraph1,
+            subtitle: data.subtitle || defaultAboutCompanyData.subtitle,
+            row1: data.row1 || defaultAboutCompanyData.row1,
+            row2: data.row2 || defaultAboutCompanyData.row2,
+            row3: data.row3 || defaultAboutCompanyData.row3,
+            row4: data.row4 || defaultAboutCompanyData.row4,
+            paragraph2: data.paragraph2 || defaultAboutCompanyData.paragraph2,
+          });
+        } else {
+          // If document doesn't exist, create it with default data
+          setDoc(doc(db, 'pages', 'aboutCompany'), defaultAboutCompanyData);
+          setAboutCompanyData(defaultAboutCompanyData);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error loading aboutCompany data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribeAboutCompany();
+  }, [db]);
+
   // Update main page data
   const updateMainPageData = async (field: string, value: any) => {
     if (!db) return;
@@ -361,15 +421,38 @@ export function useFirestoreContent() {
     }
   };
 
+  // Update aboutCompany data
+  const updateAboutCompanyData = async (field: string, value: any) => {
+    if (!db) return;
+    
+    try {
+      const docRef = doc(db, 'pages', 'aboutCompany');
+      if (field === 'batch') {
+        // Handle batch update
+        await setDoc(docRef, value, { merge: true });
+        setAboutCompanyData(value);
+      } else {
+        // Handle single field update
+        await setDoc(docRef, { ...aboutCompanyData, [field]: value }, { merge: true });
+        setAboutCompanyData(prev => ({ ...prev, [field]: value }));
+      }
+    } catch (error) {
+      console.error('Error updating aboutCompany data:', error);
+      setError('Failed to update data');
+    }
+  };
+
   return {
     mainPageData,
     specializationData,
     servicesData,
     objectsData,
+    aboutCompanyData,
     updateMainPageData,
     updateSpecializationData,
     updateServicesData,
     updateObjectsData,
+    updateAboutCompanyData,
     loading,
     error
   };

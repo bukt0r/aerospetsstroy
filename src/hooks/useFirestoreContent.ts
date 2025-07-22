@@ -148,12 +148,45 @@ const defaultAboutCompanyData = {
     "            в Приволжском и Северо-Западном ФО.",
 };
 
+// Initial state for partners page
+const defaultPartnersData = {
+  visible: true,
+  title: "НАШИ ПАРТНЕРЫ",
+  baners: [
+    { image: ["/partners/1-1.svg"] },
+    { image: ["/partners/1-2.svg"] },
+    { image: ["/partners/1-3.svg"] },
+    { image: ["/partners/1-4.svg"] },
+    { image: ["/partners/1-5.svg"] },
+    { image: ["/partners/1-6.svg"] },
+    { image: ["/partners/1-7.svg"] },
+    { image: ["/partners/1-8.svg"] },
+    { image: ["/partners/1-9.svg"] },
+    { image: ["/partners/2-1.svg"] },
+    { image: ["/partners/2-2.svg"] },
+    { image: ["/partners/2-3.svg"] },
+    { image: ["/partners/2-4.svg"] },
+    { image: ["/partners/2-5.svg"] },
+    { image: ["/partners/2-6.svg"] },
+    { image: ["/partners/2-7.svg"] },
+    { image: ["/partners/2-8.svg"] },
+    { image: ["/partners/2-9.svg"] },
+    { image: ["/partners/3-1.svg"] },
+    { image: ["/partners/3-2.svg"] },
+    { image: ["/partners/3-3.svg"] },
+    { image: ["/partners/3-4.svg"] },
+    { image: ["/partners/3-5.svg"] },
+    { image: ["/partners/3-6.svg"] },
+  ],
+};
+
 export function useFirestoreContent() {
   const [mainPageData, setMainPageData] = useState(defaultMainPageData);
   const [specializationData, setSpecializationData] = useState(defaultSpecializationData);
   const [servicesData, setServicesData] = useState(defaultServicesData);
   const [objectsData, setObjectsData] = useState(defaultObjectsData);
   const [aboutCompanyData, setAboutCompanyData] = useState(defaultAboutCompanyData);
+  const [partnersData, setPartnersData] = useState(defaultPartnersData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -337,6 +370,40 @@ export function useFirestoreContent() {
     return () => unsubscribeAboutCompany();
   }, [db]);
 
+  // Load partners data from Firestore
+  useEffect(() => {
+    if (!db) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribePartners = onSnapshot(
+      doc(db, 'pages', 'partners'),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setPartnersData({
+            visible: data.visible !== false,
+            title: data.title || defaultPartnersData.title,
+            baners: data.baners || defaultPartnersData.baners,
+          });
+        } else {
+          // If document doesn't exist, create it with default data
+          setDoc(doc(db, 'pages', 'partners'), defaultPartnersData);
+          setPartnersData(defaultPartnersData);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error loading partners data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribePartners();
+  }, [db]);
+
   // Update main page data
   const updateMainPageData = async (field: string, value: any) => {
     if (!db) return;
@@ -442,17 +509,40 @@ export function useFirestoreContent() {
     }
   };
 
+  // Update partners data
+  const updatePartnersData = async (field: string, value: any) => {
+    if (!db) return;
+    
+    try {
+      const docRef = doc(db, 'pages', 'partners');
+      if (field === 'batch') {
+        // Handle batch update
+        await setDoc(docRef, value, { merge: true });
+        setPartnersData(value);
+      } else {
+        // Handle single field update
+        await setDoc(docRef, { ...partnersData, [field]: value }, { merge: true });
+        setPartnersData(prev => ({ ...prev, [field]: value }));
+      }
+    } catch (error) {
+      console.error('Error updating partners data:', error);
+      setError('Failed to update data');
+    }
+  };
+
   return {
     mainPageData,
     specializationData,
     servicesData,
     objectsData,
     aboutCompanyData,
+    partnersData,
     updateMainPageData,
     updateSpecializationData,
     updateServicesData,
     updateObjectsData,
     updateAboutCompanyData,
+    updatePartnersData,
     loading,
     error
   };

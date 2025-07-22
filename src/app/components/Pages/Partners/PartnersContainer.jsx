@@ -5,17 +5,24 @@ import ImageCarusel from "../../ImageCarusel/ImageCarusel";
 import Partners from "@/app/components/Pages/Partners/Partners";
 import chunkArray from "@/app/components/Helper/chunkArray";
 import { useMediaQuery } from "@mantine/hooks";
+import { useFirestoreContent } from "@/hooks/useFirestoreContent";
 
-const PartnersContainer = ({ title, baners }) => {
+const PartnersContainer = () => {
+  const { partnersData } = useFirestoreContent();
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
   const count = isLargeScreen ? 8 : 9;
 
-  const partnersData = (baners || []).map(item => item.image);
-  const abbs = chunkArray(partnersData, count);
+  const partnersImages = (partnersData?.baners || []).map(item => item.image);
+  const abbs = chunkArray(partnersImages, count);
 
   const partnersBlocks = abbs.map((abb, index) => (
-      <Partners key={index} images={abb} title={title} />
+      <Partners key={index} images={abb} title={partnersData?.title} />
   ));
+
+  // Don't render if not visible
+  if (!partnersData?.visible) {
+    return null;
+  }
 
   return (
       <div

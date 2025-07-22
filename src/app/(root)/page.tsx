@@ -19,8 +19,6 @@ export default function Home() {
     const { getPageData } = useAdminContent();
     const news = getPageData("news");
     const team = getPageData("team");
-    const partners = getPageData("partners");
-    const certificates = getPageData("certificates");
     const vacancies = getPageData("vacancies");
   return (
     <main>
@@ -47,20 +45,8 @@ export default function Home() {
         )}
 
         <AboutCompany />
-
-        {partners?.visible && (
-            <PartnersContainer
-                title={partners.title}
-                baners={partners.baners}
-            />
-        )}
-
-        {certificates?.visible && (
-            <CertificatesContainer
-                title={certificates.title}
-                documents={certificates.documents}
-            />
-        )}
+        <PartnersContainer />
+        <CertificatesContainer />
 
         {vacancies?.visible && (
             <VacanciesContainer

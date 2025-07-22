@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const { getPageData, updatePageData, togglePageVisibility } = useAdminContent();
-  const { mainPageData, specializationData, servicesData, objectsData, aboutCompanyData, partnersData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData, updateAboutCompanyData, updatePartnersData } = useFirestoreContent();
+  const { mainPageData, specializationData, servicesData, objectsData, aboutCompanyData, partnersData, certificatesData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData, updateAboutCompanyData, updatePartnersData, updateCertificatesData } = useFirestoreContent();
   const [activeSection, setActiveSection] = useState('main');
 
   const sections = [
@@ -69,6 +69,7 @@ export default function AdminDashboard() {
                                  section.id === 'objects' ? objectsData :
                                  section.id === 'aboutCompany' ? aboutCompanyData :
                                  section.id === 'partners' ? partnersData :
+                                 section.id === 'certificates' ? certificatesData :
                                  getPageData(section.id);
                   const isVisible = section.id === 'main' ? true : 
                                   section.id === 'specialization' ? specializationData?.visible : 
@@ -76,6 +77,7 @@ export default function AdminDashboard() {
                                   section.id === 'objects' ? objectsData?.visible :
                                   section.id === 'aboutCompany' ? aboutCompanyData?.visible :
                                   section.id === 'partners' ? partnersData?.visible :
+                                  section.id === 'certificates' ? certificatesData?.visible :
                                   (pageData as any)?.visible !== false;
                   const showVisibilityToggle = section.id !== 'main'; // Don't show toggle for main page
                   
@@ -111,6 +113,8 @@ export default function AdminDashboard() {
                                     updateAboutCompanyData('visible', !isVisible);
                                   } else if (section.id === 'partners') {
                                     updatePartnersData('visible', !isVisible);
+                                  } else if (section.id === 'certificates') {
+                                    updateCertificatesData('visible', !isVisible);
                                   } else {
                                     togglePageVisibility(section.id);
                                   }
@@ -149,6 +153,8 @@ export default function AdminDashboard() {
                   <div>Загрузка данных о компании...</div>
                 ) : activeSection === 'partners' && !partnersData ? (
                   <div>Загрузка данных партнеров...</div>
+                ) : activeSection === 'certificates' && !certificatesData ? (
+                  <div>Загрузка данных сертификатов...</div>
                 ) : activeSection === 'objects' ? (
                   <ObjectsEditor 
                     pageData={objectsData}
@@ -159,6 +165,11 @@ export default function AdminDashboard() {
                     pageData={partnersData}
                     updatePageData={updatePartnersData}
                   />
+                ) : activeSection === 'certificates' ? (
+                  <CertificatesEditor 
+                    pageData={certificatesData}
+                    updatePageData={updateCertificatesData}
+                  />
                 ) : (
                   <ContentEditor 
                     section={activeSection} 
@@ -167,12 +178,14 @@ export default function AdminDashboard() {
                              activeSection === 'services' ? servicesData : 
                              activeSection === 'aboutCompany' ? aboutCompanyData :
                              activeSection === 'partners' ? partnersData :
+                             activeSection === 'certificates' ? certificatesData :
                              getPageData(activeSection)}
                     updatePageData={activeSection === 'main' ? updateMainPageData : 
                                   activeSection === 'specialization' ? updateSpecializationData : 
                                   activeSection === 'services' ? updateServicesData : 
                                   activeSection === 'aboutCompany' ? updateAboutCompanyData :
                                   activeSection === 'partners' ? updatePartnersData :
+                                  activeSection === 'certificates' ? updateCertificatesData :
                                   updatePageData}
                   />
                 )}
@@ -576,6 +589,222 @@ function PartnersEditor({ pageData, updatePageData }: PartnersEditorProps) {
   );
 }
 
+interface CertificatesEditorProps {
+  pageData: any;
+  updatePageData: (field: string, value: any) => Promise<void>;
+}
+
+function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProps) {
+  const [formData, setFormData] = useState(pageData);
+  const [isDirty, setIsDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingSection, setEditingSection] = useState<string | null>(null);
+
+  // Update form data when pageData changes
+  useEffect(() => {
+    setFormData(pageData);
+    setIsDirty(false);
+  }, [pageData]);
+
+  if (!pageData) {
+    return <div>Загрузка...</div>;
+  }
+
+  const handleInputChange = (key: string, value: any) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+    setIsDirty(true);
+  };
+
+  const handleDocumentChange = (section: string, index: number, field: string, value: any) => {
+    const newDocuments = { ...formData.documents };
+    const sectionData = [...(newDocuments[section] || [])];
+    sectionData[index] = { ...sectionData[index], [field]: value };
+    newDocuments[section] = sectionData;
+    setFormData(prev => ({ ...prev, documents: newDocuments }));
+    setIsDirty(true);
+  };
+
+  const addDocument = (section: string) => {
+    const newDocument = {
+      description: "Описание документа",
+      images: ["/certificates/new-document.png"],
+      pdf: "/certificates/new-document.pdf"
+    };
+    const newDocuments = { ...formData.documents };
+    const sectionData = [...(newDocuments[section] || []), newDocument];
+    newDocuments[section] = sectionData;
+    setFormData(prev => ({ ...prev, documents: newDocuments }));
+    setIsDirty(true);
+  };
+
+  const removeDocument = (section: string, index: number) => {
+    const newDocuments = { ...formData.documents };
+    const sectionData = [...(newDocuments[section] || [])];
+    sectionData.splice(index, 1);
+    newDocuments[section] = sectionData;
+    setFormData(prev => ({ ...prev, documents: newDocuments }));
+    setIsDirty(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Update the entire certificates data as a batch
+      await updatePageData('batch', formData);
+      setIsDirty(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const renderSection = (sectionName: string, sectionTitle: string) => {
+    const documents = formData.documents?.[sectionName] || [];
+    
+    return (
+      <div key={sectionName} className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-medium text-gray-900">{sectionTitle}</h3>
+          <button
+            onClick={() => addDocument(sectionName)}
+            className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+          >
+            Добавить документ
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {documents.map((document: any, index: number) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="font-medium">Документ {index + 1}</h4>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => {
+                      const key = `${sectionName}-${index}`;
+                      setEditingIndex(editingIndex === index && editingSection === sectionName ? null : index);
+                      setEditingSection(editingIndex === index && editingSection === sectionName ? null : sectionName);
+                    }}
+                    className="text-blue-600 hover:text-blue-800 text-sm"
+                  >
+                    {editingIndex === index && editingSection === sectionName ? 'Свернуть' : 'Редактировать'}
+                  </button>
+                  <button
+                    onClick={() => removeDocument(sectionName, index)}
+                    className="text-red-600 hover:text-red-800 text-sm"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+
+              {editingIndex === index && editingSection === sectionName && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Описание
+                    </label>
+                    <textarea
+                      value={document.description || ''}
+                      onChange={(e) => handleDocumentChange(sectionName, index, 'description', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      PDF файл
+                    </label>
+                    <input
+                      type="text"
+                      value={document.pdf || ''}
+                      onChange={(e) => handleDocumentChange(sectionName, index, 'pdf', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="/certificates/document.pdf"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Изображения (через запятую)
+                    </label>
+                    <input
+                      type="text"
+                      value={Array.isArray(document.images) ? document.images.join(', ') : ''}
+                      onChange={(e) => handleDocumentChange(sectionName, index, 'images', e.target.value.split(', ').filter(img => img.trim()))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="/certificates/image1.png, /certificates/image2.png"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingIndex !== index || editingSection !== sectionName ? (
+                <div className="text-sm text-gray-600">
+                  <p><strong>Описание:</strong> {document.description?.substring(0, 100)}...</p>
+                  <p><strong>PDF:</strong> {document.pdf}</p>
+                  <p><strong>Изображений:</strong> {Array.isArray(document.images) ? document.images.length : 0}</p>
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Title */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Заголовок раздела
+        </label>
+        <input
+          type="text"
+          value={formData.title || ''}
+          onChange={(e) => handleInputChange('title', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* Documents Sections */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-4">
+          Документы по категориям
+        </label>
+
+        {renderSection('ordering', 'Выписки из реестра')}
+        {renderSection('license', 'Лицензии')}
+        {renderSection('certificate', 'Сертификаты')}
+      </div>
+
+      {/* Save Button */}
+      <div className="pt-6 border-t border-gray-200">
+        <button
+          onClick={handleSave}
+          disabled={!isDirty || saving}
+          className={`px-6 py-2 rounded-md font-medium ${
+            isDirty && !saving
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {saving ? 'Сохранение...' : 'Сохранить'}
+        </button>
+        {isDirty && (
+          <span className="ml-3 text-sm text-gray-500">
+            Есть несохраненные изменения
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 interface ContentEditorProps {
   section: string;
   pageData: any;
@@ -614,6 +843,8 @@ function ContentEditor({ section, pageData, updatePageData }: ContentEditorProps
       } else if (section === 'aboutCompany') {
         await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
       } else if (section === 'partners') {
+        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+      } else if (section === 'certificates') {
         await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
       } else {
         // For other sections, update each field individually

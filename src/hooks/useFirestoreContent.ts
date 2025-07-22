@@ -180,6 +180,38 @@ const defaultPartnersData = {
   ],
 };
 
+// Initial state for certificates page
+const defaultCertificatesData = {
+  visible: true,
+  title: "СЕРТИФИКАТЫ",
+  documents: {
+    ordering: [
+      {
+        description:
+          'Выписка из реестра членов саморегулируемой организации в составе единого реестра сведений о членах саморегулируемых организаций в области строительства, реконструкции, капитального ремонта, сноса объектов капитального строительства и их обязательствах от 30.05.2025',
+        images: ['/certificates/ordering-1.png', '/certificates/ordering-2.png', '/certificates/ordering-3.png', '/certificates/ordering-4.png'],
+        pdf: '/certificates/ordering.pdf',
+      },
+    ],
+    license: [
+      {
+        description:
+          'Информация из реестра лицензий по состоянию на 23.08.2024 г.',
+        images: ['/certificates/license_1-1.png', '/certificates/license_1-2.png'],
+        pdf: '/certificates/license.pdf',
+      }
+    ],
+    certificate: [
+      {
+        description:
+          'Сертификат соответсвия',
+        images: ['/certificates/certificate_1-1.png', '/certificates/certificate_1-2.png', '/certificates/certificate_1-3.png'],
+        pdf: '/certificates/certificate.pdf',
+      }
+    ],
+  },
+};
+
 export function useFirestoreContent() {
   const [mainPageData, setMainPageData] = useState(defaultMainPageData);
   const [specializationData, setSpecializationData] = useState(defaultSpecializationData);
@@ -187,6 +219,7 @@ export function useFirestoreContent() {
   const [objectsData, setObjectsData] = useState(defaultObjectsData);
   const [aboutCompanyData, setAboutCompanyData] = useState(defaultAboutCompanyData);
   const [partnersData, setPartnersData] = useState(defaultPartnersData);
+  const [certificatesData, setCertificatesData] = useState(defaultCertificatesData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -404,6 +437,40 @@ export function useFirestoreContent() {
     return () => unsubscribePartners();
   }, [db]);
 
+  // Load certificates data from Firestore
+  useEffect(() => {
+    if (!db) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribeCertificates = onSnapshot(
+      doc(db, 'pages', 'certificates'),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setCertificatesData({
+            visible: data.visible !== false,
+            title: data.title || defaultCertificatesData.title,
+            documents: data.documents || defaultCertificatesData.documents,
+          });
+        } else {
+          // If document doesn't exist, create it with default data
+          setDoc(doc(db, 'pages', 'certificates'), defaultCertificatesData);
+          setCertificatesData(defaultCertificatesData);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error loading certificates data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribeCertificates();
+  }, [db]);
+
   // Update main page data
   const updateMainPageData = async (field: string, value: any) => {
     if (!db) return;
@@ -530,6 +597,27 @@ export function useFirestoreContent() {
     }
   };
 
+  // Update certificates data
+  const updateCertificatesData = async (field: string, value: any) => {
+    if (!db) return;
+    
+    try {
+      const docRef = doc(db, 'pages', 'certificates');
+      if (field === 'batch') {
+        // Handle batch update
+        await setDoc(docRef, value, { merge: true });
+        setCertificatesData(value);
+      } else {
+        // Handle single field update
+        await setDoc(docRef, { ...certificatesData, [field]: value }, { merge: true });
+        setCertificatesData(prev => ({ ...prev, [field]: value }));
+      }
+    } catch (error) {
+      console.error('Error updating certificates data:', error);
+      setError('Failed to update data');
+    }
+  };
+
   return {
     mainPageData,
     specializationData,
@@ -537,12 +625,14 @@ export function useFirestoreContent() {
     objectsData,
     aboutCompanyData,
     partnersData,
+    certificatesData,
     updateMainPageData,
     updateSpecializationData,
     updateServicesData,
     updateObjectsData,
     updateAboutCompanyData,
     updatePartnersData,
+    updateCertificatesData,
     loading,
     error
   };

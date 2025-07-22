@@ -879,10 +879,12 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
 
   const addNews = () => {
     const newNewsItem = {
+      id: `news-${Date.now()}`,
       title: "Новая новость",
+      subtitle: "Подзаголовок новости",
       description: "Описание новости",
-      image: "/news/news1.svg",
       date: new Date().toISOString().slice(0, 10),
+      image: "/news/news1.svg",
       url: ""
     };
     const newNewsData = [...(formData.newsData || []), newNewsItem];
@@ -964,7 +966,19 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Заголовок
+                      ID новости
+                    </label>
+                    <input
+                      type="text"
+                      value={newsItem.id || ''}
+                      onChange={(e) => handleNewsChange(index, 'id', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Заголовок новости
                     </label>
                     <input
                       type="text"
@@ -976,19 +990,43 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Описание
+                      Подзаголовок
                     </label>
-                    <textarea
-                      value={newsItem.description || ''}
-                      onChange={(e) => handleNewsChange(index, 'description', e.target.value)}
+                    <input
+                      type="text"
+                      value={newsItem.subtitle || ''}
+                      onChange={(e) => handleNewsChange(index, 'subtitle', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      rows={3}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Изображение
+                      Описание новости
+                    </label>
+                    <textarea
+                      value={newsItem.description || ''}
+                      onChange={(e) => handleNewsChange(index, 'description', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={4}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Дата публикации (YYYY-MM-DD)
+                    </label>
+                    <input
+                      type="text"
+                      value={newsItem.date || ''}
+                      onChange={(e) => handleNewsChange(index, 'date', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Изображение новости
                     </label>
                     <input
                       type="text"
@@ -1001,25 +1039,14 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Дата (YYYY-MM-DD)
-                    </label>
-                    <input
-                      type="text"
-                      value={newsItem.date || ''}
-                      onChange={(e) => handleNewsChange(index, 'date', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      URL (опционально)
+                      URL ссылка (опционально)
                     </label>
                     <input
                       type="text"
                       value={newsItem.url || ''}
                       onChange={(e) => handleNewsChange(index, 'url', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="https://example.com/news"
                     />
                   </div>
                 </div>
@@ -1027,7 +1054,9 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
 
               {editingIndex !== index && (
                 <div className="text-sm text-gray-600">
+                  <p><strong>ID:</strong> {newsItem.id}</p>
                   <p><strong>Заголовок:</strong> {newsItem.title}</p>
+                  <p><strong>Подзаголовок:</strong> {newsItem.subtitle}</p>
                   <p><strong>Дата:</strong> {newsItem.date}</p>
                   <p><strong>Описание:</strong> {newsItem.description?.substring(0, 100)}...</p>
                 </div>

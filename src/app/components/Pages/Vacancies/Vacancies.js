@@ -17,7 +17,7 @@ const Vacancies = ({ onDetailsClick }) => {
         {vacanciesData?.vacancyData?.map((vacancy, index) => (
           <div className="flex flex-col p-[24px] bg-[#FFFFFF] max-xl:w-[80%] w-[30%]" key={index}>
             <p className="font-[600] mb-[20px] xl:text-[32px]">{vacancy.mainTitle}</p>
-            <p>{vacancy.description1}</p>
+            <div className="mb-[20px]">{vacancy.description1}</div>
             <div className="flex justify-end mt-auto">
               <button
                 onClick={() => onDetailsClick(vacancy)}

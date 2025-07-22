@@ -1,8 +1,8 @@
 "use client";
 
 import { initializeApp, FirebaseApp } from "firebase/app";
-import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
 import { getFirestore, Firestore } from "firebase/firestore";
+import { Analytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBzNeRSRcf0d4K6Mq28_HLrBA1D3ElYiGA",
@@ -14,22 +14,23 @@ const firebaseConfig = {
   measurementId: "G-FXPFVFWHX3"
 };
 
-// Initialize Firebase only on client side
-let app: FirebaseApp | null = null;
-let db: Firestore | null = null;
+// Initialize Firebase
+const app: FirebaseApp = initializeApp(firebaseConfig);
+const db: Firestore = getFirestore(app);
+
+// Analytics will be initialized separately on client side
 let analytics: Analytics | null = null;
 
+// Initialize analytics only on client side
 if (typeof window !== 'undefined') {
-  app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-
-  // Initialize Analytics only if supported
-  isSupported().then((supported) => {
-    if (supported) {
-      analytics = getAnalytics(app);
-    }
-  }).catch((error) => {
-    console.log('Analytics not supported:', error);
+  import('firebase/analytics').then(({ getAnalytics, isSupported }) => {
+    isSupported().then((supported) => {
+      if (supported) {
+        analytics = getAnalytics(app);
+      }
+    }).catch((error) => {
+      console.log('Analytics not supported:', error);
+    });
   });
 }
 

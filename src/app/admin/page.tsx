@@ -131,11 +131,11 @@ export default function AdminDashboard() {
     { id: 'specialization', name: 'Специализация' },
     { id: 'services', name: 'Услуги' },
     { id: 'objects', name: 'Объекты' },
+    { id: 'news', name: 'Новости' },
+    { id: 'team', name: 'Команда' },
     { id: 'aboutCompany', name: 'О компании' },
     { id: 'partners', name: 'Партнеры' },
     { id: 'certificates', name: 'Сертификаты' },
-    { id: 'news', name: 'Новости' },
-    { id: 'team', name: 'Команда' },
     { id: 'vacancies', name: 'Вакансии' },
   ];
 

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminContent } from '@/hooks/useAdminContent';
 import { useFirestoreContent } from '@/hooks/useFirestoreContent';
+import AdminNav from '@/components/AdminNav';
 
 // Type definitions for page data
 interface PageData {
@@ -325,6 +326,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+      <AdminNav />
     </div>
   );
 }

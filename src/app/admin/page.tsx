@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const { getPageData, updatePageData, togglePageVisibility } = useAdminContent();
-  const { mainPageData, specializationData, servicesData, objectsData, aboutCompanyData, partnersData, certificatesData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData, updateAboutCompanyData, updatePartnersData, updateCertificatesData } = useFirestoreContent();
+  const { mainPageData, specializationData, servicesData, objectsData, aboutCompanyData, partnersData, certificatesData, newsData, teamData, vacanciesData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData, updateAboutCompanyData, updatePartnersData, updateCertificatesData, updateNewsData, updateTeamData, updateVacanciesData } = useFirestoreContent();
   const [activeSection, setActiveSection] = useState('main');
 
   const sections = [
@@ -70,6 +70,9 @@ export default function AdminDashboard() {
                                  section.id === 'aboutCompany' ? aboutCompanyData :
                                  section.id === 'partners' ? partnersData :
                                  section.id === 'certificates' ? certificatesData :
+                                 section.id === 'news' ? newsData :
+                                 section.id === 'team' ? teamData :
+                                 section.id === 'vacancies' ? vacanciesData :
                                  getPageData(section.id);
                   const isVisible = section.id === 'main' ? true : 
                                   section.id === 'specialization' ? specializationData?.visible : 
@@ -78,6 +81,9 @@ export default function AdminDashboard() {
                                   section.id === 'aboutCompany' ? aboutCompanyData?.visible :
                                   section.id === 'partners' ? partnersData?.visible :
                                   section.id === 'certificates' ? certificatesData?.visible :
+                                  section.id === 'news' ? newsData?.visible :
+                                  section.id === 'team' ? teamData?.visible :
+                                  section.id === 'vacancies' ? vacanciesData?.visible :
                                   (pageData as any)?.visible !== false;
                   const showVisibilityToggle = section.id !== 'main'; // Don't show toggle for main page
                   
@@ -115,6 +121,12 @@ export default function AdminDashboard() {
                                     updatePartnersData('visible', !isVisible);
                                   } else if (section.id === 'certificates') {
                                     updateCertificatesData('visible', !isVisible);
+                                  } else if (section.id === 'news') {
+                                    updateNewsData('visible', !isVisible);
+                                  } else if (section.id === 'team') {
+                                    updateTeamData('visible', !isVisible);
+                                  } else if (section.id === 'vacancies') {
+                                    updateVacanciesData('visible', !isVisible);
                                   } else {
                                     togglePageVisibility(section.id);
                                   }
@@ -155,6 +167,12 @@ export default function AdminDashboard() {
                   <div>Загрузка данных партнеров...</div>
                 ) : activeSection === 'certificates' && !certificatesData ? (
                   <div>Загрузка данных сертификатов...</div>
+                ) : activeSection === 'news' && !newsData ? (
+                  <div>Загрузка данных новостей...</div>
+                ) : activeSection === 'team' && !teamData ? (
+                  <div>Загрузка данных команды...</div>
+                ) : activeSection === 'vacancies' && !vacanciesData ? (
+                  <div>Загрузка данных вакансий...</div>
                 ) : activeSection === 'objects' ? (
                   <ObjectsEditor 
                     pageData={objectsData}
@@ -170,6 +188,21 @@ export default function AdminDashboard() {
                     pageData={certificatesData}
                     updatePageData={updateCertificatesData}
                   />
+                ) : activeSection === 'news' ? (
+                  <NewsEditor 
+                    pageData={newsData}
+                    updatePageData={updateNewsData}
+                  />
+                ) : activeSection === 'team' ? (
+                  <TeamEditor 
+                    pageData={teamData}
+                    updatePageData={updateTeamData}
+                  />
+                ) : activeSection === 'vacancies' ? (
+                  <VacanciesEditor 
+                    pageData={vacanciesData}
+                    updatePageData={updateVacanciesData}
+                  />
                 ) : (
                   <ContentEditor 
                     section={activeSection} 
@@ -179,6 +212,9 @@ export default function AdminDashboard() {
                              activeSection === 'aboutCompany' ? aboutCompanyData :
                              activeSection === 'partners' ? partnersData :
                              activeSection === 'certificates' ? certificatesData :
+                             activeSection === 'news' ? newsData :
+                             activeSection === 'team' ? teamData :
+                             activeSection === 'vacancies' ? vacanciesData :
                              getPageData(activeSection)}
                     updatePageData={activeSection === 'main' ? updateMainPageData : 
                                   activeSection === 'specialization' ? updateSpecializationData : 
@@ -186,6 +222,9 @@ export default function AdminDashboard() {
                                   activeSection === 'aboutCompany' ? updateAboutCompanyData :
                                   activeSection === 'partners' ? updatePartnersData :
                                   activeSection === 'certificates' ? updateCertificatesData :
+                                  activeSection === 'news' ? updateNewsData :
+                                  activeSection === 'team' ? updateTeamData :
+                                  activeSection === 'vacancies' ? updateVacanciesData :
                                   updatePageData}
                   />
                 )}
@@ -805,6 +844,666 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
   );
 }
 
+interface NewsEditorProps {
+  pageData: any;
+  updatePageData: (field: string, value: any) => Promise<void>;
+}
+
+function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
+  const [formData, setFormData] = useState(pageData);
+  const [isDirty, setIsDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  // Update form data when pageData changes
+  useEffect(() => {
+    setFormData(pageData);
+    setIsDirty(false);
+  }, [pageData]);
+
+  if (!pageData) {
+    return <div>Загрузка...</div>;
+  }
+
+  const handleInputChange = (key: string, value: any) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+    setIsDirty(true);
+  };
+
+  const handleNewsChange = (index: number, field: string, value: any) => {
+    const newNewsData = [...(formData.newsData || [])];
+    newNewsData[index] = { ...newNewsData[index], [field]: value };
+    setFormData(prev => ({ ...prev, newsData: newNewsData }));
+    setIsDirty(true);
+  };
+
+  const addNews = () => {
+    const newNewsItem = {
+      title: "Новая новость",
+      description: "Описание новости",
+      image: "/news/news1.svg",
+      date: new Date().toISOString().slice(0, 10),
+      url: ""
+    };
+    const newNewsData = [...(formData.newsData || []), newNewsItem];
+    setFormData(prev => ({ ...prev, newsData: newNewsData }));
+    setIsDirty(true);
+  };
+
+  const removeNews = (index: number) => {
+    const newNewsData = [...(formData.newsData || [])];
+    newNewsData.splice(index, 1);
+    setFormData(prev => ({ ...prev, newsData: newNewsData }));
+    setIsDirty(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Update the entire news data as a batch
+      await updatePageData('batch', formData);
+      setIsDirty(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Title */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Заголовок раздела
+        </label>
+        <input
+          type="text"
+          value={formData.title || ''}
+          onChange={(e) => handleInputChange('title', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* News List */}
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Список новостей
+          </label>
+          <button
+            onClick={addNews}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Добавить новость
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {(formData.newsData || []).map((newsItem: any, index: number) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="font-medium">Новость {index + 1}</h4>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setEditingIndex(editingIndex === index ? null : index)}
+                    className="text-blue-600 hover:text-blue-800 text-sm"
+                  >
+                    {editingIndex === index ? 'Свернуть' : 'Редактировать'}
+                  </button>
+                  <button
+                    onClick={() => removeNews(index)}
+                    className="text-red-600 hover:text-red-800 text-sm"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+
+              {editingIndex === index && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Заголовок
+                    </label>
+                    <input
+                      type="text"
+                      value={newsItem.title || ''}
+                      onChange={(e) => handleNewsChange(index, 'title', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Описание
+                    </label>
+                    <textarea
+                      value={newsItem.description || ''}
+                      onChange={(e) => handleNewsChange(index, 'description', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Изображение
+                    </label>
+                    <input
+                      type="text"
+                      value={newsItem.image || ''}
+                      onChange={(e) => handleNewsChange(index, 'image', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="/news/news1.svg"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Дата (YYYY-MM-DD)
+                    </label>
+                    <input
+                      type="text"
+                      value={newsItem.date || ''}
+                      onChange={(e) => handleNewsChange(index, 'date', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      URL (опционально)
+                    </label>
+                    <input
+                      type="text"
+                      value={newsItem.url || ''}
+                      onChange={(e) => handleNewsChange(index, 'url', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingIndex !== index && (
+                <div className="text-sm text-gray-600">
+                  <p><strong>Заголовок:</strong> {newsItem.title}</p>
+                  <p><strong>Дата:</strong> {newsItem.date}</p>
+                  <p><strong>Описание:</strong> {newsItem.description?.substring(0, 100)}...</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="pt-6 border-t border-gray-200">
+        <button
+          onClick={handleSave}
+          disabled={!isDirty || saving}
+          className={`px-6 py-2 rounded-md font-medium ${
+            isDirty && !saving
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {saving ? 'Сохранение...' : 'Сохранить'}
+        </button>
+        {isDirty && (
+          <span className="ml-3 text-sm text-gray-500">
+            Есть несохраненные изменения
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+interface TeamEditorProps {
+  pageData: any;
+  updatePageData: (field: string, value: any) => Promise<void>;
+}
+
+function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
+  const [formData, setFormData] = useState(pageData);
+  const [isDirty, setIsDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  // Update form data when pageData changes
+  useEffect(() => {
+    setFormData(pageData);
+    setIsDirty(false);
+  }, [pageData]);
+
+  if (!pageData) {
+    return <div>Загрузка...</div>;
+  }
+
+  const handleInputChange = (key: string, value: any) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+    setIsDirty(true);
+  };
+
+  const handleTeamMemberChange = (index: number, field: string, value: any) => {
+    const newTeamData = [...(formData.teamData || [])];
+    newTeamData[index] = { ...newTeamData[index], [field]: value };
+    setFormData(prev => ({ ...prev, teamData: newTeamData }));
+    setIsDirty(true);
+  };
+
+  const addTeamMember = () => {
+    const newTeamMember = {
+      name: "Новый сотрудник",
+      position: "Должность",
+      image: "/team/team1.svg",
+      description: "Описание сотрудника"
+    };
+    const newTeamData = [...(formData.teamData || []), newTeamMember];
+    setFormData(prev => ({ ...prev, teamData: newTeamData }));
+    setIsDirty(true);
+  };
+
+  const removeTeamMember = (index: number) => {
+    const newTeamData = [...(formData.teamData || [])];
+    newTeamData.splice(index, 1);
+    setFormData(prev => ({ ...prev, teamData: newTeamData }));
+    setIsDirty(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Update the entire team data as a batch
+      await updatePageData('batch', formData);
+      setIsDirty(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Title */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Заголовок раздела
+        </label>
+        <input
+          type="text"
+          value={formData.title || ''}
+          onChange={(e) => handleInputChange('title', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* Team Members List */}
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Список сотрудников
+          </label>
+          <button
+            onClick={addTeamMember}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Добавить сотрудника
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {(formData.teamData || []).map((member: any, index: number) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="font-medium">Сотрудник {index + 1}</h4>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setEditingIndex(editingIndex === index ? null : index)}
+                    className="text-blue-600 hover:text-blue-800 text-sm"
+                  >
+                    {editingIndex === index ? 'Свернуть' : 'Редактировать'}
+                  </button>
+                  <button
+                    onClick={() => removeTeamMember(index)}
+                    className="text-red-600 hover:text-red-800 text-sm"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+
+              {editingIndex === index && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Имя
+                    </label>
+                    <input
+                      type="text"
+                      value={member.name || ''}
+                      onChange={(e) => handleTeamMemberChange(index, 'name', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Должность
+                    </label>
+                    <input
+                      type="text"
+                      value={member.position || ''}
+                      onChange={(e) => handleTeamMemberChange(index, 'position', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Изображение
+                    </label>
+                    <input
+                      type="text"
+                      value={member.image || ''}
+                      onChange={(e) => handleTeamMemberChange(index, 'image', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="/team/team1.svg"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Описание
+                    </label>
+                    <textarea
+                      value={member.description || ''}
+                      onChange={(e) => handleTeamMemberChange(index, 'description', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingIndex !== index && (
+                <div className="text-sm text-gray-600">
+                  <p><strong>Имя:</strong> {member.name}</p>
+                  <p><strong>Должность:</strong> {member.position}</p>
+                  <p><strong>Описание:</strong> {member.description?.substring(0, 100)}...</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="pt-6 border-t border-gray-200">
+        <button
+          onClick={handleSave}
+          disabled={!isDirty || saving}
+          className={`px-6 py-2 rounded-md font-medium ${
+            isDirty && !saving
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {saving ? 'Сохранение...' : 'Сохранить'}
+        </button>
+        {isDirty && (
+          <span className="ml-3 text-sm text-gray-500">
+            Есть несохраненные изменения
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+interface VacanciesEditorProps {
+  pageData: any;
+  updatePageData: (field: string, value: any) => Promise<void>;
+}
+
+function VacanciesEditor({ pageData, updatePageData }: VacanciesEditorProps) {
+  const [formData, setFormData] = useState(pageData);
+  const [isDirty, setIsDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  // Update form data when pageData changes
+  useEffect(() => {
+    setFormData(pageData);
+    setIsDirty(false);
+  }, [pageData]);
+
+  if (!pageData) {
+    return <div>Загрузка...</div>;
+  }
+
+  const handleInputChange = (key: string, value: any) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+    setIsDirty(true);
+  };
+
+  const handleVacancyChange = (index: number, field: string, value: any) => {
+    const newVacanciesData = [...(formData.vacanciesData || [])];
+    newVacanciesData[index] = { ...newVacanciesData[index], [field]: value };
+    setFormData(prev => ({ ...prev, vacanciesData: newVacanciesData }));
+    setIsDirty(true);
+  };
+
+  const addVacancy = () => {
+    const newVacancy = {
+      title: "Новая вакансия",
+      description: "Описание вакансии",
+      requirements: "Требования",
+      conditions: "Условия",
+      salary: "Зарплата",
+      date: new Date().toISOString().slice(0, 10),
+      url: ""
+    };
+    const newVacanciesData = [...(formData.vacanciesData || []), newVacancy];
+    setFormData(prev => ({ ...prev, vacanciesData: newVacanciesData }));
+    setIsDirty(true);
+  };
+
+  const removeVacancy = (index: number) => {
+    const newVacanciesData = [...(formData.vacanciesData || [])];
+    newVacanciesData.splice(index, 1);
+    setFormData(prev => ({ ...prev, vacanciesData: newVacanciesData }));
+    setIsDirty(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Update the entire vacancies data as a batch
+      await updatePageData('batch', formData);
+      setIsDirty(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Title */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Заголовок раздела
+        </label>
+        <input
+          type="text"
+          value={formData.title || ''}
+          onChange={(e) => handleInputChange('title', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* Vacancies List */}
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Список вакансий
+          </label>
+          <button
+            onClick={addVacancy}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Добавить вакансию
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {(formData.vacanciesData || []).map((vacancy: any, index: number) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="font-medium">Вакансия {index + 1}</h4>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setEditingIndex(editingIndex === index ? null : index)}
+                    className="text-blue-600 hover:text-blue-800 text-sm"
+                  >
+                    {editingIndex === index ? 'Свернуть' : 'Редактировать'}
+                  </button>
+                  <button
+                    onClick={() => removeVacancy(index)}
+                    className="text-red-600 hover:text-red-800 text-sm"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+
+              {editingIndex === index && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Заголовок
+                    </label>
+                    <input
+                      type="text"
+                      value={vacancy.title || ''}
+                      onChange={(e) => handleVacancyChange(index, 'title', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Описание
+                    </label>
+                    <textarea
+                      value={vacancy.description || ''}
+                      onChange={(e) => handleVacancyChange(index, 'description', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Требования
+                    </label>
+                    <textarea
+                      value={vacancy.requirements || ''}
+                      onChange={(e) => handleVacancyChange(index, 'requirements', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Условия
+                    </label>
+                    <textarea
+                      value={vacancy.conditions || ''}
+                      onChange={(e) => handleVacancyChange(index, 'conditions', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Зарплата
+                    </label>
+                    <input
+                      type="text"
+                      value={vacancy.salary || ''}
+                      onChange={(e) => handleVacancyChange(index, 'salary', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Дата (YYYY-MM-DD)
+                    </label>
+                    <input
+                      type="text"
+                      value={vacancy.date || ''}
+                      onChange={(e) => handleVacancyChange(index, 'date', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      URL (опционально)
+                    </label>
+                    <input
+                      type="text"
+                      value={vacancy.url || ''}
+                      onChange={(e) => handleVacancyChange(index, 'url', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingIndex !== index && (
+                <div className="text-sm text-gray-600">
+                  <p><strong>Заголовок:</strong> {vacancy.title}</p>
+                  <p><strong>Дата:</strong> {vacancy.date}</p>
+                  <p><strong>Описание:</strong> {vacancy.description?.substring(0, 100)}...</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="pt-6 border-t border-gray-200">
+        <button
+          onClick={handleSave}
+          disabled={!isDirty || saving}
+          className={`px-6 py-2 rounded-md font-medium ${
+            isDirty && !saving
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {saving ? 'Сохранение...' : 'Сохранить'}
+        </button>
+        {isDirty && (
+          <span className="ml-3 text-sm text-gray-500">
+            Есть несохраненные изменения
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 interface ContentEditorProps {
   section: string;
   pageData: any;
@@ -845,6 +1544,12 @@ function ContentEditor({ section, pageData, updatePageData }: ContentEditorProps
       } else if (section === 'partners') {
         await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
       } else if (section === 'certificates') {
+        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+      } else if (section === 'news') {
+        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+      } else if (section === 'team') {
+        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+      } else if (section === 'vacancies') {
         await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
       } else {
         // For other sections, update each field individually

@@ -212,6 +212,105 @@ const defaultCertificatesData = {
   },
 };
 
+// Initial state for news page
+const defaultNewsData = {
+  visible: false,
+  title: "НОВОСТИ",
+  subtitle: "",
+  description: "",
+};
+
+// Initial state for team page
+const defaultTeamData = {
+  visible: false,
+  title: "КОМАНДА",
+  subtitle: "Наша команда профессионалов",
+  description: "Мы гордимся нашей командой экспертов",
+  members: [
+    {
+      image: ["/team/avatar1.svg"],
+      name: ["имя1 фамилия1"],
+    },
+    {
+      image: ["/team/avatar2.svg"],
+      name: ["имя2 фамилия2"],
+    },
+    {
+      image: ["/team/avatar3.svg"],
+      name: ["имя3 фамилия3"],
+    },
+    {
+      image: ["/team/avatar1.svg"],
+      name: ["имя4 фамилия4"],
+    },
+    {
+      image: ["/team/avatar2.svg"],
+      name: ["имя5 фамилия5"],
+    },
+    {
+      image: ["/team/avatar3.svg"],
+      name: ["имя6 фамилия6"],
+    },
+    {
+      image: ["/team/avatar4.svg"],
+      name: ["имя7 фамилия7"],
+    },
+    {
+      image: ["/team/avatar5.svg"],
+      name: ["имя8 фамилия8"],
+    },
+    {
+      image: ["/team/avatar6.svg"],
+      name: ["имя9 фамилия9"],
+    },
+    {
+      image: ["/team/avatar7.svg"],
+      name: ["имя10 фамилия10"],
+    },
+    {
+      image: ["/team/avatar8.svg"],
+      name: ["имя11 фамилия11"],
+    },
+    {
+      image: ["/team/avatar9.svg"],
+      name: ["имя12 фамилия12"],
+    },
+  ],
+};
+
+// Initial state for vacancies page
+const defaultVacanciesData = {
+  visible: false,
+  title: "ВАКАНСИИ",
+  vacancyData: [
+    {
+      id: "engineer-ws",
+      mainTitle: 'Инженер-проектировщик систем водоснабжения и канализации',
+      shortInfo: 'Опыт работы: 3–6 лет\n' +
+        'Полная занятость\n' +
+        'График: 5/2\n' +
+        'Рабочие часы: 8',
+      title1: 'Обязанности:',
+      description1: 'Разработка проектной и рабочей документации разделов водоснабжения и канализации в соответствии с требованиями нормативной документации;\n' +
+        'Прохождение государственной экспертизы по разработанным проектам;\n' +
+        'Сопровождение проектных работ по объектам строительства и контроль качества выполняемых работ;\n' +
+        'Подготовка заданий для разработки смежных разделов проектной документации.',
+      title2: 'Требования:',
+      description2: 'Высшее образование по специализированному направлению;\n' +
+        'Знание общих принципов и методов проектирования;\n' +
+        'Опыт работы от 3-х лет (ПГС);\n' +
+        'Уверенный пользователь ПК, обязательное владение AutoCAD, MS Office, расчетными программами по данному направлению, приветствуется знание Revit;\n' +
+        'Знание методических, нормативно-технических материалов по проектированию; \n' +
+        'строительству и эксплуатации объектов ПГС.',
+      title3: 'Условия:',
+      description3: 'Работа в г. Москве;\n' +
+        'Официальное трудоустройство в соответствии с ТК РФ;\n' +
+        'Предоставление полного соц. пакета;\n' +
+        'Заработная плата от 120 т.р. по результатам собеседования.',
+    }
+  ],
+};
+
 export function useFirestoreContent() {
   const [mainPageData, setMainPageData] = useState(defaultMainPageData);
   const [specializationData, setSpecializationData] = useState(defaultSpecializationData);
@@ -220,6 +319,9 @@ export function useFirestoreContent() {
   const [aboutCompanyData, setAboutCompanyData] = useState(defaultAboutCompanyData);
   const [partnersData, setPartnersData] = useState(defaultPartnersData);
   const [certificatesData, setCertificatesData] = useState(defaultCertificatesData);
+  const [newsData, setNewsData] = useState(defaultNewsData);
+  const [teamData, setTeamData] = useState(defaultTeamData);
+  const [vacanciesData, setVacanciesData] = useState(defaultVacanciesData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -471,6 +573,111 @@ export function useFirestoreContent() {
     return () => unsubscribeCertificates();
   }, [db]);
 
+  // Load news data from Firestore
+  useEffect(() => {
+    if (!db) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribeNews = onSnapshot(
+      doc(db, 'pages', 'news'),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setNewsData({
+            visible: data.visible !== false,
+            title: data.title || defaultNewsData.title,
+            subtitle: data.subtitle || defaultNewsData.subtitle,
+            description: data.description || defaultNewsData.description,
+          });
+        } else {
+          // If document doesn't exist, create it with default data
+          setDoc(doc(db, 'pages', 'news'), defaultNewsData);
+          setNewsData(defaultNewsData);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error loading news data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribeNews();
+  }, [db]);
+
+  // Load team data from Firestore
+  useEffect(() => {
+    if (!db) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribeTeam = onSnapshot(
+      doc(db, 'pages', 'team'),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setTeamData({
+            visible: data.visible !== false,
+            title: data.title || defaultTeamData.title,
+            subtitle: data.subtitle || defaultTeamData.subtitle,
+            description: data.description || defaultTeamData.description,
+            members: data.members || defaultTeamData.members,
+          });
+        } else {
+          // If document doesn't exist, create it with default data
+          setDoc(doc(db, 'pages', 'team'), defaultTeamData);
+          setTeamData(defaultTeamData);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error loading team data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribeTeam();
+  }, [db]);
+
+  // Load vacancies data from Firestore
+  useEffect(() => {
+    if (!db) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribeVacancies = onSnapshot(
+      doc(db, 'pages', 'vacancies'),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setVacanciesData({
+            visible: data.visible !== false,
+            title: data.title || defaultVacanciesData.title,
+            vacancyData: data.vacancyData || defaultVacanciesData.vacancyData,
+          });
+        } else {
+          // If document doesn't exist, create it with default data
+          setDoc(doc(db, 'pages', 'vacancies'), defaultVacanciesData);
+          setVacanciesData(defaultVacanciesData);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error loading vacancies data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribeVacancies();
+  }, [db]);
+
   // Update main page data
   const updateMainPageData = async (field: string, value: any) => {
     if (!db) return;
@@ -618,6 +825,69 @@ export function useFirestoreContent() {
     }
   };
 
+  // Update news data
+  const updateNewsData = async (field: string, value: any) => {
+    if (!db) return;
+    
+    try {
+      const docRef = doc(db, 'pages', 'news');
+      if (field === 'batch') {
+        // Handle batch update
+        await setDoc(docRef, value, { merge: true });
+        setNewsData(value);
+      } else {
+        // Handle single field update
+        await setDoc(docRef, { ...newsData, [field]: value }, { merge: true });
+        setNewsData(prev => ({ ...prev, [field]: value }));
+      }
+    } catch (error) {
+      console.error('Error updating news data:', error);
+      setError('Failed to update data');
+    }
+  };
+
+  // Update team data
+  const updateTeamData = async (field: string, value: any) => {
+    if (!db) return;
+    
+    try {
+      const docRef = doc(db, 'pages', 'team');
+      if (field === 'batch') {
+        // Handle batch update
+        await setDoc(docRef, value, { merge: true });
+        setTeamData(value);
+      } else {
+        // Handle single field update
+        await setDoc(docRef, { ...teamData, [field]: value }, { merge: true });
+        setTeamData(prev => ({ ...prev, [field]: value }));
+      }
+    } catch (error) {
+      console.error('Error updating team data:', error);
+      setError('Failed to update data');
+    }
+  };
+
+  // Update vacancies data
+  const updateVacanciesData = async (field: string, value: any) => {
+    if (!db) return;
+    
+    try {
+      const docRef = doc(db, 'pages', 'vacancies');
+      if (field === 'batch') {
+        // Handle batch update
+        await setDoc(docRef, value, { merge: true });
+        setVacanciesData(value);
+      } else {
+        // Handle single field update
+        await setDoc(docRef, { ...vacanciesData, [field]: value }, { merge: true });
+        setVacanciesData(prev => ({ ...prev, [field]: value }));
+      }
+    } catch (error) {
+      console.error('Error updating vacancies data:', error);
+      setError('Failed to update data');
+    }
+  };
+
   return {
     mainPageData,
     specializationData,
@@ -626,6 +896,9 @@ export function useFirestoreContent() {
     aboutCompanyData,
     partnersData,
     certificatesData,
+    newsData,
+    teamData,
+    vacanciesData,
     updateMainPageData,
     updateSpecializationData,
     updateServicesData,
@@ -633,6 +906,9 @@ export function useFirestoreContent() {
     updateAboutCompanyData,
     updatePartnersData,
     updateCertificatesData,
+    updateNewsData,
+    updateTeamData,
+    updateVacanciesData,
     loading,
     error
   };

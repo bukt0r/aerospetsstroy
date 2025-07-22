@@ -1,6 +1,15 @@
 'use client'
 
-const Team = ({ team, title, subtitle, description }) => {
+import React from "react";
+import { useFirestoreContent } from "@/hooks/useFirestoreContent";
+
+const Team = () => {
+  const { teamData } = useFirestoreContent();
+
+  // Don't render if not visible
+  if (!teamData?.visible) {
+    return null;
+  }
 
   return (
     <div
@@ -9,10 +18,10 @@ const Team = ({ team, title, subtitle, description }) => {
       <div className="flex flex-col lg:flex-row lg:justify-between">
         <div>
           <div>
-            <h2 className="text-[30px] font-semibold mb-[28px] xl:mb-[19px] xl:text-[64px] xl:leading-none">{title}</h2>
+            <h2 className="text-[30px] font-semibold mb-[28px] xl:mb-[19px] xl:text-[64px] xl:leading-none">{teamData?.title}</h2>
           </div>
           <div className="mb-[12px] xl:mb-[40px]">
-            <p className="font-[550] xl:text-[24px]">{subtitle}</p>
+            <p className="font-[550] xl:text-[24px]">{teamData?.subtitle}</p>
           </div>
         </div>
 
@@ -20,7 +29,7 @@ const Team = ({ team, title, subtitle, description }) => {
           <img src="/team/teamImg.svg" alt="team"/>
         </div>
         <div className="mb-[52px] xl:text-[20px] lg:w-[45%]">
-          <p>{description}</p>
+          <p>{teamData?.description}</p>
         </div>
       </div>
 
@@ -28,7 +37,7 @@ const Team = ({ team, title, subtitle, description }) => {
 
 
       <div className="grid grid-cols-3 gap-4 mb-[32px] lg:grid-cols-6 lg:gap-[24px]">
-        {team.map((member,index)=>(
+        {teamData?.members?.map((member,index)=>(
           <div
             className="flex flex-col items-center content-between"
             key={index}

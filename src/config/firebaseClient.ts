@@ -1,8 +1,8 @@
 "use client";
 
-import { initializeApp } from "firebase/app";
-import { getAnalytics, isSupported } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, FirebaseApp } from "firebase/app";
+import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
+import { getFirestore, Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBzNeRSRcf0d4K6Mq28_HLrBA1D3ElYiGA",
@@ -15,9 +15,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase only on client side
-let app: any = null;
-let db: any = null;
-let analytics: any = null;
+let app: FirebaseApp | null = null;
+let db: Firestore | null = null;
+let analytics: Analytics | null = null;
 
 if (typeof window !== 'undefined') {
   app = initializeApp(firebaseConfig);

@@ -10,13 +10,11 @@ import AboutCompany from "@/app/components/Pages/AboutCompany/AboutCompany";
 import PartnersContainer from "@/app/components/Pages/Partners/PartnersContainer";
 import CertificatesContainer from "@/app/components/Pages/Certificates/CertificatesContainer";
 import VacanciesContainer from "@/app/components/Pages/Vacancies/VacanciesContainer";
-import { useAdminContent } from "@/hooks/useAdminContent"
 import AdminNav from "@/components/AdminNav";
 import FirestoreStatus from "@/components/FirestoreStatus";
 
 
 export default function Home() {
-    const { getPageData } = useAdminContent();
   return (
     <main>
         <MainPage />

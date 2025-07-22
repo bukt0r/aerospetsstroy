@@ -1,249 +1,332 @@
 "use client";
 
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminContent } from '@/hooks/useAdminContent';
 import { useFirestoreContent } from '@/hooks/useFirestoreContent';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+
+// Type definitions for page data
+interface PageData {
+  visible?: boolean;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  [key: string]: unknown;
+}
+
+interface ObjectItem {
+  title: string;
+  description: string;
+  address: string;
+  adressUrl: string;
+  image: string;
+  images: string[];
+}
+
+interface PartnerItem {
+  image: string[];
+}
+
+interface CertificateDocument {
+  description: string;
+  images: string[];
+  pdf: string;
+}
+
+interface CertificatesDocuments {
+  ordering: CertificateDocument[];
+  license: CertificateDocument[];
+  certificate: CertificateDocument[];
+}
+
+interface TeamMember {
+  image: string[];
+  name: string[];
+}
+
+interface VacancyItem {
+  id: string;
+  mainTitle: string;
+  shortInfo: string;
+  title1: string;
+  description1: string;
+  title2: string;
+  description2: string;
+  title3: string;
+  description3: string;
+}
+
+interface NewsItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  date: string;
+  image: string;
+  url: string;
+}
+
+// Editor component props interfaces
+interface ObjectsEditorProps {
+  pageData: PageData & { objectsData: ObjectItem[] };
+  updatePageData: (field: string, value: unknown) => Promise<void>;
+}
+
+interface PartnersEditorProps {
+  pageData: PageData & { baners: PartnerItem[] };
+  updatePageData: (field: string, value: unknown) => Promise<void>;
+}
+
+interface CertificatesEditorProps {
+  pageData: PageData & { documents: CertificatesDocuments };
+  updatePageData: (field: string, value: unknown) => Promise<void>;
+}
+
+interface NewsEditorProps {
+  pageData: PageData & { newsData: NewsItem[] };
+  updatePageData: (field: string, value: unknown) => Promise<void>;
+}
+
+interface TeamEditorProps {
+  pageData: PageData & { members: TeamMember[] };
+  updatePageData: (field: string, value: unknown) => Promise<void>;
+}
+
+interface VacanciesEditorProps {
+  pageData: PageData & { vacancyData: VacancyItem[] };
+  updatePageData: (field: string, value: unknown) => Promise<void>;
+}
+
+interface ContentEditorProps {
+  pageData: PageData;
+  updatePageData: (field: string, value: unknown) => Promise<void> | ((page: string, key: string, value: unknown) => void);
+  section: string;
+}
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const { getPageData, updatePageData, togglePageVisibility } = useAdminContent();
   const { mainPageData, specializationData, servicesData, objectsData, aboutCompanyData, partnersData, certificatesData, newsData, teamData, vacanciesData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData, updateAboutCompanyData, updatePartnersData, updateCertificatesData, updateNewsData, updateTeamData, updateVacanciesData } = useFirestoreContent();
-  const [activeSection, setActiveSection] = useState('main');
+  const [activeSection, setActiveSection] = useState<string>('main');
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              Вход в админ панель
+            </h2>
+          </div>
+          <div className="text-center">
+            <p className="text-gray-600">Пожалуйста, войдите в систему</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const sections = [
-    { id: 'main', title: 'Главная страница' },
-    { id: 'specialization', title: 'Специализация' },
-    { id: 'services', title: 'Услуги' },
-    { id: 'objects', title: 'Объекты' },
-    { id: 'news', title: 'Новости' },
-    { id: 'team', title: 'Команда' },
-    { id: 'aboutCompany', title: 'О компании' },
-    { id: 'partners', title: 'Партнеры' },
-    { id: 'certificates', title: 'Сертификаты' },
-    { id: 'vacancies', title: 'Вакансии' },
+    { id: 'main', name: 'Главная страница' },
+    { id: 'specialization', name: 'Специализация' },
+    { id: 'services', name: 'Услуги' },
+    { id: 'objects', name: 'Объекты' },
+    { id: 'aboutCompany', name: 'О компании' },
+    { id: 'partners', name: 'Партнеры' },
+    { id: 'certificates', name: 'Сертификаты' },
+    { id: 'news', name: 'Новости' },
+    { id: 'team', name: 'Команда' },
+    { id: 'vacancies', name: 'Вакансии' },
   ];
-
-  const handleLogout = async () => {
-    await logout();
-  };
 
   return (
     <div className="min-h-screen bg-gray-100">
-        {/* Header */}
-        <header className="bg-white shadow-sm border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-4">
-              <h1 className="text-2xl font-bold text-gray-900">Админ панель</h1>
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/"
-                  className="text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  На сайт
-                </Link>
-                <span className="text-sm text-gray-600">
-                  {user?.email}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                >
-                  Выйти
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <nav className="space-y-2">
-                                                {sections.map((section) => {
-                  const pageData = section.id === 'main' ? mainPageData : 
-                                 section.id === 'specialization' ? specializationData : 
-                                 section.id === 'services' ? servicesData : 
-                                 section.id === 'objects' ? objectsData :
-                                 section.id === 'aboutCompany' ? aboutCompanyData :
-                                 section.id === 'partners' ? partnersData :
-                                 section.id === 'certificates' ? certificatesData :
-                                 section.id === 'news' ? newsData :
-                                 section.id === 'team' ? teamData :
-                                 section.id === 'vacancies' ? vacanciesData :
-                                 getPageData(section.id);
-                  const isVisible = section.id === 'main' ? true : 
-                                  section.id === 'specialization' ? specializationData?.visible : 
-                                  section.id === 'services' ? servicesData?.visible : 
-                                  section.id === 'objects' ? objectsData?.visible :
-                                  section.id === 'aboutCompany' ? aboutCompanyData?.visible :
-                                  section.id === 'partners' ? partnersData?.visible :
-                                  section.id === 'certificates' ? certificatesData?.visible :
-                                  section.id === 'news' ? newsData?.visible :
-                                  section.id === 'team' ? teamData?.visible :
-                                  section.id === 'vacancies' ? vacanciesData?.visible :
-                                  (pageData as any)?.visible !== false;
-                  const showVisibilityToggle = section.id !== 'main'; // Don't show toggle for main page
-                  
-                  return (
-                    <button
-                      key={section.id}
-                      onClick={() => setActiveSection(section.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                        activeSection === section.id
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                                              <div className="flex items-center justify-between">
-                          <span>{section.title}</span>
-                          <div className="flex items-center space-x-2">
-                            <span
-                              className={`w-3 h-3 rounded-full ${
-                                isVisible ? 'bg-green-500' : 'bg-gray-300'
-                              }`}
-                            />
-                            {showVisibilityToggle ? (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  if (section.id === 'specialization') {
-                                    updateSpecializationData('visible', !isVisible);
-                                  } else if (section.id === 'services') {
-                                    updateServicesData('visible', !isVisible);
-                                  } else if (section.id === 'objects') {
-                                    updateObjectsData('visible', !isVisible);
-                                  } else if (section.id === 'aboutCompany') {
-                                    updateAboutCompanyData('visible', !isVisible);
-                                  } else if (section.id === 'partners') {
-                                    updatePartnersData('visible', !isVisible);
-                                  } else if (section.id === 'certificates') {
-                                    updateCertificatesData('visible', !isVisible);
-                                  } else if (section.id === 'news') {
-                                    updateNewsData('visible', !isVisible);
-                                  } else if (section.id === 'team') {
-                                    updateTeamData('visible', !isVisible);
-                                  } else if (section.id === 'vacancies') {
-                                    updateVacanciesData('visible', !isVisible);
-                                  } else {
-                                    togglePageVisibility(section.id);
-                                  }
-                                }}
-                                className="text-xs px-2 py-1 rounded bg-gray-200 hover:bg-gray-300"
-                              >
-                                {isVisible ? 'Скрыть' : 'Показать'}
-                              </button>
-                            ) : (
-                              <span className="text-xs text-gray-500"></span>
-                            )}
-                          </div>
-                        </div>
-                    </button>
-                  );
-                })}
-              </nav>
-            </div>
-
-            {/* Main Content */}
-            <div className="lg:col-span-3">
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-xl font-semibold mb-6">
-                  {sections.find(s => s.id === activeSection)?.title}
-                </h2>
-
-                                                {activeSection === 'main' && !mainPageData ? (
-                  <div>Загрузка данных главной страницы...</div>
-                ) : activeSection === 'specialization' && !specializationData ? (
-                  <div>Загрузка данных специализации...</div>
-                ) : activeSection === 'services' && !servicesData ? (
-                  <div>Загрузка данных услуг...</div>
-                ) : activeSection === 'objects' && !objectsData ? (
-                  <div>Загрузка данных объектов...</div>
-                ) : activeSection === 'aboutCompany' && !aboutCompanyData ? (
-                  <div>Загрузка данных о компании...</div>
-                ) : activeSection === 'partners' && !partnersData ? (
-                  <div>Загрузка данных партнеров...</div>
-                ) : activeSection === 'certificates' && !certificatesData ? (
-                  <div>Загрузка данных сертификатов...</div>
-                ) : activeSection === 'news' && !newsData ? (
-                  <div>Загрузка данных новостей...</div>
-                ) : activeSection === 'team' && !teamData ? (
-                  <div>Загрузка данных команды...</div>
-                ) : activeSection === 'vacancies' && !vacanciesData ? (
-                  <div>Загрузка данных вакансий...</div>
-                ) : activeSection === 'objects' ? (
-                  <ObjectsEditor 
-                    pageData={objectsData}
-                    updatePageData={updateObjectsData}
-                  />
-                ) : activeSection === 'partners' ? (
-                  <PartnersEditor 
-                    pageData={partnersData}
-                    updatePageData={updatePartnersData}
-                  />
-                ) : activeSection === 'certificates' ? (
-                  <CertificatesEditor 
-                    pageData={certificatesData}
-                    updatePageData={updateCertificatesData}
-                  />
-                ) : activeSection === 'news' ? (
-                  <NewsEditor 
-                    pageData={newsData}
-                    updatePageData={updateNewsData}
-                  />
-                ) : activeSection === 'team' ? (
-                  <TeamEditor 
-                    pageData={teamData}
-                    updatePageData={updateTeamData}
-                  />
-                ) : activeSection === 'vacancies' ? (
-                  <VacanciesEditor 
-                    pageData={vacanciesData}
-                    updatePageData={updateVacanciesData}
-                  />
-                ) : (
-                  <ContentEditor 
-                    section={activeSection} 
-                    pageData={activeSection === 'main' ? mainPageData : 
-                             activeSection === 'specialization' ? specializationData : 
-                             activeSection === 'services' ? servicesData : 
-                             activeSection === 'aboutCompany' ? aboutCompanyData :
-                             activeSection === 'partners' ? partnersData :
-                             activeSection === 'certificates' ? certificatesData :
-                             activeSection === 'news' ? newsData :
-                             activeSection === 'team' ? teamData :
-                             activeSection === 'vacancies' ? vacanciesData :
-                             getPageData(activeSection)}
-                    updatePageData={activeSection === 'main' ? updateMainPageData : 
-                                  activeSection === 'specialization' ? updateSpecializationData : 
-                                  activeSection === 'services' ? updateServicesData : 
-                                  activeSection === 'aboutCompany' ? updateAboutCompanyData :
-                                  activeSection === 'partners' ? updatePartnersData :
-                                  activeSection === 'certificates' ? updateCertificatesData :
-                                  activeSection === 'news' ? updateNewsData :
-                                  activeSection === 'team' ? updateTeamData :
-                                  activeSection === 'vacancies' ? updateVacanciesData :
-                                  updatePageData}
-                  />
-                )}
-              </div>
+      {/* Header */}
+      <div className="bg-white shadow">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <h1 className="text-3xl font-bold text-gray-900">Админ панель</h1>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-700">Пользователь: {user.email}</span>
+              <button
+                onClick={logout}
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+              >
+                Выйти
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex">
+          {/* Sidebar */}
+          <div className="w-64 bg-white shadow rounded-lg p-6 mr-8">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Разделы</h2>
+            <nav className="space-y-2">
+              {sections.map((section) => {
+                const pageData: PageData = 
+                  section.id === 'main' ? (mainPageData as unknown as PageData) :
+                  section.id === 'specialization' ? (specializationData as unknown as PageData) :
+                  section.id === 'services' ? (servicesData as unknown as PageData) :
+                  section.id === 'objects' ? (objectsData as unknown as PageData) :
+                  section.id === 'aboutCompany' ? (aboutCompanyData as unknown as PageData) :
+                  section.id === 'partners' ? (partnersData as unknown as PageData) :
+                  section.id === 'certificates' ? (certificatesData as unknown as PageData) :
+                  section.id === 'news' ? (newsData as unknown as PageData) :
+                  section.id === 'team' ? (teamData as unknown as PageData) :
+                  section.id === 'vacancies' ? (vacanciesData as unknown as PageData) :
+                  (getPageData(section.id) as PageData);
+                const isVisible = section.id === 'main' ? true : 
+                  section.id === 'specialization' ? specializationData?.visible :
+                  section.id === 'services' ? servicesData?.visible :
+                  section.id === 'objects' ? objectsData?.visible :
+                  section.id === 'aboutCompany' ? aboutCompanyData?.visible :
+                  section.id === 'partners' ? partnersData?.visible :
+                  section.id === 'certificates' ? certificatesData?.visible :
+                  section.id === 'news' ? newsData?.visible :
+                  section.id === 'team' ? teamData?.visible :
+                  section.id === 'vacancies' ? vacanciesData?.visible :
+                  (pageData as PageData)?.visible !== false;
+                const showVisibilityToggle = section.id !== 'main'; // Don't show toggle for main page
+
+                return (
+                  <div key={section.id} className="flex items-center justify-between">
+                    <button
+                      onClick={() => setActiveSection(section.id)}
+                      className={`flex-1 text-left px-3 py-2 rounded-md text-sm font-medium ${
+                        activeSection === section.id
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      {section.name}
+                    </button>
+                    {showVisibilityToggle && (
+                      <button
+                        onClick={() => {
+                          if (section.id === 'specialization') {
+                            updateSpecializationData('visible', !isVisible);
+                          } else if (section.id === 'services') {
+                            updateServicesData('visible', !isVisible);
+                          } else if (section.id === 'objects') {
+                            updateObjectsData('visible', !isVisible);
+                          } else if (section.id === 'aboutCompany') {
+                            updateAboutCompanyData('visible', !isVisible);
+                          } else if (section.id === 'partners') {
+                            updatePartnersData('visible', !isVisible);
+                          } else if (section.id === 'certificates') {
+                            updateCertificatesData('visible', !isVisible);
+                          } else if (section.id === 'news') {
+                            updateNewsData('visible', !isVisible);
+                          } else if (section.id === 'team') {
+                            updateTeamData('visible', !isVisible);
+                          } else if (section.id === 'vacancies') {
+                            updateVacanciesData('visible', !isVisible);
+                          } else {
+                            togglePageVisibility(section.id);
+                          }
+                        }}
+                        className={`ml-2 px-2 py-1 text-xs rounded ${
+                          isVisible
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {isVisible ? 'Вкл' : 'Выкл'}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 bg-white shadow rounded-lg p-6">
+            {activeSection === 'main' && !mainPageData ? (
+              <div>Загрузка данных главной страницы...</div>
+            ) : activeSection === 'specialization' && !specializationData ? (
+              <div>Загрузка данных специализации...</div>
+            ) : activeSection === 'services' && !servicesData ? (
+              <div>Загрузка данных услуг...</div>
+            ) : activeSection === 'objects' && !objectsData ? (
+              <div>Загрузка данных объектов...</div>
+            ) : activeSection === 'aboutCompany' && !aboutCompanyData ? (
+              <div>Загрузка данных о компании...</div>
+            ) : activeSection === 'partners' && !partnersData ? (
+              <div>Загрузка данных партнеров...</div>
+            ) : activeSection === 'certificates' && !certificatesData ? (
+              <div>Загрузка данных сертификатов...</div>
+            ) : activeSection === 'news' && !newsData ? (
+              <div>Загрузка данных новостей...</div>
+            ) : activeSection === 'team' && !teamData ? (
+              <div>Загрузка данных команды...</div>
+            ) : activeSection === 'vacancies' && !vacanciesData ? (
+              <div>Загрузка данных вакансий...</div>
+            ) : activeSection === 'objects' ? (
+              <ObjectsEditor 
+                pageData={objectsData as PageData & { objectsData: ObjectItem[] }}
+                updatePageData={updateObjectsData}
+              />
+            ) : activeSection === 'partners' ? (
+              <PartnersEditor 
+                pageData={partnersData as PageData & { baners: PartnerItem[] }}
+                updatePageData={updatePartnersData}
+              />
+            ) : activeSection === 'certificates' ? (
+              <CertificatesEditor 
+                pageData={certificatesData as PageData & { documents: CertificatesDocuments }}
+                updatePageData={updateCertificatesData}
+              />
+            ) : activeSection === 'news' ? (
+              <NewsEditor 
+                pageData={newsData as PageData & { newsData: NewsItem[] }}
+                updatePageData={updateNewsData}
+              />
+            ) : activeSection === 'team' ? (
+              <TeamEditor 
+                pageData={teamData as PageData & { members: TeamMember[] }}
+                updatePageData={updateTeamData}
+              />
+            ) : activeSection === 'vacancies' ? (
+              <VacanciesEditor 
+                pageData={vacanciesData as PageData & { vacancyData: VacancyItem[] }}
+                updatePageData={updateVacanciesData}
+              />
+            ) : (
+              <ContentEditor 
+                pageData={
+                  activeSection === 'main' ? (mainPageData as PageData) :
+                  activeSection === 'specialization' ? (specializationData as PageData) :
+                  activeSection === 'services' ? (servicesData as PageData) :
+                  activeSection === 'aboutCompany' ? (aboutCompanyData as PageData) :
+                  activeSection === 'partners' ? (partnersData as PageData) :
+                  activeSection === 'certificates' ? (certificatesData as PageData) :
+                  activeSection === 'news' ? (newsData as PageData) :
+                  activeSection === 'team' ? (teamData as PageData) :
+                  activeSection === 'vacancies' ? (vacanciesData as PageData) :
+                  (getPageData(activeSection) as PageData)
+                }
+                updatePageData={activeSection === 'main' ? updateMainPageData : 
+                  activeSection === 'specialization' ? updateSpecializationData :
+                  activeSection === 'services' ? updateServicesData :
+                  activeSection === 'aboutCompany' ? updateAboutCompanyData :
+                  activeSection === 'partners' ? updatePartnersData :
+                  activeSection === 'certificates' ? updateCertificatesData :
+                  activeSection === 'news' ? updateNewsData :
+                  activeSection === 'team' ? updateTeamData :
+                  activeSection === 'vacancies' ? updateVacanciesData :
+                  updatePageData}
+                section={activeSection}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
-
-interface ObjectsEditorProps {
-  pageData: any;
-  updatePageData: (field: string, value: any) => Promise<void>;
-}
-
-interface PartnersEditorProps {
-  pageData: any;
-  updatePageData: (field: string, value: any) => Promise<void>;
 }
 
 function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
@@ -262,12 +345,12 @@ function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
     return <div>Загрузка...</div>;
   }
 
-  const handleInputChange = (key: string, value: any) => {
+  const handleInputChange = (key: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [key]: value }));
     setIsDirty(true);
   };
 
-  const handleObjectChange = (index: number, field: string, value: any) => {
+  const handleObjectChange = (index: number, field: string, value: unknown) => {
     const newObjectsData = [...(formData.objectsData || [])];
     newObjectsData[index] = { ...newObjectsData[index], [field]: value };
     setFormData(prev => ({ ...prev, objectsData: newObjectsData }));
@@ -338,7 +421,7 @@ function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
         </div>
 
         <div className="space-y-4">
-          {(formData.objectsData || []).map((object: any, index: number) => (
+          {(formData.objectsData || []).map((object: ObjectItem, index: number) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="font-medium">Объект {index + 1}</h4>
@@ -487,12 +570,12 @@ function PartnersEditor({ pageData, updatePageData }: PartnersEditorProps) {
     return <div>Загрузка...</div>;
   }
 
-  const handleInputChange = (key: string, value: any) => {
+  const handleInputChange = (key: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [key]: value }));
     setIsDirty(true);
   };
 
-  const handlePartnerChange = (index: number, field: string, value: any) => {
+  const handlePartnerChange = (index: number, field: string, value: unknown) => {
     const newBanersData = [...(formData.baners || [])];
     newBanersData[index] = { ...newBanersData[index], [field]: value };
     setFormData(prev => ({ ...prev, baners: newBanersData }));
@@ -558,7 +641,7 @@ function PartnersEditor({ pageData, updatePageData }: PartnersEditorProps) {
         </div>
 
         <div className="space-y-4">
-          {(formData.baners || []).map((partner: any, index: number) => (
+          {(formData.baners || []).map((partner: PartnerItem, index: number) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="font-medium">Партнер {index + 1}</h4>
@@ -628,11 +711,6 @@ function PartnersEditor({ pageData, updatePageData }: PartnersEditorProps) {
   );
 }
 
-interface CertificatesEditorProps {
-  pageData: any;
-  updatePageData: (field: string, value: any) => Promise<void>;
-}
-
 function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProps) {
   const [formData, setFormData] = useState(pageData);
   const [isDirty, setIsDirty] = useState(false);
@@ -650,12 +728,12 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
     return <div>Загрузка...</div>;
   }
 
-  const handleInputChange = (key: string, value: any) => {
+  const handleInputChange = (key: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [key]: value }));
     setIsDirty(true);
   };
 
-  const handleDocumentChange = (section: string, index: number, field: string, value: any) => {
+  const handleDocumentChange = (section: string, index: number, field: string, value: unknown) => {
     const newDocuments = { ...formData.documents };
     const sectionData = [...(newDocuments[section] || [])];
     sectionData[index] = { ...sectionData[index], [field]: value };
@@ -715,14 +793,13 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
         </div>
 
         <div className="space-y-4">
-          {documents.map((document: any, index: number) => (
+          {documents.map((document: CertificateDocument, index: number) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="font-medium">Документ {index + 1}</h4>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => {
-                      const key = `${sectionName}-${index}`;
                       setEditingIndex(editingIndex === index && editingSection === sectionName ? null : index);
                       setEditingSection(editingIndex === index && editingSection === sectionName ? null : sectionName);
                     }}
@@ -844,11 +921,6 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
   );
 }
 
-interface NewsEditorProps {
-  pageData: any;
-  updatePageData: (field: string, value: any) => Promise<void>;
-}
-
 function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
   const [formData, setFormData] = useState(pageData);
   const [isDirty, setIsDirty] = useState(false);
@@ -865,12 +937,12 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
     return <div>Загрузка...</div>;
   }
 
-  const handleInputChange = (key: string, value: any) => {
+  const handleInputChange = (key: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [key]: value }));
     setIsDirty(true);
   };
 
-  const handleNewsChange = (index: number, field: string, value: any) => {
+  const handleNewsChange = (index: number, field: string, value: unknown) => {
     const newNewsData = [...(formData.newsData || [])];
     newNewsData[index] = { ...newNewsData[index], [field]: value };
     setFormData(prev => ({ ...prev, newsData: newNewsData }));
@@ -942,7 +1014,7 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
         </div>
 
         <div className="space-y-4">
-          {(formData.newsData || []).map((newsItem: any, index: number) => (
+          {(formData.newsData || []).map((newsItem: NewsItem, index: number) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="font-medium">Новость {index + 1}</h4>
@@ -1089,11 +1161,6 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
   );
 }
 
-interface TeamEditorProps {
-  pageData: any;
-  updatePageData: (field: string, value: any) => Promise<void>;
-}
-
 function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
   const [formData, setFormData] = useState(pageData);
   const [isDirty, setIsDirty] = useState(false);
@@ -1110,12 +1177,12 @@ function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
     return <div>Загрузка...</div>;
   }
 
-  const handleInputChange = (key: string, value: any) => {
+  const handleInputChange = (key: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [key]: value }));
     setIsDirty(true);
   };
 
-  const handleTeamMemberChange = (index: number, field: string, value: any) => {
+  const handleTeamMemberChange = (index: number, field: string, value: unknown) => {
     const newMembersData = [...(formData.members || [])];
     newMembersData[index] = { ...newMembersData[index], [field]: value };
     setFormData(prev => ({ ...prev, members: newMembersData }));
@@ -1208,7 +1275,7 @@ function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
         </div>
 
         <div className="space-y-4">
-          {(formData.members || []).map((member: any, index: number) => (
+          {(formData.members || []).map((member: TeamMember, index: number) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="font-medium">Сотрудник {index + 1}</h4>
@@ -1291,11 +1358,6 @@ function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
   );
 }
 
-interface VacanciesEditorProps {
-  pageData: any;
-  updatePageData: (field: string, value: any) => Promise<void>;
-}
-
 function VacanciesEditor({ pageData, updatePageData }: VacanciesEditorProps) {
   const [formData, setFormData] = useState(pageData);
   const [isDirty, setIsDirty] = useState(false);
@@ -1312,12 +1374,12 @@ function VacanciesEditor({ pageData, updatePageData }: VacanciesEditorProps) {
     return <div>Загрузка...</div>;
   }
 
-  const handleInputChange = (key: string, value: any) => {
+  const handleInputChange = (key: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [key]: value }));
     setIsDirty(true);
   };
 
-  const handleVacancyChange = (index: number, field: string, value: any) => {
+  const handleVacancyChange = (index: number, field: string, value: unknown) => {
     const newVacancyData = [...(formData.vacancyData || [])];
     newVacancyData[index] = { ...newVacancyData[index], [field]: value };
     setFormData(prev => ({ ...prev, vacancyData: newVacancyData }));
@@ -1391,7 +1453,7 @@ function VacanciesEditor({ pageData, updatePageData }: VacanciesEditorProps) {
         </div>
 
         <div className="space-y-4">
-          {(formData.vacancyData || []).map((vacancy: any, index: number) => (
+          {(formData.vacancyData || []).map((vacancy: VacancyItem, index: number) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="font-medium">Вакансия {index + 1}</h4>
@@ -1559,13 +1621,7 @@ function VacanciesEditor({ pageData, updatePageData }: VacanciesEditorProps) {
   );
 }
 
-interface ContentEditorProps {
-  section: string;
-  pageData: any;
-  updatePageData: ((page: string, key: string, value: any) => void) | ((field: string, value: string) => Promise<void>);
-}
-
-function ContentEditor({ section, pageData, updatePageData }: ContentEditorProps) {
+function ContentEditor({ pageData, updatePageData, section }: ContentEditorProps) {
   const [formData, setFormData] = useState(pageData);
   const [isDirty, setIsDirty] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -1580,7 +1636,7 @@ function ContentEditor({ section, pageData, updatePageData }: ContentEditorProps
     return <div>Загрузка...</div>;
   }
 
-  const handleInputChange = (key: string, value: any) => {
+  const handleInputChange = (key: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [key]: value }));
     setIsDirty(true);
   };
@@ -1588,31 +1644,22 @@ function ContentEditor({ section, pageData, updatePageData }: ContentEditorProps
   const handleSave = async () => {
     setSaving(true);
     try {
-      if (section === 'main') {
-        await (updatePageData as (field: string, value: string) => Promise<void>)('batch', formData);
-      } else if (section === 'specialization') {
-        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
-      } else if (section === 'services') {
-        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
-      } else if (section === 'aboutCompany') {
-        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+      if (section === 'objects') {
+        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
       } else if (section === 'partners') {
-        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
       } else if (section === 'certificates') {
-        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
       } else if (section === 'news') {
-        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
       } else if (section === 'team') {
-        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
       } else if (section === 'vacancies') {
-        await (updatePageData as (field: string, value: any) => Promise<void>)('batch', formData);
+        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
       } else {
-        // For other sections, update each field individually
-        for (const [key, value] of Object.entries(formData)) {
-          if (key !== 'page' && key !== 'visible') {
-            (updatePageData as (page: string, key: string, value: any) => void)(section, key, value);
-          }
-        }
+        // Handle other sections that use the old updatePageData signature
+        const oldUpdateFunction = updatePageData as (page: string, key: string, value: unknown) => void;
+        oldUpdateFunction(section, 'batch', formData);
       }
       setIsDirty(false);
     } catch (error) {
@@ -1622,56 +1669,79 @@ function ContentEditor({ section, pageData, updatePageData }: ContentEditorProps
     }
   };
 
-    const renderField = (key: string, value: any, label: string, type: string = 'text') => {
-    if (typeof value === 'string') {
-      return (
-        <div key={key} className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            {label}
-          </label>
-          {type === 'textarea' ? (
-            <textarea
-              value={value}
-              onChange={(e) => handleInputChange(key, e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows={4}
-            />
-          ) : (
-            <input
-              type={type}
-              value={value}
-              onChange={(e) => handleInputChange(key, e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          )}
-        </div>
-      );
+  // Get editable fields based on section
+  const getEditableFields = () => {
+    const fields = [];
+    
+    if (formData.title !== undefined) {
+      fields.push({ key: 'title', label: 'Заголовок', type: 'text' });
     }
-    return null;
+    if (formData.subtitle !== undefined) {
+      fields.push({ key: 'subtitle', label: 'Подзаголовок', type: 'text' });
+    }
+    if (formData.description !== undefined) {
+      fields.push({ key: 'description', label: 'Описание', type: 'textarea' });
+    }
+    if (formData.paragraph1 !== undefined) {
+      fields.push({ key: 'paragraph1', label: 'Параграф 1', type: 'textarea' });
+    }
+    if (formData.paragraph2 !== undefined) {
+      fields.push({ key: 'paragraph2', label: 'Параграф 2', type: 'textarea' });
+    }
+    if (formData.row1 !== undefined) {
+      fields.push({ key: 'row1', label: 'Строка 1', type: 'text' });
+    }
+    if (formData.row2 !== undefined) {
+      fields.push({ key: 'row2', label: 'Строка 2', type: 'text' });
+    }
+    if (formData.row3 !== undefined) {
+      fields.push({ key: 'row3', label: 'Строка 3', type: 'text' });
+    }
+    if (formData.row4 !== undefined) {
+      fields.push({ key: 'row4', label: 'Строка 4', type: 'text' });
+    }
+
+    return fields;
   };
+
+  const editableFields = getEditableFields();
 
   return (
     <div className="space-y-6">
-      {Object.entries(formData).map(([key, value]) => {
-        if (key === 'page' || key === 'visible') return null;
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+        Редактирование раздела: {section}
+      </h2>
 
-        const label = key.charAt(0).toUpperCase() + key.slice(1);
-
-        if (typeof value === 'string') {
-          return renderField(key, value, label, value.length > 100 ? 'textarea' : 'text');
-        }
-
-        return (
-          <div key={key} className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {label} (объект)
-            </label>
-            <div className="text-sm text-gray-500">
-              {JSON.stringify(value, null, 2)}
+      {editableFields.length === 0 ? (
+        <div className="text-gray-500">
+          Нет редактируемых полей для этого раздела.
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {editableFields.map((field) => (
+            <div key={field.key}>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {field.label}
+              </label>
+              {field.type === 'textarea' ? (
+                <textarea
+                  value={formData[field.key] || ''}
+                  onChange={(e) => handleInputChange(field.key, e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={4}
+                />
+              ) : (
+                <input
+                  type="text"
+                  value={formData[field.key] || ''}
+                  onChange={(e) => handleInputChange(field.key, e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              )}
             </div>
-          </div>
-        );
-      })}
+          ))}
+        </div>
+      )}
 
       {/* Save Button */}
       <div className="pt-6 border-t border-gray-200">

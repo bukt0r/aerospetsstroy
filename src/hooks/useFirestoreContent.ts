@@ -1,11 +1,134 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/config/firebaseClient';
 
+// Type definitions for data structures
+interface MainPageData {
+  title: string;
+  subtitle: string;
+  email: string;
+  phone: string;
+}
+
+interface SpecializationData {
+  visible: boolean;
+  title: string;
+  description: string;
+  subtitle1: string;
+  description1: string;
+  subtitle2: string;
+  description2: string;
+}
+
+interface ServicesData {
+  visible: boolean;
+  title: string;
+  subtitle1: string;
+  description1: string;
+  subtitle2: string;
+  description2: string;
+}
+
+interface ObjectItem {
+  title: string;
+  description: string;
+  address: string;
+  adressUrl: string;
+  image: string;
+  images: string[];
+}
+
+interface ObjectsData {
+  visible: boolean;
+  title: string;
+  objectsData: ObjectItem[];
+}
+
+interface AboutCompanyData {
+  visible: boolean;
+  title: string;
+  paragraph1: string;
+  subtitle: string;
+  row1: string;
+  row2: string;
+  row3: string;
+  row4: string;
+  paragraph2: string;
+}
+
+interface PartnerItem {
+  image: string[];
+}
+
+interface PartnersData {
+  visible: boolean;
+  title: string;
+  baners: PartnerItem[];
+}
+
+interface CertificateDocument {
+  description: string;
+  images: string[];
+  pdf: string;
+}
+
+interface CertificatesDocuments {
+  ordering: CertificateDocument[];
+  license: CertificateDocument[];
+  certificate: CertificateDocument[];
+}
+
+interface CertificatesData {
+  visible: boolean;
+  title: string;
+  documents: CertificatesDocuments;
+}
+
+interface NewsData {
+  visible: boolean;
+  title: string;
+  subtitle: string;
+  description: string;
+}
+
+interface TeamMember {
+  image: string[];
+  name: string[];
+}
+
+interface TeamData {
+  visible: boolean;
+  title: string;
+  subtitle: string;
+  description: string;
+  members: TeamMember[];
+}
+
+interface VacancyItem {
+  id: string;
+  mainTitle: string;
+  shortInfo: string;
+  title1: string;
+  description1: string;
+  title2: string;
+  description2: string;
+  title3: string;
+  description3: string;
+}
+
+interface VacanciesData {
+  visible: boolean;
+  title: string;
+  vacancyData: VacancyItem[];
+}
+
+// Update function type
+type UpdateFunction = (field: string, value: unknown) => Promise<void>;
+
 // Initial state for main page
-const defaultMainPageData = {
+const defaultMainPageData: MainPageData = {
   title: "МЫ СОЗДАЕМ БУДУЩЕЕ",
   subtitle: "полный спектр услуг по строительству",
   email: "info@aeross.ru",
@@ -13,7 +136,7 @@ const defaultMainPageData = {
 };
 
 // Initial state for specialization page
-const defaultSpecializationData = {
+const defaultSpecializationData: SpecializationData = {
   visible: true,
   title: "СПЕЦИАЛИЗАЦИЯ",
   description: "ООО «АэроСпецСтрой» специализируется на промышленном строительстве.\n" +
@@ -32,7 +155,7 @@ const defaultSpecializationData = {
 };
 
 // Initial state for services page
-const defaultServicesData = {
+const defaultServicesData: ServicesData = {
   visible: true,
   title: "УСЛУГИ",
   subtitle1: "Строительство",
@@ -42,7 +165,7 @@ const defaultServicesData = {
 };
 
 // Initial state for objects page
-const defaultObjectsData = {
+const defaultObjectsData: ObjectsData = {
   visible: true,
   title: "НАШИ ОБЪЕКТЫ",
   objectsData: [
@@ -130,7 +253,7 @@ const defaultObjectsData = {
 };
 
 // Initial state for aboutCompany page
-const defaultAboutCompanyData = {
+const defaultAboutCompanyData: AboutCompanyData = {
   visible: true,
   title: "О КОМПАНИИ",
   paragraph1: "ООО «АэроСпецСтрой» — надежный подрядчик в сфере промышленного строительства.\n" +
@@ -149,7 +272,7 @@ const defaultAboutCompanyData = {
 };
 
 // Initial state for partners page
-const defaultPartnersData = {
+const defaultPartnersData: PartnersData = {
   visible: true,
   title: "НАШИ ПАРТНЕРЫ",
   baners: [
@@ -181,7 +304,7 @@ const defaultPartnersData = {
 };
 
 // Initial state for certificates page
-const defaultCertificatesData = {
+const defaultCertificatesData: CertificatesData = {
   visible: true,
   title: "СЕРТИФИКАТЫ",
   documents: {
@@ -213,7 +336,7 @@ const defaultCertificatesData = {
 };
 
 // Initial state for news page
-const defaultNewsData = {
+const defaultNewsData: NewsData = {
   visible: false,
   title: "НОВОСТИ",
   subtitle: "",
@@ -221,7 +344,7 @@ const defaultNewsData = {
 };
 
 // Initial state for team page
-const defaultTeamData = {
+const defaultTeamData: TeamData = {
   visible: false,
   title: "КОМАНДА",
   subtitle: "Наша команда профессионалов",
@@ -279,7 +402,7 @@ const defaultTeamData = {
 };
 
 // Initial state for vacancies page
-const defaultVacanciesData = {
+const defaultVacanciesData: VacanciesData = {
   visible: false,
   title: "ВАКАНСИИ",
   vacancyData: [
@@ -312,17 +435,17 @@ const defaultVacanciesData = {
 };
 
 export function useFirestoreContent() {
-  const [mainPageData, setMainPageData] = useState(defaultMainPageData);
-  const [specializationData, setSpecializationData] = useState(defaultSpecializationData);
-  const [servicesData, setServicesData] = useState(defaultServicesData);
-  const [objectsData, setObjectsData] = useState(defaultObjectsData);
-  const [aboutCompanyData, setAboutCompanyData] = useState(defaultAboutCompanyData);
-  const [partnersData, setPartnersData] = useState(defaultPartnersData);
-  const [certificatesData, setCertificatesData] = useState(defaultCertificatesData);
-  const [newsData, setNewsData] = useState(defaultNewsData);
-  const [teamData, setTeamData] = useState(defaultTeamData);
-  const [vacanciesData, setVacanciesData] = useState(defaultVacanciesData);
-  const [loading, setLoading] = useState(true);
+  const [mainPageData, setMainPageData] = useState<MainPageData>(defaultMainPageData);
+  const [specializationData, setSpecializationData] = useState<SpecializationData>(defaultSpecializationData);
+  const [servicesData, setServicesData] = useState<ServicesData>(defaultServicesData);
+  const [objectsData, setObjectsData] = useState<ObjectsData>(defaultObjectsData);
+  const [aboutCompanyData, setAboutCompanyData] = useState<AboutCompanyData>(defaultAboutCompanyData);
+  const [partnersData, setPartnersData] = useState<PartnersData>(defaultPartnersData);
+  const [certificatesData, setCertificatesData] = useState<CertificatesData>(defaultCertificatesData);
+  const [newsData, setNewsData] = useState<NewsData>(defaultNewsData);
+  const [teamData, setTeamData] = useState<TeamData>(defaultTeamData);
+  const [vacanciesData, setVacanciesData] = useState<VacanciesData>(defaultVacanciesData);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   // Load main page data from Firestore
@@ -336,7 +459,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'main'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<MainPageData>;
           setMainPageData({
             title: data.title || defaultMainPageData.title,
             subtitle: data.subtitle || defaultMainPageData.subtitle,
@@ -356,7 +479,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeMain();
-  }, [db]);
+  }, []);
 
   // Load specialization data from Firestore
   useEffect(() => {
@@ -369,7 +492,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'specialization'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<SpecializationData>;
           setSpecializationData({
             visible: data.visible !== false,
             title: data.title || defaultSpecializationData.title,
@@ -392,7 +515,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeSpecialization();
-  }, [db]);
+  }, []);
 
   // Load services data from Firestore
   useEffect(() => {
@@ -405,7 +528,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'services'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<ServicesData>;
           setServicesData({
             visible: data.visible !== false,
             title: data.title || defaultServicesData.title,
@@ -429,7 +552,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeServices();
-  }, [db]);
+  }, []);
 
   // Load objects data from Firestore
   useEffect(() => {
@@ -442,7 +565,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'objects'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<ObjectsData>;
           setObjectsData({
             visible: data.visible !== false,
             title: data.title || defaultObjectsData.title,
@@ -463,7 +586,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeObjects();
-  }, [db]);
+  }, []);
 
   // Load aboutCompany data from Firestore
   useEffect(() => {
@@ -476,7 +599,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'aboutCompany'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<AboutCompanyData>;
           setAboutCompanyData({
             visible: data.visible !== false,
             title: data.title || defaultAboutCompanyData.title,
@@ -503,7 +626,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeAboutCompany();
-  }, [db]);
+  }, []);
 
   // Load partners data from Firestore
   useEffect(() => {
@@ -516,7 +639,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'partners'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<PartnersData>;
           setPartnersData({
             visible: data.visible !== false,
             title: data.title || defaultPartnersData.title,
@@ -537,7 +660,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribePartners();
-  }, [db]);
+  }, []);
 
   // Load certificates data from Firestore
   useEffect(() => {
@@ -550,7 +673,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'certificates'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<CertificatesData>;
           setCertificatesData({
             visible: data.visible !== false,
             title: data.title || defaultCertificatesData.title,
@@ -571,7 +694,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeCertificates();
-  }, [db]);
+  }, []);
 
   // Load news data from Firestore
   useEffect(() => {
@@ -584,7 +707,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'news'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<NewsData>;
           setNewsData({
             visible: data.visible !== false,
             title: data.title || defaultNewsData.title,
@@ -606,7 +729,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeNews();
-  }, [db]);
+  }, []);
 
   // Load team data from Firestore
   useEffect(() => {
@@ -619,7 +742,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'team'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<TeamData>;
           setTeamData({
             visible: data.visible !== false,
             title: data.title || defaultTeamData.title,
@@ -642,7 +765,7 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeTeam();
-  }, [db]);
+  }, []);
 
   // Load vacancies data from Firestore
   useEffect(() => {
@@ -655,7 +778,7 @@ export function useFirestoreContent() {
       doc(db, 'pages', 'vacancies'),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          const data = docSnapshot.data() as Partial<VacanciesData>;
           setVacanciesData({
             visible: data.visible !== false,
             title: data.title || defaultVacanciesData.title,
@@ -676,10 +799,10 @@ export function useFirestoreContent() {
     );
 
     return () => unsubscribeVacancies();
-  }, [db]);
+  }, []);
 
   // Update main page data
-  const updateMainPageData = async (field: string, value: any) => {
+  const updateMainPageData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -687,7 +810,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setMainPageData(value);
+        setMainPageData(value as MainPageData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...mainPageData, [field]: value }, { merge: true });
@@ -700,7 +823,7 @@ export function useFirestoreContent() {
   };
 
   // Update specialization data
-  const updateSpecializationData = async (field: string, value: any) => {
+  const updateSpecializationData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -708,7 +831,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setSpecializationData(value);
+        setSpecializationData(value as SpecializationData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...specializationData, [field]: value }, { merge: true });
@@ -721,7 +844,7 @@ export function useFirestoreContent() {
   };
 
   // Update services data
-  const updateServicesData = async (field: string, value: any) => {
+  const updateServicesData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -729,7 +852,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setServicesData(value);
+        setServicesData(value as ServicesData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...servicesData, [field]: value }, { merge: true });
@@ -742,7 +865,7 @@ export function useFirestoreContent() {
   };
 
   // Update objects data
-  const updateObjectsData = async (field: string, value: any) => {
+  const updateObjectsData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -750,7 +873,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setObjectsData(value);
+        setObjectsData(value as ObjectsData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...objectsData, [field]: value }, { merge: true });
@@ -763,7 +886,7 @@ export function useFirestoreContent() {
   };
 
   // Update aboutCompany data
-  const updateAboutCompanyData = async (field: string, value: any) => {
+  const updateAboutCompanyData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -771,7 +894,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setAboutCompanyData(value);
+        setAboutCompanyData(value as AboutCompanyData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...aboutCompanyData, [field]: value }, { merge: true });
@@ -784,7 +907,7 @@ export function useFirestoreContent() {
   };
 
   // Update partners data
-  const updatePartnersData = async (field: string, value: any) => {
+  const updatePartnersData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -792,7 +915,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setPartnersData(value);
+        setPartnersData(value as PartnersData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...partnersData, [field]: value }, { merge: true });
@@ -805,7 +928,7 @@ export function useFirestoreContent() {
   };
 
   // Update certificates data
-  const updateCertificatesData = async (field: string, value: any) => {
+  const updateCertificatesData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -813,7 +936,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setCertificatesData(value);
+        setCertificatesData(value as CertificatesData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...certificatesData, [field]: value }, { merge: true });
@@ -826,7 +949,7 @@ export function useFirestoreContent() {
   };
 
   // Update news data
-  const updateNewsData = async (field: string, value: any) => {
+  const updateNewsData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -834,7 +957,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setNewsData(value);
+        setNewsData(value as NewsData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...newsData, [field]: value }, { merge: true });
@@ -847,7 +970,7 @@ export function useFirestoreContent() {
   };
 
   // Update team data
-  const updateTeamData = async (field: string, value: any) => {
+  const updateTeamData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -855,7 +978,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setTeamData(value);
+        setTeamData(value as TeamData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...teamData, [field]: value }, { merge: true });
@@ -868,7 +991,7 @@ export function useFirestoreContent() {
   };
 
   // Update vacancies data
-  const updateVacanciesData = async (field: string, value: any) => {
+  const updateVacanciesData: UpdateFunction = async (field: string, value: unknown) => {
     if (!db) return;
     
     try {
@@ -876,7 +999,7 @@ export function useFirestoreContent() {
       if (field === 'batch') {
         // Handle batch update
         await setDoc(docRef, value, { merge: true });
-        setVacanciesData(value);
+        setVacanciesData(value as VacanciesData);
       } else {
         // Handle single field update
         await setDoc(docRef, { ...vacanciesData, [field]: value }, { merge: true });

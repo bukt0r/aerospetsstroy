@@ -58,7 +58,7 @@ const Footer =()=>{
 
       <footer className="pl-[15px] py-[12px] xl:px-[60px]">
         <div className="flex flex-col gap-[8px] xl:flex-row xl:justify-between xl:items-center">
-          <p className="text-[#46484980] xl:text-[20px]">ООО "АэроСпецСтрой"</p>
+          <p className="text-[#46484980] xl:text-[20px]">ООО &quot;АэроСпецСтрой&quot;</p>
           <a 
             href="/certificates/policy.pdf" 
             target="_blank" 

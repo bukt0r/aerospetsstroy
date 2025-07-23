@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useRef } from 'react';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { storage } from '@/config/firebaseClient';
+import { cloudinaryUploadUrl, cloudinaryConfig } from '@/config/cloudinary';
 
-interface ImageUploadAdvancedProps {
+interface CloudinaryUploadAdvancedProps {
   onUploadComplete: (urls: string[]) => void;
   onRemoveImage?: (url: string) => void;
   folder?: string;
@@ -17,10 +16,10 @@ interface ImageUploadAdvancedProps {
   currentImages?: string[];
 }
 
-export default function ImageUploadAdvanced({ 
+export default function CloudinaryUploadAdvanced({ 
   onUploadComplete, 
   onRemoveImage,
-  folder = 'uploads', 
+  folder = 'aerospetsstroy',
   accept = 'image/*',
   maxSize = 5,
   maxFiles = 10,
@@ -28,7 +27,7 @@ export default function ImageUploadAdvanced({
   className = '',
   label = 'Загрузить изображения',
   currentImages = []
-}: ImageUploadAdvancedProps) {
+}: CloudinaryUploadAdvancedProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -67,24 +66,42 @@ export default function ImageUploadAdvanced({
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         
-        // Create a unique filename with sanitized name
-        const timestamp = Date.now();
-        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-        const fileName = `${timestamp}_${sanitizedName}`;
-        const storageRef = ref(storage, `${folder}/${fileName}`);
+        // Create FormData for Cloudinary upload
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', cloudinaryConfig.uploadPreset);
+        formData.append('folder', folder);
 
-        // Upload file with metadata
-        const metadata = {
-          contentType: file.type,
-          cacheControl: 'public, max-age=31536000',
-        };
+        // Upload to Cloudinary
+        console.log(`Uploading file ${i + 1}/${files.length} to Cloudinary:`, {
+          url: cloudinaryUploadUrl,
+          preset: cloudinaryConfig.uploadPreset,
+          folder: folder,
+          fileSize: file.size,
+          fileType: file.type,
+          fileName: file.name
+        });
 
-        // Upload file
-        const snapshot = await uploadBytes(storageRef, file, metadata);
-        
-        // Get download URL
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        uploadedUrls.push(downloadURL);
+        const response = await fetch(cloudinaryUploadUrl, {
+          method: 'POST',
+          body: formData,
+        });
+
+        console.log(`Upload response for file ${i + 1}:`, {
+          status: response.status,
+          statusText: response.statusText,
+          ok: response.ok
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`Upload error response for file ${i + 1}:`, errorText);
+          throw new Error(`Upload failed: ${response.status} ${response.statusText} - ${errorText}`);
+        }
+
+        const result = await response.json();
+        console.log(`Upload success for file ${i + 1}:`, result);
+        uploadedUrls.push(result.secure_url);
         
         // Update progress
         setUploadProgress(((i + 1) / files.length) * 100);
@@ -99,34 +116,16 @@ export default function ImageUploadAdvanced({
       }
     } catch (err) {
       console.error('Upload error:', err);
-      if (err instanceof Error && err.message.includes('CORS')) {
-        setError('Ошибка CORS. Пожалуйста, проверьте настройки Firebase Storage.');
-      } else {
-        setError('Ошибка загрузки файлов. Попробуйте еще раз.');
-      }
+      setError('Ошибка загрузки файлов. Попробуйте еще раз.');
     } finally {
       setUploading(false);
       setUploadProgress(0);
     }
   };
 
-  const handleRemoveImage = async (imageUrl: string) => {
-    if (!onRemoveImage) return;
-    
-    try {
-      // Extract the path from the URL
-      const url = new URL(imageUrl);
-      const pathMatch = url.pathname.match(/\/o\/(.+?)\?/);
-      if (pathMatch) {
-        const decodedPath = decodeURIComponent(pathMatch[1]);
-        const storageRef = ref(storage, decodedPath);
-        await deleteObject(storageRef);
-      }
-      
+  const handleRemoveImage = (imageUrl: string) => {
+    if (onRemoveImage) {
       onRemoveImage(imageUrl);
-    } catch (err) {
-      console.error('Error removing image:', err);
-      setError('Ошибка удаления изображения');
     }
   };
 

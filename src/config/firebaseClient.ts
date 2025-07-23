@@ -2,7 +2,7 @@
 
 import { initializeApp, FirebaseApp } from "firebase/app";
 import { getFirestore, Firestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+// Firebase Storage removed - using Cloudinary instead
 
 const firebaseConfig = {
   apiKey: "AIzaSyBzNeRSRcf0d4K6Mq28_HLrBA1D3ElYiGA",
@@ -17,7 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app: FirebaseApp = initializeApp(firebaseConfig);
 const db: Firestore = getFirestore(app);
-const storage = getStorage(app);
+// Firebase Storage removed - using Cloudinary instead
 
 // Analytics will be initialized separately on client side
 const analytics: null = null;
@@ -36,4 +36,4 @@ if (typeof window !== 'undefined') {
   // });
 }
 
-export { app, db, storage, analytics }; 
+export { app, db, analytics }; 

@@ -6,7 +6,7 @@ import { useAdminContent } from '@/hooks/useAdminContent';
 import { useFirestoreContent } from '@/hooks/useFirestoreContent';
 import AdminNav from '@/components/AdminNav';
 import RichTextEditor from '@/components/RichTextEditor';
-import ImageUploadAdvanced from '@/components/ImageUploadAdvanced';
+import CloudinaryUploadAdvanced from '@/components/CloudinaryUploadAdvanced';
 
 // Type definitions for page data
 interface PageData {
@@ -509,7 +509,7 @@ function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Главное изображение
                     </label>
-                    <ImageUploadAdvanced
+                    <CloudinaryUploadAdvanced
                       onUploadComplete={(urls) => handleObjectChange(index, 'image', urls[0])}
                       folder="objects/main"
                       label="Загрузить главное изображение"
@@ -532,7 +532,7 @@ function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Дополнительные изображения
                     </label>
-                    <ImageUploadAdvanced
+                    <CloudinaryUploadAdvanced
                       onUploadComplete={(urls) => {
                         const currentImages = Array.isArray(object.images) ? object.images : [];
                         handleObjectChange(index, 'images', [...currentImages, ...urls]);
@@ -1129,7 +1129,7 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Изображение новости
                     </label>
-                    <ImageUploadAdvanced
+                    <CloudinaryUploadAdvanced
                       onUploadComplete={(urls) => handleNewsChange(index, 'image', urls[0])}
                       folder="news"
                       label="Загрузить изображение новости"

@@ -27,8 +27,10 @@ interface ServicesData {
   title: string;
   subtitle1: string;
   description1: string;
+  visible1: boolean;
   subtitle2: string;
   description2: string;
+  visible2: boolean;
 }
 
 interface ObjectItem {
@@ -169,8 +171,10 @@ const defaultServicesData: ServicesData = {
   title: "УСЛУГИ",
   subtitle1: "Строительство",
   description1: "Строим высокотехнологичные производственные комплексы в разных отраслях. ",
+  visible1: true,
   subtitle2: "Проектирование",
   description2: "Нами реализовано большое количество посадочных площадок всех типов и сложности на территории РФ и СНГ. Наша компания выполняет работы с соблюдением всех норм, применяя самые современные технологии, материалы и оборудование.",
+  visible2: true,
 };
 
 // Initial state for objects page
@@ -570,8 +574,10 @@ export function useFirestoreContent() {
             title: data.title || defaultServicesData.title,
             subtitle1: data.subtitle1 || defaultServicesData.subtitle1,
             description1: data.description1 || defaultServicesData.description1,
+            visible1: data.visible1 !== false,
             subtitle2: data.subtitle2 || defaultServicesData.subtitle2,
             description2: data.description2 || defaultServicesData.description2,
+            visible2: data.visible2 !== false,
           });
         } else {
           // If document doesn't exist, create it with default data

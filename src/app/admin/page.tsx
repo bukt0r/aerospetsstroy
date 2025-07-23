@@ -1686,7 +1686,20 @@ function ServicesEditor({ pageData, updatePageData }: ServicesEditorProps) {
 
         {/* First Service */}
         <div className="border border-gray-200 rounded-lg p-4">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Первая услуга</h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium text-gray-900">Первая услуга</h3>
+            <div className="flex items-center">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.visible1 !== false}
+                  onChange={(e) => handleInputChange('visible1', e.target.checked)}
+                  className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <span className="text-sm text-gray-700">Показать услугу</span>
+              </label>
+            </div>
+          </div>
           
           <div className="space-y-4">
             <div>
@@ -1714,7 +1727,20 @@ function ServicesEditor({ pageData, updatePageData }: ServicesEditorProps) {
 
         {/* Second Service */}
         <div className="border border-gray-200 rounded-lg p-4">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Вторая услуга</h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium text-gray-900">Вторая услуга</h3>
+            <div className="flex items-center">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.visible2 !== false}
+                  onChange={(e) => handleInputChange('visible2', e.target.checked)}
+                  className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <span className="text-sm text-gray-700">Показать услугу</span>
+              </label>
+            </div>
+          </div>
           
           <div className="space-y-4">
             <div>

@@ -4,10 +4,47 @@ import React from "react";
 import { useFirestoreContent } from "@/hooks/useFirestoreContent";
 
 const News = () => {
-  const { newsData } = useFirestoreContent();
+  const { newsData, loading } = useFirestoreContent();
+
+  // Default values for loading state
+  const defaultData = {
+    title: "НОВОСТИ",
+    newsData: [
+      {
+        id: "news-1",
+        title: "Наша компания успешно завершила строительство объекта «ПТО на станции Анапа»",
+        subtitle: "Завершение проекта",
+        description: "Выполнение СМР на строительстве объекта: «ПТО на станции Анапа», включая полный комплекс работ по вертикальной планировке и устройству свайного фундамента, вынос сетей связи и СЦБ из зоны строительства и устройство сетей ЭС, устройство наружных сетей ТС, ВиК , устройство железобетонных буронабивных свай, монтаж ворот и звукоизолирующего шумозащитного ограждения. Краснодарский край, станция Анапа",
+        date: "2023-10-27",
+        image: "/news/news1.jpg",
+        url: "/news/news1",
+      },
+      {
+        id: "news-2",
+        title: "Строительство вертолётной площадки, дороги и рулёжные дороги",
+        subtitle: "Новый проект",
+        description: "Выполнение полного комплекса СМР по инженерной инфраструктуре вертолетной площадки с рулёжными дорожками и дорогами из ж/б конструкций. Краснодарский край, с. Прасковеевка",
+        date: "2023-09-15",
+        image: "/news/news2.jpg",
+        url: "/news/news2",
+      },
+      {
+        id: "news-3",
+        title: "Строительство шумозащитных экранов",
+        subtitle: "Экологический проект",
+        description: "Строительство второго пути на участке Выселки (вкл.) Козырьки (искл.)» Комплекс работ по устройству монолитных ростверков и монтажу шумозащитных экранов. Краснодарский край, Северо-Кавказская ж.д . Выселки Козырьки",
+        date: "2023-08-20",
+        image: "/news/news3.jpg",
+        url: "/news/news3",
+      },
+    ]
+  };
+
+  // Use data from Firestore or defaults
+  const data = loading ? defaultData : newsData;
 
   // Don't render if not visible
-  if (!newsData?.visible) {
+  if (!data?.visible) {
     return null;
   }
 
@@ -15,33 +52,84 @@ const News = () => {
     <div
       id="News"
       className="flex flex-col pl-[15px] pr-[19px] pt-[60px] pb-[60px] bg-[#D3DFEA] text-[#111111CC] lg:bg-[#F2F5F9] lg:px-[60px] lg:py-[100px] xl:px-[100px]">
-      <div >
-        <h2 className="text-[30px] font-semibold mb-[20px] xl:text-[64px] lg:mb-[37px]">{newsData?.title}</h2>
-        <div
-          className="relative h-[300px] lg:h-[690px] bg-[#F7FAFF] lg:bg-gradient-to-b from-[#E9F3FE] to-[#F7F9FF] lg:shadow-[8px_8px_200px_0px_#3C72AE33]">
-          {/* Содержимое с прокруткой */}
-          <div
-            className="px-[16px] pt-[16px] pb-[50px] overflow-y-auto h-full lg:px-[130px] lg:pt-[84px]"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "#6095AB4D #F7FAFF",
-            }}
-          >
-            <p className="font-[550] mb-[12px] lg:text-[#4A4A4A] xl:text-[32px]">{newsData?.subtitle}</p>
-            <p className="lg:text-[#4A4A4A] xl:text-[20px]">
-              {newsData?.description}
-            </p>
-          </div>
-
-          {/* Фиксированный градиент для размытия */}
-          <div
-            className="max-lg:hidden pointer-events-none absolute bottom-0 left-0 w-full h-[134px] bg-gradient-to-t from-[#F7FAFF] to-[#F7FAFF00]"
-          ></div>
+      <div>
+        <h2 className="text-[30px] font-semibold mb-[20px] xl:text-[64px] lg:mb-[37px]">
+          {loading ? (
+            <div className="animate-pulse">
+              <div className="h-[30px] xl:h-[64px] bg-gray-300 rounded w-1/3"></div>
+            </div>
+          ) : (
+            data.title
+          )}
+        </h2>
+        
+        <div className="space-y-6">
+          {loading ? (
+            // Loading skeleton for news items
+            Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="bg-white rounded-lg p-6 shadow-md">
+                <div className="animate-pulse space-y-4">
+                  <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-300 rounded w-full"></div>
+                    <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                    <div className="h-4 bg-gray-300 rounded w-4/5"></div>
+                  </div>
+                  <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+                </div>
+              </div>
+            ))
+          ) : (
+            // Actual news items
+            (data.newsData || []).map((newsItem, index) => (
+              <div key={newsItem.id || index} className="bg-white rounded-lg p-6 shadow-md">
+                <div className="mb-4">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {newsItem.title}
+                  </h3>
+                  <p className="text-lg text-blue-600 font-medium">
+                    {newsItem.subtitle}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {newsItem.date}
+                  </p>
+                </div>
+                
+                <div className="mb-4">
+                  <div 
+                    className="text-gray-700 leading-relaxed prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: newsItem.description || '' }}
+                  />
+                </div>
+                
+                {newsItem.image && (
+                  <div className="mb-4">
+                    <img 
+                      src={newsItem.image} 
+                      alt={newsItem.title}
+                      className="w-full h-48 object-cover rounded-lg"
+                    />
+                  </div>
+                )}
+                
+                {newsItem.url && (
+                  <div className="mt-4">
+                    <a 
+                      href={newsItem.url}
+                      className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                    >
+                      Читать далее
+                    </a>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
-
-
       </div>
     </div>
   );
 };
+
 export default News;

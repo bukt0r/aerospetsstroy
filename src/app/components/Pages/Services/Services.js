@@ -53,16 +53,17 @@ const Services = () => {
                 data.subtitle1
               )}
             </span>
-            <p className="mt-[12px] xl:text-[20px]">
-              {loading ? (
-                <div className="animate-pulse">
-                  <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-full mb-2"></div>
-                  <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-5/6"></div>
-                </div>
-              ) : (
-                data.description1
-              )}
-            </p>
+            {loading ? (
+              <div className="animate-pulse">
+                <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-full mb-2"></div>
+                <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-5/6"></div>
+              </div>
+            ) : (
+              <div 
+                className="mt-[12px] xl:text-[20px] prose prose-sm max-w-none"
+                dangerouslySetInnerHTML={{ __html: data.description1 || '' }}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -85,16 +86,17 @@ const Services = () => {
                 data.subtitle2
               )}
             </span>
-            <p className="mt-[12px] xl:text-[20px]">
-              {loading ? (
-                <div className="animate-pulse">
-                  <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-full mb-2"></div>
-                  <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-5/6"></div>
-                </div>
-              ) : (
-                data.description2
-              )}
-            </p>
+            {loading ? (
+              <div className="animate-pulse">
+                <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-full mb-2"></div>
+                <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-5/6"></div>
+              </div>
+            ) : (
+              <div 
+                className="mt-[12px] xl:text-[20px] prose prose-sm max-w-none"
+                dangerouslySetInnerHTML={{ __html: data.description2 || '' }}
+              />
+            )}
           </div>
         </div>
       </div>

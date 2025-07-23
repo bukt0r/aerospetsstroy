@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAdminContent } from '@/hooks/useAdminContent';
 import { useFirestoreContent } from '@/hooks/useFirestoreContent';
 import AdminNav from '@/components/AdminNav';
+import RichTextEditor from '@/components/RichTextEditor';
 
 // Type definitions for page data
 interface PageData {
@@ -968,7 +969,7 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
       subtitle: "Подзаголовок новости",
       description: "Описание новости",
       date: new Date().toISOString().slice(0, 10),
-      image: "/news/news1.svg",
+      image: "/news/news1.jpg",
       url: ""
     };
     const newNewsData = [...(formData.newsData || []), newNewsItem];
@@ -1085,14 +1086,11 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Описание новости
-                    </label>
-                    <textarea
+                    <RichTextEditor
                       value={newsItem.description || ''}
-                      onChange={(e) => handleNewsChange(index, 'description', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      rows={4}
+                      onChange={(value) => handleNewsChange(index, 'description', value)}
+                      label="Описание новости"
+                      placeholder="Введите описание новости..."
                     />
                   </div>
 
@@ -1117,7 +1115,7 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
                       value={newsItem.image || ''}
                       onChange={(e) => handleNewsChange(index, 'image', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/news/news1.svg"
+                      placeholder="/news/news1.jpg"
                     />
                   </div>
 
@@ -1704,14 +1702,11 @@ function ServicesEditor({ pageData, updatePageData }: ServicesEditorProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Описание первой услуги
-              </label>
-              <textarea
+              <RichTextEditor
                 value={formData.description1 || ''}
-                onChange={(e) => handleInputChange('description1', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={4}
+                onChange={(value) => handleInputChange('description1', value)}
+                label="Описание первой услуги"
+                placeholder="Введите описание первой услуги..."
               />
             </div>
           </div>
@@ -1735,14 +1730,11 @@ function ServicesEditor({ pageData, updatePageData }: ServicesEditorProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Описание второй услуги
-              </label>
-              <textarea
+              <RichTextEditor
                 value={formData.description2 || ''}
-                onChange={(e) => handleInputChange('description2', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={4}
+                onChange={(value) => handleInputChange('description2', value)}
+                label="Описание второй услуги"
+                placeholder="Введите описание второй услуги..."
               />
             </div>
           </div>

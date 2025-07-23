@@ -86,11 +86,20 @@ interface CertificatesData {
   documents: CertificatesDocuments;
 }
 
-interface NewsData {
-  visible: boolean;
+interface NewsItem {
+  id: string;
   title: string;
   subtitle: string;
   description: string;
+  date: string;
+  image: string;
+  url: string;
+}
+
+interface NewsData {
+  visible: boolean;
+  title: string;
+  newsData: NewsItem[];
 }
 
 interface TeamMember {
@@ -337,10 +346,37 @@ const defaultCertificatesData: CertificatesData = {
 
 // Initial state for news page
 const defaultNewsData: NewsData = {
-  visible: false,
+  visible: true,
   title: "НОВОСТИ",
-  subtitle: "",
-  description: "",
+  newsData: [
+    {
+      id: "news-1",
+      title: "Наша компания успешно завершила строительство объекта «ПТО на станции Анапа»",
+      subtitle: "Завершение проекта",
+      description: "Выполнение СМР на строительстве объекта: «ПТО на станции Анапа», включая полный комплекс работ по вертикальной планировке и устройству свайного фундамента, вынос сетей связи и СЦБ из зоны строительства и устройство сетей ЭС, устройство наружных сетей ТС, ВиК , устройство железобетонных буронабивных свай, монтаж ворот и звукоизолирующего шумозащитного ограждения. Краснодарский край, станция Анапа",
+      date: "2023-10-27",
+      image: "/news/news1.jpg",
+      url: "/news/news1",
+    },
+    {
+      id: "news-2",
+      title: "Строительство вертолётной площадки, дороги и рулёжные дороги",
+      subtitle: "Новый проект",
+      description: "Выполнение полного комплекса СМР по инженерной инфраструктуре вертолетной площадки с рулёжными дорожками и дорогами из ж/б конструкций. Краснодарский край, с. Прасковеевка",
+      date: "2023-09-15",
+      image: "/news/news2.jpg",
+      url: "/news/news2",
+    },
+    {
+      id: "news-3",
+      title: "Строительство шумозащитных экранов",
+      subtitle: "Экологический проект",
+      description: "Строительство второго пути на участке Выселки (вкл.) Козырьки (искл.)» Комплекс работ по устройству монолитных ростверков и монтажу шумозащитных экранов. Краснодарский край, Северо-Кавказская ж.д . Выселки Козырьки",
+      date: "2023-08-20",
+      image: "/news/news3.jpg",
+      url: "/news/news3",
+    },
+  ],
 };
 
 // Initial state for team page
@@ -711,8 +747,7 @@ export function useFirestoreContent() {
           setNewsData({
             visible: data.visible !== false,
             title: data.title || defaultNewsData.title,
-            subtitle: data.subtitle || defaultNewsData.subtitle,
-            description: data.description || defaultNewsData.description,
+            newsData: data.newsData || defaultNewsData.newsData,
           });
         } else {
           // If document doesn't exist, create it with default data

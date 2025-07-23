@@ -6,6 +6,7 @@ import { useAdminContent } from '@/hooks/useAdminContent';
 import { useFirestoreContent } from '@/hooks/useFirestoreContent';
 import AdminNav from '@/components/AdminNav';
 import RichTextEditor from '@/components/RichTextEditor';
+import ImageUploadAdvanced from '@/components/ImageUploadAdvanced';
 
 // Type definitions for page data
 interface PageData {
@@ -508,25 +509,43 @@ function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Главное изображение
                     </label>
-                    <input
-                      type="text"
-                      value={object.image || ''}
-                      onChange={(e) => handleObjectChange(index, 'image', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/objects/objects1-full.svg"
+                    <ImageUploadAdvanced
+                      onUploadComplete={(urls) => handleObjectChange(index, 'image', urls[0])}
+                      folder="objects/main"
+                      label="Загрузить главное изображение"
+                      multiple={false}
+                      currentImages={object.image ? [object.image] : []}
+                      onRemoveImage={() => handleObjectChange(index, 'image', '')}
                     />
+                    {object.image && (
+                      <div className="mt-2">
+                        <img 
+                          src={object.image} 
+                          alt="Main object image" 
+                          className="w-32 h-24 object-cover rounded border"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Дополнительные изображения (через запятую)
+                      Дополнительные изображения
                     </label>
-                    <input
-                      type="text"
-                      value={Array.isArray(object.images) ? object.images.join(', ') : ''}
-                      onChange={(e) => handleObjectChange(index, 'images', e.target.value.split(', ').filter(img => img.trim()))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/objects/images/1-1.svg, /objects/images/1-2.svg"
+                    <ImageUploadAdvanced
+                      onUploadComplete={(urls) => {
+                        const currentImages = Array.isArray(object.images) ? object.images : [];
+                        handleObjectChange(index, 'images', [...currentImages, ...urls]);
+                      }}
+                      folder="objects/gallery"
+                      label="Загрузить дополнительные изображения"
+                      multiple={true}
+                      maxFiles={10}
+                      currentImages={Array.isArray(object.images) ? object.images : []}
+                      onRemoveImage={(urlToRemove) => {
+                        const currentImages = Array.isArray(object.images) ? object.images : [];
+                        handleObjectChange(index, 'images', currentImages.filter(url => url !== urlToRemove));
+                      }}
                     />
                   </div>
                 </div>
@@ -1110,13 +1129,23 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Изображение новости
                     </label>
-                    <input
-                      type="text"
-                      value={newsItem.image || ''}
-                      onChange={(e) => handleNewsChange(index, 'image', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/news/news1.jpg"
+                    <ImageUploadAdvanced
+                      onUploadComplete={(urls) => handleNewsChange(index, 'image', urls[0])}
+                      folder="news"
+                      label="Загрузить изображение новости"
+                      multiple={false}
+                      currentImages={newsItem.image ? [newsItem.image] : []}
+                      onRemoveImage={() => handleNewsChange(index, 'image', '')}
                     />
+                    {newsItem.image && (
+                      <div className="mt-2">
+                        <img 
+                          src={newsItem.image} 
+                          alt="News image" 
+                          className="w-32 h-24 object-cover rounded border"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div>

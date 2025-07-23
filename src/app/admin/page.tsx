@@ -98,6 +98,11 @@ interface VacanciesEditorProps {
   updatePageData: (field: string, value: unknown) => Promise<void>;
 }
 
+interface ServicesEditorProps {
+  pageData: PageData;
+  updatePageData: (field: string, value: unknown) => Promise<void>;
+}
+
 interface ContentEditorProps {
   pageData: PageData;
   updatePageData: (field: string, value: unknown) => Promise<void> | ((page: string, key: string, value: unknown) => void);
@@ -266,6 +271,11 @@ export default function AdminDashboard() {
               <div>Загрузка данных команды...</div>
             ) : activeSection === 'vacancies' && !vacanciesData ? (
               <div>Загрузка данных вакансий...</div>
+            ) : activeSection === 'services' ? (
+              <ServicesEditor 
+                pageData={servicesData as unknown as PageData}
+                updatePageData={updateServicesData}
+              />
             ) : activeSection === 'objects' ? (
               <ObjectsEditor 
                 pageData={objectsData as PageData & { objectsData: ObjectItem[] }}
@@ -1597,6 +1607,145 @@ function VacanciesEditor({ pageData, updatePageData }: VacanciesEditorProps) {
               )}
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="pt-6 border-t border-gray-200">
+        <button
+          onClick={handleSave}
+          disabled={!isDirty || saving}
+          className={`px-6 py-2 rounded-md font-medium ${
+            isDirty && !saving
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {saving ? 'Сохранение...' : 'Сохранить'}
+        </button>
+        {isDirty && (
+          <span className="ml-3 text-sm text-gray-500">
+            Есть несохраненные изменения
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ServicesEditor({ pageData, updatePageData }: ServicesEditorProps) {
+  const [formData, setFormData] = useState(pageData);
+  const [isDirty, setIsDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  // Update form data when pageData changes
+  useEffect(() => {
+    setFormData(pageData);
+    setIsDirty(false);
+  }, [pageData]);
+
+  if (!pageData) {
+    return <div>Загрузка...</div>;
+  }
+
+  const handleInputChange = (key: string, value: unknown) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+    setIsDirty(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Update the entire services data as a batch
+      await updatePageData('batch', formData);
+      setIsDirty(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+        Редактирование раздела: Услуги
+      </h2>
+
+      <div className="space-y-4">
+        {/* Title */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Заголовок раздела
+          </label>
+          <input
+            type="text"
+            value={formData.title || ''}
+            onChange={(e) => handleInputChange('title', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* First Service */}
+        <div className="border border-gray-200 rounded-lg p-4">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Первая услуга</h3>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Подзаголовок первой услуги
+              </label>
+              <input
+                type="text"
+                value={formData.subtitle1 || ''}
+                onChange={(e) => handleInputChange('subtitle1', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Описание первой услуги
+              </label>
+              <textarea
+                value={formData.description1 || ''}
+                onChange={(e) => handleInputChange('description1', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={4}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Second Service */}
+        <div className="border border-gray-200 rounded-lg p-4">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Вторая услуга</h3>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Подзаголовок второй услуги
+              </label>
+              <input
+                type="text"
+                value={formData.subtitle2 || ''}
+                onChange={(e) => handleInputChange('subtitle2', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Описание второй услуги
+              </label>
+              <textarea
+                value={formData.description2 || ''}
+                onChange={(e) => handleInputChange('description2', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={4}
+              />
+            </div>
+          </div>
         </div>
       </div>
 

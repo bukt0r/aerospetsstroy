@@ -11,6 +11,7 @@ const Services = () => {
     title: "УСЛУГИ",
     subtitle1: "Строительство",
     description1: "Строим высокотехнологичные производственные комплексы в разных отраслях. ",
+    subtitle2: "Проектирование",
     description2: "Нами реализовано большое количество посадочных площадок всех типов и сложности на территории РФ и СНГ. Наша компания выполняет работы с соблюдением всех норм, применяя самые современные технологии, материалы и оборудование."
   };
 
@@ -37,59 +38,70 @@ const Services = () => {
           )}
         </h2>
       </div>
-        <div className="lg:flex lg:items-center lg:bg-[url('/services/servicesFullScreenImg2.png')] bg-cover bg-center lg:shadow-[0px_30px_20px_#DFE7F2,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2] lg:min-h-[300px] xl:min-h-[470px]">
-            <div className="flex lg:w-[50%]"></div>
-            <div className="lg:w-[50%]">
-                <div className="lg:w-[80%] lg:pl-[30px]">
-                    <span className="text-[20px] font-[600] xl:text-[24px]">
-                      {loading ? (
-                        <div className="animate-pulse">
-                          <div className="h-[20px] xl:h-[24px] bg-gray-300 rounded w-1/3"></div>
-                        </div>
-                      ) : (
-                        data.subtitle1
-                      )}
-                    </span>
-                    <p className="mt-[12px] xl:text-[20px]">
-                      {loading ? (
-                        <div className="animate-pulse">
-                          <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-full mb-2"></div>
-                          <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-5/6"></div>
-                        </div>
-                      ) : (
-                        <>
-                          {data.description1}
-                          <br />
-                          <br />
-                          {data.description2}
-                        </>
-                      )}
-                    </p>
+      
+      {/* First Service Section */}
+      <div className="lg:flex lg:items-center lg:bg-[url('/services/servicesFullScreenImg2.png')] bg-cover bg-center lg:shadow-[0px_30px_20px_#DFE7F2,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2] lg:min-h-[300px] xl:min-h-[470px]">
+        <div className="flex lg:w-[50%]"></div>
+        <div className="lg:w-[50%]">
+          <div className="lg:w-[80%] lg:pl-[30px]">
+            <span className="text-[20px] font-[600] xl:text-[24px]">
+              {loading ? (
+                <div className="animate-pulse">
+                  <div className="h-[20px] xl:h-[24px] bg-gray-300 rounded w-1/3"></div>
                 </div>
-            </div>
+              ) : (
+                data.subtitle1
+              )}
+            </span>
+            <p className="mt-[12px] xl:text-[20px]">
+              {loading ? (
+                <div className="animate-pulse">
+                  <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-full mb-2"></div>
+                  <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-5/6"></div>
+                </div>
+              ) : (
+                data.description1
+              )}
+            </p>
+          </div>
         </div>
+      </div>
 
-        <div className="lg:hidden mt-[40px]">
-            <img className="shadow-[0px_30px_20px_#DFE7F2,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2]" src="/services/servicesImg2.png" alt="pic"/>
+      <div className="lg:hidden mt-[40px]">
+        <img className="shadow-[0px_30px_20px_#DFE7F2,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2]" src="/services/servicesImg2.png" alt="pic"/>
+      </div>
+
+      {/* Second Service Section */}
+      <div className="lg:flex lg:items-center lg:bg-[url('/services/servicesFullScreenImg1.png')] bg-cover bg-center lg:shadow-[0px_40px_20px_#D6E1ED,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2] lg:min-h-[300px] xl:min-h-[470px] lg:mb-[40px]">
+        <div className="flex lg:w-[50%]"></div>
+        <div className="lg:w-[50%]">
+          <div className="lg:w-[80%] lg:pl-[30px] mt-[40px]">
+            <span className="text-[20px] font-[600] xl:text-[24px]">
+              {loading ? (
+                <div className="animate-pulse">
+                  <div className="h-[20px] xl:h-[24px] bg-gray-300 rounded w-1/3"></div>
+                </div>
+              ) : (
+                data.subtitle2
+              )}
+            </span>
+            <p className="mt-[12px] xl:text-[20px]">
+              {loading ? (
+                <div className="animate-pulse">
+                  <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-full mb-2"></div>
+                  <div className="h-[20px] xl:h-[20px] bg-gray-300 rounded w-5/6"></div>
+                </div>
+              ) : (
+                data.description2
+              )}
+            </p>
+          </div>
         </div>
-
-      {/*<div className="lg:flex lg:items-center lg:bg-[url('/services/servicesFullScreenImg1.png')] bg-cover bg-center lg:shadow-[0px_40px_20px_#D6E1ED,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2] lg:min-h-[300px] xl:min-h-[470px] lg:mb-[40px]">*/}
-      {/*  <div className="flex lg:w-[50%]"></div>*/}
-      {/*  <div className="lg:w-[50%]">*/}
-      {/*    <div className="lg:w-[80%] lg:pl-[30px] mt-[40px]">*/}
-      {/*      <span className="text-[20px] font-[600] xl:text-[24px]">{subtitle2}</span>*/}
-      {/*      <p className="mt-[12px] xl:text-[20px]">*/}
-      {/*          {description2}*/}
-      {/*      </p>*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
+      </div>
 
       <div className="lg:hidden mt-[40px] mb-[60px]">
         <img className="shadow-[0px_30px_20px_#DFE7F2,0px_-30px_20px_#DFE7F2,20px_0px_20px_#DFE7F2]" src="/services/servicesImg1.png" alt="pic"/>
       </div>
-
-
     </div>
   );
 };

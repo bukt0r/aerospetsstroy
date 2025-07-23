@@ -13,7 +13,7 @@ const Team = () => {
 
   return (
     <div
-      className="flex flex-col text-[#111111CC]"
+      className="flex flex-col text-[#111111CC] pl-[15px] pr-[19px] pt-[60px] pb-[60px] lg:px-[60px] lg:py-[100px] xl:px-[100px]"
     >
       <div className="flex flex-col lg:flex-row lg:justify-between">
         <div>

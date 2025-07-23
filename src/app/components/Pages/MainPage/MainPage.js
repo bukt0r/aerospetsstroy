@@ -90,7 +90,11 @@ const MainPage = () => {
         </p>
       </div>
       <div className="flex flex-col mt-auto text-right lg:text-left xl:text-[20px]">
-        <span className="text-[#1D1D1DCC] mb-[8px]">
+        <a 
+          href={`mailto:${data.email}`}
+          className="contact-link text-[#1D1D1DCC] mb-[8px] hover:text-blue-600 transition-colors cursor-pointer"
+          aria-label={`Отправить email на ${data.email}`}
+        >
           {loading ? (
             <div className="animate-pulse">
               <div className="h-[20px] bg-gray-300 rounded w-32 ml-auto lg:ml-0"></div>
@@ -98,8 +102,12 @@ const MainPage = () => {
           ) : (
             data.email
           )}
-        </span>
-        <span className="text-[#1D1D1DCC]">
+        </a>
+        <a 
+          href={`tel:${data.phone}`}
+          className="contact-link text-[#1D1D1DCC] hover:text-blue-600 transition-colors cursor-pointer"
+          aria-label={`Позвонить по номеру ${data.phone}`}
+        >
           {loading ? (
             <div className="animate-pulse">
               <div className="h-[20px] bg-gray-300 rounded w-40 ml-auto lg:ml-0"></div>
@@ -107,7 +115,7 @@ const MainPage = () => {
           ) : (
             data.phone
           )}
-        </span>
+        </a>
       </div>
 
     </div>

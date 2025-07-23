@@ -2,6 +2,13 @@
 
 import React from "react";
 import { useFirestoreContent } from "@/hooks/useFirestoreContent";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const News = () => {
   const { newsData, loading } = useFirestoreContent();
@@ -63,10 +70,10 @@ const News = () => {
           )}
         </h2>
         
-        <div className="space-y-6">
-          {loading ? (
-            // Loading skeleton for news items
-            Array.from({ length: 3 }).map((_, index) => (
+        {loading ? (
+          // Loading skeleton for news slider
+          <div className="space-y-6">
+            {Array.from({ length: 3 }).map((_, index) => (
               <div key={index} className="bg-white rounded-lg p-6 shadow-md">
                 <div className="animate-pulse space-y-4">
                   <div className="h-6 bg-gray-300 rounded w-3/4"></div>
@@ -79,54 +86,110 @@ const News = () => {
                   <div className="h-4 bg-gray-300 rounded w-1/4"></div>
                 </div>
               </div>
-            ))
-          ) : (
-            // Actual news items
-            (data.newsData || []).map((newsItem, index) => (
-              <div key={newsItem.id || index} className="bg-white rounded-lg p-6 shadow-md">
-                <div className="mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {newsItem.title}
-                  </h3>
-                  <p className="text-lg text-blue-600 font-medium">
-                    {newsItem.subtitle}
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {newsItem.date}
-                  </p>
-                </div>
-                
-                <div className="mb-4">
-                  <div 
-                    className="text-gray-700 leading-relaxed prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: newsItem.description || '' }}
-                  />
-                </div>
-                
-                {newsItem.image && (
-                  <div className="mb-4">
-                    <img 
-                      src={newsItem.image} 
-                      alt={newsItem.title}
-                      className="w-full h-48 object-cover rounded-lg"
-                    />
+            ))}
+          </div>
+        ) : (
+          // News Slider
+          <div className="relative">
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={30}
+              slidesPerView={1}
+              navigation={{
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              }}
+              pagination={{
+                clickable: true,
+                el: '.swiper-pagination',
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                640: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 30,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 30,
+                },
+              }}
+              className="news-swiper"
+            >
+              {(data.newsData || []).map((newsItem, index) => (
+                <SwiperSlide key={newsItem.id || index}>
+                  <div className="bg-white rounded-lg shadow-lg overflow-hidden h-full">
+                    {/* News Image */}
+                    {newsItem.image && (
+                      <div className="relative h-48 overflow-hidden">
+                        <img 
+                          src={newsItem.image} 
+                          alt={newsItem.title}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                        <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          {newsItem.date}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* News Content */}
+                    <div className="p-6">
+                      <div className="mb-4">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
+                          {newsItem.title}
+                        </h3>
+                        <p className="text-lg text-blue-600 font-medium mb-2">
+                          {newsItem.subtitle}
+                        </p>
+                      </div>
+                      
+                      <div className="mb-4">
+                        <div 
+                          className="text-gray-700 leading-relaxed prose prose-sm max-w-none line-clamp-3"
+                          dangerouslySetInnerHTML={{ __html: newsItem.description || '' }}
+                        />
+                      </div>
+                      
+                      {newsItem.url && (
+                        <div className="mt-4">
+                          <a 
+                            href={newsItem.url}
+                            className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                          >
+                            Читать далее
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                )}
-                
-                {newsItem.url && (
-                  <div className="mt-4">
-                    <a 
-                      href={newsItem.url}
-                      className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-                    >
-                      Читать далее
-                    </a>
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-        </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            
+            {/* Custom Navigation Buttons */}
+            <div className="swiper-button-prev !text-blue-600 !bg-white !w-12 !h-12 !rounded-full !shadow-lg hover:!bg-blue-50 transition-colors">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </div>
+            <div className="swiper-button-next !text-blue-600 !bg-white !w-12 !h-12 !rounded-full !shadow-lg hover:!bg-blue-50 transition-colors">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+            
+            {/* Custom Pagination */}
+            <div className="swiper-pagination !bottom-4"></div>
+          </div>
+        )}
       </div>
     </div>
   );

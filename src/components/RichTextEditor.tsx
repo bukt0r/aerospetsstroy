@@ -34,7 +34,6 @@ const RichTextEditorFallback: React.FC<{ label?: string }> = ({ label }) => (
 const RichTextEditorClient: React.FC<RichTextEditorProps> = ({ 
   value, 
   onChange, 
-  placeholder = "Введите текст...",
   label 
 }) => {
   const [mounted, setMounted] = useState(false);

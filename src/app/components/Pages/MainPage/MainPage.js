@@ -28,7 +28,7 @@ const MainPage = () => {
   return(
     <div
       id="MainPage"
-      className="flex flex-col pl-[15px] pr-[19px] pb-[36px] bg-[url('/main/mainBackground.svg')] bg-cover bg-center min-h-screen w-full lg:bg-[url('/main/mainBackgroundFullScreen.svg')] lg:px-[60px] xl:px-[100px] lg:pb-[55px] ">
+      className="flex flex-col pl-[15px] pr-[19px] pb-[36px] bg-[url('/main/mainBackground.svg')] bg-cover bg-center min-h-screen w-full lg:bg-[url('/main/hero-background.jpeg')] lg:px-[60px] xl:px-[100px] lg:pb-[55px] ">
       <header className="flex justify-between items-center pt-[50px] lg:hidden">
         <div>
           <img onClick={handleLogoClick} className="cursor-pointer" src="/main/logo.svg" alt="logo"/>
@@ -90,7 +90,7 @@ const MainPage = () => {
         </p>
       </div>
       <div className="flex flex-col mt-auto text-right lg:text-left xl:text-[20px]">
-        <a 
+        <a
           href={`mailto:${data.email}`}
           className="contact-link text-[#1D1D1DCC] mb-[8px] hover:text-blue-600 transition-colors cursor-pointer"
           aria-label={`Отправить email на ${data.email}`}
@@ -103,7 +103,7 @@ const MainPage = () => {
             data.email
           )}
         </a>
-        <a 
+        <a
           href={`tel:${data.phone}`}
           className="contact-link text-[#1D1D1DCC] hover:text-blue-600 transition-colors cursor-pointer"
           aria-label={`Позвонить по номеру ${data.phone}`}

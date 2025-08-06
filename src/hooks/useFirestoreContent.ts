@@ -114,6 +114,7 @@ interface TeamData {
   title: string;
   subtitle: string;
   description: string;
+  coverImage: string;
   members: TeamMember[];
 }
 
@@ -389,6 +390,7 @@ const defaultTeamData: TeamData = {
   title: "КОМАНДА",
   subtitle: "Наша команда профессионалов",
   description: "Мы гордимся нашей командой экспертов",
+  coverImage: "/team/teamFullScreen.svg",
   members: [
     {
       image: ["/team/avatar1.svg"],
@@ -789,6 +791,7 @@ export function useFirestoreContent() {
             title: data.title || defaultTeamData.title,
             subtitle: data.subtitle || defaultTeamData.subtitle,
             description: data.description || defaultTeamData.description,
+            coverImage: data.coverImage || defaultTeamData.coverImage,
             members: data.members || defaultTeamData.members,
           });
         } else {

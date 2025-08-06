@@ -32,7 +32,7 @@ const Team = () => {
       </div>
 
       <div className="flex">
-        <img src="/team/teamFullScreen.svg" alt="team" className="w-full"/>
+        <img src={teamData?.coverImage || "/team/teamFullScreen.svg"} alt="team" className="w-full"/>
       </div>
 
       <div className="lg:hidden mb-4">

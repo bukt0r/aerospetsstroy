@@ -300,7 +300,7 @@ export default function AdminDashboard() {
               />
             ) : activeSection === 'team' ? (
               <TeamEditor 
-                pageData={teamData as PageData & { members: TeamMember[] }}
+                pageData={teamData as unknown as PageData & { members: TeamMember[] }}
                 updatePageData={updateTeamData}
               />
             ) : activeSection === 'vacancies' ? (
@@ -311,15 +311,15 @@ export default function AdminDashboard() {
             ) : (
               <ContentEditor 
                 pageData={
-                  activeSection === 'main' ? (mainPageData as PageData) :
-                  activeSection === 'specialization' ? (specializationData as PageData) :
-                  activeSection === 'services' ? (servicesData as PageData) :
-                  activeSection === 'aboutCompany' ? (aboutCompanyData as PageData) :
-                  activeSection === 'partners' ? (partnersData as PageData) :
-                  activeSection === 'certificates' ? (certificatesData as PageData) :
-                  activeSection === 'news' ? (newsData as PageData) :
-                  activeSection === 'team' ? (teamData as PageData) :
-                  activeSection === 'vacancies' ? (vacanciesData as PageData) :
+                  activeSection === 'main' ? (mainPageData as unknown as PageData) :
+                  activeSection === 'specialization' ? (specializationData as unknown as PageData) :
+                  activeSection === 'services' ? (servicesData as unknown as PageData) :
+                  activeSection === 'aboutCompany' ? (aboutCompanyData as unknown as PageData) :
+                  activeSection === 'partners' ? (partnersData as unknown as PageData) :
+                  activeSection === 'certificates' ? (certificatesData as unknown as PageData) :
+                  activeSection === 'news' ? (newsData as unknown as PageData) :
+                  activeSection === 'team' ? (teamData as unknown as PageData) :
+                  activeSection === 'vacancies' ? (vacanciesData as unknown as PageData) :
                   (getPageData(activeSection) as PageData)
                 }
                 updatePageData={activeSection === 'main' ? updateMainPageData : 
@@ -1299,6 +1299,29 @@ function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
         />
       </div>
 
+      {/* Cover Image */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Обложка команды
+        </label>
+        <CloudinaryUploadAdvanced
+          currentImages={formData.coverImage ? [formData.coverImage as string] : []}
+          onUploadComplete={(urls) => handleInputChange('coverImage', urls[0] || '')}
+          maxFiles={1}
+          multiple={false}
+          label="Загрузить обложку команды"
+        />
+        {formData.coverImage && (
+          <div className="mt-2">
+            <img 
+              src={formData.coverImage} 
+              alt="Cover preview" 
+              className="w-32 h-32 object-cover rounded border"
+            />
+          </div>
+        )}
+      </div>
+
       {/* Team Members List */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-4">
@@ -1352,13 +1375,22 @@ function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Изображение сотрудника
                     </label>
-                    <input
-                      type="text"
-                      value={Array.isArray(member.image) ? member.image[0] || '' : member.image || ''}
-                      onChange={(e) => handleTeamMemberChange(index, 'image', [e.target.value])}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/team/avatar1.svg"
+                    <CloudinaryUploadAdvanced
+                      currentImages={Array.isArray(member.image) ? member.image as string[] : [member.image as string || '']}
+                      onUploadComplete={(urls) => handleTeamMemberChange(index, 'image', urls)}
+                      maxFiles={1}
+                      multiple={false}
+                      label="Загрузить фото сотрудника"
                     />
+                    {Array.isArray(member.image) && member.image[0] && (
+                      <div className="mt-2">
+                        <img 
+                          src={member.image[0]} 
+                          alt="Member preview" 
+                          className="w-24 h-24 object-cover rounded border"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

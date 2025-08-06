@@ -10,10 +10,10 @@ interface Props {
 
 const Layout: FC<Props> = ({ children }) => {
   return (
-    <body>
+    <>
       {children}
       <Footer/>
-    </body>
+    </>
   );
 };
 

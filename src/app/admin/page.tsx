@@ -7,6 +7,7 @@ import { useFirestoreContent } from '@/hooks/useFirestoreContent';
 import AdminNav from '@/components/AdminNav';
 import RichTextEditor from '@/components/RichTextEditor';
 import CloudinaryUploadAdvanced from '@/components/CloudinaryUploadAdvanced';
+import PdfUpload from '@/components/PdfUpload';
 
 // Type definitions for page data
 interface PageData {
@@ -787,7 +788,8 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
     const newDocument = {
       description: "Описание документа",
       images: ["/certificates/new-document.png"],
-      pdf: "/certificates/new-document.pdf"
+      pdf: "/certificates/new-document.pdf",
+      visible: true
     };
     const newDocuments = { ...formData.documents };
     const sectionData = [...(newDocuments[section] || []), newDocument];
@@ -875,26 +877,48 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       PDF файл
                     </label>
-                    <input
-                      type="text"
-                      value={document.pdf || ''}
-                      onChange={(e) => handleDocumentChange(sectionName, index, 'pdf', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/certificates/document.pdf"
+                    <PdfUpload
+                      currentPdf={document.pdf || ''}
+                      onUploadComplete={(url) => handleDocumentChange(sectionName, index, 'pdf', url)}
+                      label="Загрузить PDF документ"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Изображения (через запятую)
+                      Изображения документа
                     </label>
-                    <input
-                      type="text"
-                      value={Array.isArray(document.images) ? document.images.join(', ') : ''}
-                      onChange={(e) => handleDocumentChange(sectionName, index, 'images', e.target.value.split(', ').filter(img => img.trim()))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/certificates/image1.png, /certificates/image2.png"
+                    <CloudinaryUploadAdvanced
+                      currentImages={Array.isArray(document.images) ? document.images as string[] : []}
+                      onUploadComplete={(urls) => handleDocumentChange(sectionName, index, 'images', urls)}
+                      maxFiles={10}
+                      multiple={true}
+                      label="Загрузить изображения документа"
                     />
+                    {Array.isArray(document.images) && document.images.length > 0 && (
+                      <div className="mt-2 grid grid-cols-4 gap-2">
+                        {document.images.map((image, imgIndex) => (
+                          <img 
+                            key={imgIndex}
+                            src={image} 
+                            alt={`Document preview ${imgIndex + 1}`} 
+                            className="w-16 h-16 object-cover rounded border"
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={document.visible !== false}
+                        onChange={(e) => handleDocumentChange(sectionName, index, 'visible', e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm font-medium text-gray-700">Видимый документ</span>
+                    </label>
                   </div>
                 </div>
               )}
@@ -904,6 +928,7 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
                   <p><strong>Описание:</strong> {document.description?.substring(0, 100)}...</p>
                   <p><strong>PDF:</strong> {document.pdf}</p>
                   <p><strong>Изображений:</strong> {Array.isArray(document.images) ? document.images.length : 0}</p>
+                  <p><strong>Видимость:</strong> {document.visible ? 'Видим' : 'Скрыт'}</p>
                 </div>
               ) : null}
             </div>

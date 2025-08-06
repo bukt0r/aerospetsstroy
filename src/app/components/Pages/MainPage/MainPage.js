@@ -79,43 +79,43 @@ const MainPage = () => {
             data.title
           )}
         </h1>
-        <p className="text-left text-[#111111CC] text-[20px] font-helvetica font-[200] xl:text-[32px] lg:text-[#000000B2]">
-          {loading ? (
-            <div className="animate-pulse">
-              <div className="h-[20px] lg:h-[32px] bg-gray-300 rounded w-1/2"></div>
-            </div>
-          ) : (
-            data.subtitle
-          )}
-        </p>
+        {loading ? (
+          <div className="animate-pulse">
+            <div className="h-[20px] lg:h-[32px] bg-gray-300 rounded w-1/2"></div>
+          </div>
+        ) : (
+          <p className="text-left text-[#111111CC] text-[20px] font-helvetica font-[200] xl:text-[32px] lg:text-[#000000B2]">
+            {data.subtitle}
+          </p>
+        )}
       </div>
       <div className="flex flex-col mt-auto text-right lg:text-left xl:text-[20px]">
-        <a
-          href={`mailto:${data.email}`}
-          className="contact-link text-[#1D1D1DCC] mb-[8px] hover:text-blue-600 transition-colors cursor-pointer"
-          aria-label={`Отправить email на ${data.email}`}
-        >
-          {loading ? (
-            <div className="animate-pulse">
-              <div className="h-[20px] bg-gray-300 rounded w-32 ml-auto lg:ml-0"></div>
-            </div>
-          ) : (
-            data.email
-          )}
-        </a>
-        <a
-          href={`tel:${data.phone}`}
-          className="contact-link text-[#1D1D1DCC] hover:text-blue-600 transition-colors cursor-pointer"
-          aria-label={`Позвонить по номеру ${data.phone}`}
-        >
-          {loading ? (
-            <div className="animate-pulse">
-              <div className="h-[20px] bg-gray-300 rounded w-40 ml-auto lg:ml-0"></div>
-            </div>
-          ) : (
-            data.phone
-          )}
-        </a>
+        {loading ? (
+          <div className="animate-pulse mb-[8px]">
+            <div className="h-[20px] bg-gray-300 rounded w-32 ml-auto lg:ml-0"></div>
+          </div>
+        ) : (
+          <a
+            href={`mailto:${data.email}`}
+            className="contact-link text-[#1D1D1DCC] mb-[8px] hover:text-blue-600 transition-colors cursor-pointer"
+            aria-label={`Отправить email на ${data.email}`}
+          >
+            {data.email}
+          </a>
+        )}
+        {loading ? (
+          <div className="animate-pulse">
+            <div className="h-[20px] bg-gray-300 rounded w-40 ml-auto lg:ml-0"></div>
+          </div>
+        ) : (
+          <a
+            href={`tel:${data.phone}`}
+            className="contact-link text-[#1D1D1DCC] hover:text-blue-600 transition-colors cursor-pointer"
+            aria-label={`Позвонить по номеру ${data.phone}`}
+          >
+            {data.phone}
+          </a>
+        )}
       </div>
 
     </div>

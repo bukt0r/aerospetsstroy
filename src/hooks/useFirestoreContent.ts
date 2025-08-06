@@ -74,6 +74,7 @@ interface CertificateDocument {
   description: string;
   images: string[];
   pdf: string;
+  visible: boolean;
 }
 
 interface CertificatesDocuments {
@@ -328,6 +329,7 @@ const defaultCertificatesData: CertificatesData = {
           'Выписка из реестра членов саморегулируемой организации в составе единого реестра сведений о членах саморегулируемых организаций в области строительства, реконструкции, капитального ремонта, сноса объектов капитального строительства и их обязательствах от 30.05.2025',
         images: ['/certificates/ordering-1.png', '/certificates/ordering-2.png', '/certificates/ordering-3.png', '/certificates/ordering-4.png'],
         pdf: '/certificates/ordering.pdf',
+        visible: true,
       },
     ],
     license: [
@@ -336,6 +338,7 @@ const defaultCertificatesData: CertificatesData = {
           'Информация из реестра лицензий по состоянию на 23.08.2024 г.',
         images: ['/certificates/license_1-1.png', '/certificates/license_1-2.png'],
         pdf: '/certificates/license.pdf',
+        visible: true,
       }
     ],
     certificate: [
@@ -344,6 +347,7 @@ const defaultCertificatesData: CertificatesData = {
           'Сертификат соответсвия',
         images: ['/certificates/certificate_1-1.png', '/certificates/certificate_1-2.png', '/certificates/certificate_1-3.png'],
         pdf: '/certificates/certificate.pdf',
+        visible: true,
       }
     ],
   },

@@ -6,7 +6,7 @@ const Certificates = ({ data = [] }) => {
 
   return (
     <div className="text-[#111111CC]">
-      {data.map((item, index) => (
+      {data.filter(item => item.visible !== false).map((item, index) => (
         <div key={index}>
           <p className="mb-[16px]">{item.description}</p>
           <div className="grid grid-cols-2 gap-[10px]">

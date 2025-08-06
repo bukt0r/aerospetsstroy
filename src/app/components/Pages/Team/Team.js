@@ -25,18 +25,22 @@ const Team = () => {
           </div>
         </div>
 
-        <div className="mb-[24px] lg:hidden">
-          <img src="/team/teamImg.svg" alt="team"/>
-        </div>
-        <div className="mb-[52px] xl:text-[20px] lg:w-[45%]">
-          <p>{teamData?.description}</p>
+
+        <div className="max-lg:hidden flex justify-end mb-[52px] xl:text-[20px] lg:w-[45%]">
+          <p className="self-end">{teamData?.description}</p>
         </div>
       </div>
 
-      <div className="max-lg:hidden mb-[100px]"><img src="/team/teamFullScreen.svg" alt="team"/></div>
+      <div className="flex">
+        <img src="/team/teamFullScreen.svg" alt="team" className="w-full"/>
+      </div>
+
+      <div className="lg:hidden mb-4">
+        <p className="self-end">{teamData?.description}</p>
+      </div>
 
 
-      <div className="grid grid-cols-3 gap-4 mb-[32px] lg:grid-cols-6 lg:gap-[24px]">
+      <div className="mt-[100px] max-lg:mt-[50px] grid grid-cols-3 gap-4 mb-[32px] lg:grid-cols-6 lg:gap-[24px]">
         {teamData?.members?.map((member,index)=>(
           <div
             className="flex flex-col items-center content-between"

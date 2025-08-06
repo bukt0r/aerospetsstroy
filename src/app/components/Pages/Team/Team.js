@@ -46,8 +46,10 @@ const Team = () => {
             className="flex flex-col items-center content-between"
             key={index}
           >
-            <img className="mb-2 xl:mb-[32px] xl:w-[242px] xl:h-[242px]"
-                 src={member.image} alt="pic"
+            <img
+              className="mb-2 xl:mb-[32px] w-full aspect-square rounded-full border-4 border-[#6095AB] object-cover"
+              src={member.image}
+              alt="pic"
             />
             <p className="text-center xl:text-[24px]">{member.name}</p>
           </div>

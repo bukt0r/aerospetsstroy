@@ -699,13 +699,22 @@ function PartnersEditor({ pageData, updatePageData }: PartnersEditorProps) {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Изображение партнера
                     </label>
-                    <input
-                      type="text"
-                      value={Array.isArray(partner.image) ? partner.image[0] || '' : partner.image || ''}
-                      onChange={(e) => handlePartnerChange(index, 'image', [e.target.value])}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="/partners/partner-logo.svg"
+                    <CloudinaryUploadAdvanced
+                      currentImages={Array.isArray(partner.image) ? partner.image as string[] : [partner.image as string || '']}
+                      onUploadComplete={(urls) => handlePartnerChange(index, 'image', urls)}
+                      maxFiles={1}
+                      multiple={false}
+                      label="Загрузить логотип партнера"
                     />
+                    {Array.isArray(partner.image) && partner.image[0] && (
+                      <div className="mt-2">
+                        <img 
+                          src={partner.image[0]} 
+                          alt="Partner preview" 
+                          className="w-24 h-24 object-contain rounded border"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

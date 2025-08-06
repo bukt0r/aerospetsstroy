@@ -12,7 +12,7 @@ const PartnersContainer = () => {
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
   const count = isLargeScreen ? 8 : 9;
 
-  const partnersImages = (partnersData?.baners || []).map(item => item.image);
+  const partnersImages = (partnersData?.baners || []).map(item => Array.isArray(item.image) ? item.image[0] : item.image);
   const abbs = chunkArray(partnersImages, count);
 
   const partnersBlocks = abbs.map((abb, index) => (

@@ -54,7 +54,7 @@ const Objects: React.FC<{ projects: Project[]; addresses: string[], titles: stri
       className="flex gap-[20px] mb-[60px]">
       {obj.map((image:string, index:number)=> (
         <div key={index} className="cursor-pointer" onClick={() => openImageModal(image)}>
-          <img key={index} src={image} alt="img"/>
+          <img key={index} src={image} alt="img" className="max-h-[251px] w-auto h-auto object-contain"/>
         </div>
       ))}
     </div>

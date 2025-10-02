@@ -1,9 +1,10 @@
 'use client';
 
-import React from "react";
+import React, { useState } from "react";
 import { useFirestoreContent } from "@/hooks/useFirestoreContent";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import NewsDetails from "@/app/components/NewsDetails";
 
 // Import Swiper styles
 import 'swiper/css';
@@ -12,6 +13,7 @@ import 'swiper/css/pagination';
 
 const News = () => {
   const { newsData, loading } = useFirestoreContent();
+  const [selectedNews, setSelectedNews] = useState(null);
 
   // Default values for loading state
   const defaultData = {
@@ -158,16 +160,14 @@ const News = () => {
                         />
                       </div>
                       
-                      {newsItem.url && (
-                        <div className="mt-4">
-                          <a 
-                            href={newsItem.url}
-                            className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-                          >
-                            Читать далее
-                          </a>
-                        </div>
-                      )}
+                      <div className="mt-4">
+                        <button 
+                          onClick={() => setSelectedNews(newsItem)}
+                          className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                        >
+                          Читать далее
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </SwiperSlide>
@@ -191,6 +191,15 @@ const News = () => {
           </div>
         )}
       </div>
+
+      {/* News Details Modal */}
+      {selectedNews && (
+        <div className="fixed top-0 left-0 w-full h-full z-50 bg-black bg-opacity-30 flex justify-center items-center p-4">
+          <div className="relative w-full max-w-4xl bg-white p-6 rounded-lg overflow-y-auto max-h-[90vh]">
+            <NewsDetails newsItem={selectedNews} onClose={() => setSelectedNews(null)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import AdminNav from '@/components/AdminNav';
 import RichTextEditor from '@/components/RichTextEditor';
 import CloudinaryUploadAdvanced from '@/components/CloudinaryUploadAdvanced';
 import PdfUpload from '@/components/PdfUpload';
+import ChangePasswordModal from '@/components/ChangePasswordModal';
 
 // Type definitions for page data
 interface PageData {
@@ -117,6 +118,7 @@ export default function AdminDashboard() {
   const { getPageData, updatePageData, togglePageVisibility } = useAdminContent();
   const { mainPageData, specializationData, servicesData, objectsData, aboutCompanyData, partnersData, certificatesData, newsData, teamData, vacanciesData, updateMainPageData, updateSpecializationData, updateServicesData, updateObjectsData, updateAboutCompanyData, updatePartnersData, updateCertificatesData, updateNewsData, updateTeamData, updateVacanciesData } = useFirestoreContent();
   const [activeSection, setActiveSection] = useState<string>('main');
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   if (!user) {
     return (
@@ -157,6 +159,12 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-bold text-gray-900">Админ панель</h1>
             <div className="flex items-center space-x-4">
               <span className="text-gray-700">Пользователь: {user.email}</span>
+              <button
+                onClick={() => setShowChangePassword(true)}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Сменить пароль
+              </button>
               <button
                 onClick={logout}
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
@@ -340,6 +348,10 @@ export default function AdminDashboard() {
         </div>
       </div>
       <AdminNav />
+      <ChangePasswordModal
+        open={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+      />
     </div>
   );
 }
@@ -352,9 +364,9 @@ function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
+    if (isDirty) return;
     setFormData(pageData);
-    setIsDirty(false);
-  }, [pageData]);
+  }, [pageData, isDirty]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -595,9 +607,9 @@ function PartnersEditor({ pageData, updatePageData }: PartnersEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
+    if (isDirty) return;
     setFormData(pageData);
-    setIsDirty(false);
-  }, [pageData]);
+  }, [pageData, isDirty]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -762,9 +774,9 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
 
   // Update form data when pageData changes
   useEffect(() => {
+    if (isDirty) return;
     setFormData(pageData);
-    setIsDirty(false);
-  }, [pageData]);
+  }, [pageData, isDirty]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -995,9 +1007,9 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
+    if (isDirty) return;
     setFormData(pageData);
-    setIsDirty(false);
-  }, [pageData]);
+  }, [pageData, isDirty]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1242,9 +1254,9 @@ function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
+    if (isDirty) return;
     setFormData(pageData);
-    setIsDirty(false);
-  }, [pageData]);
+  }, [pageData, isDirty]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1471,9 +1483,9 @@ function VacanciesEditor({ pageData, updatePageData }: VacanciesEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
+    if (isDirty) return;
     setFormData(pageData);
-    setIsDirty(false);
-  }, [pageData]);
+  }, [pageData, isDirty]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1733,9 +1745,9 @@ function ServicesEditor({ pageData, updatePageData }: ServicesEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
+    if (isDirty) return;
     setFormData(pageData);
-    setIsDirty(false);
-  }, [pageData]);
+  }, [pageData, isDirty]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1892,9 +1904,9 @@ function ContentEditor({ pageData, updatePageData, section }: ContentEditorProps
 
   // Update form data when pageData changes
   useEffect(() => {
+    if (isDirty) return;
     setFormData(pageData);
-    setIsDirty(false);
-  }, [pageData]);
+  }, [pageData, isDirty]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;

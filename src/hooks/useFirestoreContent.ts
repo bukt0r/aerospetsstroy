@@ -507,10 +507,10 @@ export function useFirestoreContent() {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data() as Partial<MainPageData>;
           setMainPageData({
-            title: data.title || defaultMainPageData.title,
-            subtitle: data.subtitle || defaultMainPageData.subtitle,
-            email: data.email || defaultMainPageData.email,
-            phone: data.phone || defaultMainPageData.phone,
+            title: data.title ?? defaultMainPageData.title,
+            subtitle: data.subtitle ?? defaultMainPageData.subtitle,
+            email: data.email ?? defaultMainPageData.email,
+            phone: data.phone ?? defaultMainPageData.phone,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -541,12 +541,12 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<SpecializationData>;
           setSpecializationData({
             visible: data.visible !== false,
-            title: data.title || defaultSpecializationData.title,
-            description: data.description || defaultSpecializationData.description,
-            subtitle1: data.subtitle1 || defaultSpecializationData.subtitle1,
-            description1: data.description1 || defaultSpecializationData.description1,
-            subtitle2: data.subtitle2 || defaultSpecializationData.subtitle2,
-            description2: data.description2 || defaultSpecializationData.description2,
+            title: data.title ?? defaultSpecializationData.title,
+            description: data.description ?? defaultSpecializationData.description,
+            subtitle1: data.subtitle1 ?? defaultSpecializationData.subtitle1,
+            description1: data.description1 ?? defaultSpecializationData.description1,
+            subtitle2: data.subtitle2 ?? defaultSpecializationData.subtitle2,
+            description2: data.description2 ?? defaultSpecializationData.description2,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -577,12 +577,12 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<ServicesData>;
           setServicesData({
             visible: data.visible !== false,
-            title: data.title || defaultServicesData.title,
-            subtitle1: data.subtitle1 || defaultServicesData.subtitle1,
-            description1: data.description1 || defaultServicesData.description1,
+            title: data.title ?? defaultServicesData.title,
+            subtitle1: data.subtitle1 ?? defaultServicesData.subtitle1,
+            description1: data.description1 ?? defaultServicesData.description1,
             visible1: data.visible1 !== false,
-            subtitle2: data.subtitle2 || defaultServicesData.subtitle2,
-            description2: data.description2 || defaultServicesData.description2,
+            subtitle2: data.subtitle2 ?? defaultServicesData.subtitle2,
+            description2: data.description2 ?? defaultServicesData.description2,
             visible2: data.visible2 !== false,
           });
         } else {
@@ -616,8 +616,8 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<ObjectsData>;
           setObjectsData({
             visible: data.visible !== false,
-            title: data.title || defaultObjectsData.title,
-            objectsData: data.objectsData || defaultObjectsData.objectsData,
+            title: data.title ?? defaultObjectsData.title,
+            objectsData: data.objectsData ?? defaultObjectsData.objectsData,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -650,14 +650,14 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<AboutCompanyData>;
           setAboutCompanyData({
             visible: data.visible !== false,
-            title: data.title || defaultAboutCompanyData.title,
-            paragraph1: data.paragraph1 || defaultAboutCompanyData.paragraph1,
-            subtitle: data.subtitle || defaultAboutCompanyData.subtitle,
-            row1: data.row1 || defaultAboutCompanyData.row1,
-            row2: data.row2 || defaultAboutCompanyData.row2,
-            row3: data.row3 || defaultAboutCompanyData.row3,
-            row4: data.row4 || defaultAboutCompanyData.row4,
-            paragraph2: data.paragraph2 || defaultAboutCompanyData.paragraph2,
+            title: data.title ?? defaultAboutCompanyData.title,
+            paragraph1: data.paragraph1 ?? defaultAboutCompanyData.paragraph1,
+            subtitle: data.subtitle ?? defaultAboutCompanyData.subtitle,
+            row1: data.row1 ?? defaultAboutCompanyData.row1,
+            row2: data.row2 ?? defaultAboutCompanyData.row2,
+            row3: data.row3 ?? defaultAboutCompanyData.row3,
+            row4: data.row4 ?? defaultAboutCompanyData.row4,
+            paragraph2: data.paragraph2 ?? defaultAboutCompanyData.paragraph2,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -690,8 +690,8 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<PartnersData>;
           setPartnersData({
             visible: data.visible !== false,
-            title: data.title || defaultPartnersData.title,
-            baners: data.baners || defaultPartnersData.baners,
+            title: data.title ?? defaultPartnersData.title,
+            baners: data.baners ?? defaultPartnersData.baners,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -724,8 +724,8 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<CertificatesData>;
           setCertificatesData({
             visible: data.visible !== false,
-            title: data.title || defaultCertificatesData.title,
-            documents: data.documents || defaultCertificatesData.documents,
+            title: data.title ?? defaultCertificatesData.title,
+            documents: data.documents ?? defaultCertificatesData.documents,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -758,8 +758,8 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<NewsData>;
           setNewsData({
             visible: data.visible !== false,
-            title: data.title || defaultNewsData.title,
-            newsData: data.newsData || defaultNewsData.newsData,
+            title: data.title ?? defaultNewsData.title,
+            newsData: data.newsData ?? defaultNewsData.newsData,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -792,11 +792,11 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<TeamData>;
           setTeamData({
             visible: data.visible !== false,
-            title: data.title || defaultTeamData.title,
-            subtitle: data.subtitle || defaultTeamData.subtitle,
-            description: data.description || defaultTeamData.description,
-            coverImage: data.coverImage || defaultTeamData.coverImage,
-            members: data.members || defaultTeamData.members,
+            title: data.title ?? defaultTeamData.title,
+            subtitle: data.subtitle ?? defaultTeamData.subtitle,
+            description: data.description ?? defaultTeamData.description,
+            coverImage: data.coverImage ?? defaultTeamData.coverImage,
+            members: data.members ?? defaultTeamData.members,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -829,8 +829,8 @@ export function useFirestoreContent() {
           const data = docSnapshot.data() as Partial<VacanciesData>;
           setVacanciesData({
             visible: data.visible !== false,
-            title: data.title || defaultVacanciesData.title,
-            vacancyData: data.vacancyData || defaultVacanciesData.vacancyData,
+            title: data.title ?? defaultVacanciesData.title,
+            vacancyData: data.vacancyData ?? defaultVacanciesData.vacancyData,
           });
         } else {
           // If document doesn't exist, create it with default data
@@ -860,8 +860,8 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setMainPageData(value as MainPageData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...mainPageData, [field]: value }, { merge: true });
+        // Handle single field update — only write the delta to avoid clobbering concurrent edits
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setMainPageData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -881,8 +881,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setSpecializationData(value as SpecializationData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...specializationData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setSpecializationData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -902,8 +901,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setServicesData(value as ServicesData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...servicesData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setServicesData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -923,8 +921,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setObjectsData(value as ObjectsData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...objectsData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setObjectsData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -944,8 +941,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setAboutCompanyData(value as AboutCompanyData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...aboutCompanyData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setAboutCompanyData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -965,8 +961,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setPartnersData(value as PartnersData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...partnersData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setPartnersData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -986,8 +981,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setCertificatesData(value as CertificatesData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...certificatesData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setCertificatesData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -1007,8 +1001,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setNewsData(value as NewsData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...newsData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setNewsData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -1028,8 +1021,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setTeamData(value as TeamData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...teamData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setTeamData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {
@@ -1049,8 +1041,7 @@ export function useFirestoreContent() {
         await setDoc(docRef, value, { merge: true });
         setVacanciesData(value as VacanciesData);
       } else {
-        // Handle single field update
-        await setDoc(docRef, { ...vacanciesData, [field]: value }, { merge: true });
+        await setDoc(docRef, { [field]: value }, { merge: true });
         setVacanciesData(prev => ({ ...prev, [field]: value }));
       }
     } catch (error) {

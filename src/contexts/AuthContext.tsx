@@ -39,6 +39,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await signOut(auth);
     } catch (error) {
       console.error('Error signing out:', error);
+    } finally {
+      // Hard nav to home — bypasses the AdminLayout redirect that would
+      // otherwise push the now-signed-out user to /admin/login.
+      if (typeof window !== 'undefined') {
+        window.location.replace('/');
+      }
     }
   };
 

@@ -513,8 +513,6 @@ export function useFirestoreContent() {
             phone: data.phone ?? defaultMainPageData.phone,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'main'), defaultMainPageData);
           setMainPageData(defaultMainPageData);
         }
       },
@@ -549,8 +547,6 @@ export function useFirestoreContent() {
             description2: data.description2 ?? defaultSpecializationData.description2,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'specialization'), defaultSpecializationData);
           setSpecializationData(defaultSpecializationData);
         }
       },
@@ -586,8 +582,6 @@ export function useFirestoreContent() {
             visible2: data.visible2 !== false,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'services'), defaultServicesData);
           setServicesData(defaultServicesData);
         }
         setLoading(false);
@@ -620,8 +614,6 @@ export function useFirestoreContent() {
             objectsData: data.objectsData ?? defaultObjectsData.objectsData,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'objects'), defaultObjectsData);
           setObjectsData(defaultObjectsData);
         }
         setLoading(false);
@@ -660,8 +652,6 @@ export function useFirestoreContent() {
             paragraph2: data.paragraph2 ?? defaultAboutCompanyData.paragraph2,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'aboutCompany'), defaultAboutCompanyData);
           setAboutCompanyData(defaultAboutCompanyData);
         }
         setLoading(false);
@@ -694,8 +684,6 @@ export function useFirestoreContent() {
             baners: data.baners ?? defaultPartnersData.baners,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'partners'), defaultPartnersData);
           setPartnersData(defaultPartnersData);
         }
         setLoading(false);
@@ -728,8 +716,6 @@ export function useFirestoreContent() {
             documents: data.documents ?? defaultCertificatesData.documents,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'certificates'), defaultCertificatesData);
           setCertificatesData(defaultCertificatesData);
         }
         setLoading(false);
@@ -762,8 +748,6 @@ export function useFirestoreContent() {
             newsData: data.newsData ?? defaultNewsData.newsData,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'news'), defaultNewsData);
           setNewsData(defaultNewsData);
         }
         setLoading(false);
@@ -799,8 +783,6 @@ export function useFirestoreContent() {
             members: data.members ?? defaultTeamData.members,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'team'), defaultTeamData);
           setTeamData(defaultTeamData);
         }
         setLoading(false);
@@ -833,8 +815,6 @@ export function useFirestoreContent() {
             vacancyData: data.vacancyData ?? defaultVacanciesData.vacancyData,
           });
         } else {
-          // If document doesn't exist, create it with default data
-          setDoc(doc(db, 'pages', 'vacancies'), defaultVacanciesData);
           setVacanciesData(defaultVacanciesData);
         }
         setLoading(false);

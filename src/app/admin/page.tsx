@@ -364,9 +364,9 @@ function ObjectsEditor({ pageData, updatePageData }: ObjectsEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
-    if (isDirty) return;
+    if (isDirty || saving) return;
     setFormData(pageData);
-  }, [pageData, isDirty]);
+  }, [pageData, isDirty, saving]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -607,9 +607,9 @@ function PartnersEditor({ pageData, updatePageData }: PartnersEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
-    if (isDirty) return;
+    if (isDirty || saving) return;
     setFormData(pageData);
-  }, [pageData, isDirty]);
+  }, [pageData, isDirty, saving]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -774,9 +774,9 @@ function CertificatesEditor({ pageData, updatePageData }: CertificatesEditorProp
 
   // Update form data when pageData changes
   useEffect(() => {
-    if (isDirty) return;
+    if (isDirty || saving) return;
     setFormData(pageData);
-  }, [pageData, isDirty]);
+  }, [pageData, isDirty, saving]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1007,9 +1007,9 @@ function NewsEditor({ pageData, updatePageData }: NewsEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
-    if (isDirty) return;
+    if (isDirty || saving) return;
     setFormData(pageData);
-  }, [pageData, isDirty]);
+  }, [pageData, isDirty, saving]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1254,9 +1254,9 @@ function TeamEditor({ pageData, updatePageData }: TeamEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
-    if (isDirty) return;
+    if (isDirty || saving) return;
     setFormData(pageData);
-  }, [pageData, isDirty]);
+  }, [pageData, isDirty, saving]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1483,9 +1483,9 @@ function VacanciesEditor({ pageData, updatePageData }: VacanciesEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
-    if (isDirty) return;
+    if (isDirty || saving) return;
     setFormData(pageData);
-  }, [pageData, isDirty]);
+  }, [pageData, isDirty, saving]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1745,9 +1745,9 @@ function ServicesEditor({ pageData, updatePageData }: ServicesEditorProps) {
 
   // Update form data when pageData changes
   useEffect(() => {
-    if (isDirty) return;
+    if (isDirty || saving) return;
     setFormData(pageData);
-  }, [pageData, isDirty]);
+  }, [pageData, isDirty, saving]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1904,9 +1904,9 @@ function ContentEditor({ pageData, updatePageData, section }: ContentEditorProps
 
   // Update form data when pageData changes
   useEffect(() => {
-    if (isDirty) return;
+    if (isDirty || saving) return;
     setFormData(pageData);
-  }, [pageData, isDirty]);
+  }, [pageData, isDirty, saving]);
 
   if (!pageData) {
     return <div>Загрузка...</div>;
@@ -1920,20 +1920,16 @@ function ContentEditor({ pageData, updatePageData, section }: ContentEditorProps
   const handleSave = async () => {
     setSaving(true);
     try {
-      if (section === 'objects') {
-        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
-      } else if (section === 'partners') {
-        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
-      } else if (section === 'certificates') {
-        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
-      } else if (section === 'news') {
-        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
-      } else if (section === 'team') {
-        await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
-      } else if (section === 'vacancies') {
+      // All Firestore-backed sections use the (field, value) signature.
+      // Only fall back to the legacy (page, field, value) form for unknown
+      // sections served by useAdminContent.
+      const firestoreSections = [
+        'main', 'specialization', 'services', 'objects', 'aboutCompany',
+        'partners', 'certificates', 'news', 'team', 'vacancies',
+      ];
+      if (firestoreSections.includes(section)) {
         await (updatePageData as (field: string, value: unknown) => Promise<void>)('batch', formData);
       } else {
-        // Handle other sections that use the old updatePageData signature
         const oldUpdateFunction = updatePageData as (page: string, key: string, value: unknown) => void;
         oldUpdateFunction(section, 'batch', formData);
       }

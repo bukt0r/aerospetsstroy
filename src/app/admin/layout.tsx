@@ -13,14 +13,16 @@ export default function AdminLayout({
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log('Admin layout - user:', user, 'loading:', loading, 'pathname:', pathname);
+  // Normalize: trailingSlash:true makes pathname "/admin/login/"; strip the
+  // trailing slash so comparisons work regardless of the export setting.
+  const normalizedPath = pathname?.replace(/\/$/, '') || pathname;
+  const isLoginPage = normalizedPath === '/admin/login';
 
   useEffect(() => {
-    // Don't redirect if we're already on the login page
-    if (!loading && !user && pathname !== '/admin/login') {
+    if (!loading && !user && !isLoginPage) {
       router.push('/admin/login');
     }
-  }, [user, loading, router, pathname]);
+  }, [user, loading, router, isLoginPage]);
 
   if (loading) {
     return (
@@ -31,7 +33,7 @@ export default function AdminLayout({
   }
 
   // Allow login page to render even if user is not authenticated
-  if (!user && pathname === '/admin/login') {
+  if (!user && isLoginPage) {
     return <>{children}</>;
   }
 

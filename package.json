@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build || true",
     "build:static": "./build-static.sh",
-    "build:archive": "npm run build:static && tar -czf aerospetsstroy-static.tar.gz -C out .",
+    "build:archive": "npm run build:static && COPYFILE_DISABLE=1 tar --exclude='._*' --exclude='.DS_Store' -czf aerospetsstroy-static.tar.gz -C out .",
     "build:zip": "npm run build:static && cd out && zip -r ../aerospetsstroy-static.zip . && cd ..",
     "start": "next start",
     "lint": "next lint"
